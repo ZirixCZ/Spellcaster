@@ -28,6 +28,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	if userExists == true {
 		fmt.Println("User exists")
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "user exists")
 		return
 	}
 
@@ -38,6 +40,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	newUser = models.User{
 		UserName: userInput.UserName,
+		Email:    userInput.Email,
 		Password: hashedPassword,
 	}
 
@@ -72,5 +75,6 @@ func getAndHandleUserExists(user *models.User, userName string) (exists bool, er
 
 type RegisterUserInput struct {
 	UserName string `json:"userName" validate:"required,max=256"`
+	Email    string `json:"email" validate:"required,min=8,max=256"`
 	Password string `json:"password" validate:"required,min=8,max=256"`
 }
