@@ -20,9 +20,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var newUser models.User
-	userExists, useExistsErr := getAndHandleUserExists(&newUser, userInput.UserName)
-	if useExistsErr != nil {
-		fmt.Println(useExistsErr)
+	userExists, userExistsErr := getAndHandleUserExists(&newUser, userInput.UserName)
+	if userExistsErr != nil {
+		fmt.Println(userExistsErr)
 		return
 	}
 
@@ -49,6 +49,46 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "User: %+v", userInput)
 }
 
+func Login(w http.ResponseWriter, r *http.Request) {
+	var userInput RegisterUserInput
+
+	err := json.NewDecoder(r.Body).Decode(&userInput)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
+	var user models.User
+	userExists, userExistsError := getAndHandleUserExists(&user, userInput.UserName)
+	if userExistsError != nil {
+		fmt.Println(userExistsError)
+		return
+	}
+
+	if userExists == false {
+		fmt.Println("User doesn't exist")
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "User doesn't exist")
+		return
+	}
+
+	hashError := getHashedPassword(userInput.UserName, &user)
+	if hashError != nil {
+		fmt.Println("An error occurred")
+		return
+	}
+
+	matchPasswords := doPasswordMatch(user.Password, userInput.Password)
+	if matchPasswords == false {
+		fmt.Println("Passwords do not match")
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Passwords do not match")
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Println("user login")
+	fmt.Fprintf(w, "Access for %+v has been granted", userInput.UserName)
+}
+
 func hashAndSaltPassword(password string) (hashedPassword string, err error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != err {
@@ -56,6 +96,20 @@ func hashAndSaltPassword(password string) (hashedPassword string, err error) {
 	}
 
 	return string(hash), nil
+}
+
+func doPasswordMatch(hashedPassword, password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	return err == nil
+}
+
+func getHashedPassword(userName string, user *models.User) error {
+	getHash := storage.DB.Select("password").Where("user_name = ?", strings.ToLower(userName)).Limit(1).Find(&user)
+	if getHash.Error != nil {
+		return getHash.Error
+	}
+
+	return nil
 }
 
 func getAndHandleUserExists(user *models.User, userName string) (exists bool, err error) {

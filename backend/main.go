@@ -13,6 +13,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/user/register", routes.Register)
+	mux.HandleFunc("/api/user/login", routes.Login)
 
 	http.ListenAndServe(":8080", mux)
 }
