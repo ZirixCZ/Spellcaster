@@ -20,7 +20,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var newUser models.User
-	userExists, userExistsErr := getAndHandleUserExists(&newUser, userInput.UserName)
+	userExists, userExistsErr := getAndHandleUserExists(&newUser, userInput.Email)
 	if userExistsErr != nil {
 		fmt.Println(userExistsErr)
 		return
@@ -29,7 +29,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	if userExists == true {
 		fmt.Println("User exists")
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "user exists")
+		fmt.Fprintf(w, "User exists")
 		return
 	}
 
@@ -46,7 +46,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	storage.DB.Create(&newUser)
 
-	fmt.Fprintf(w, "User: %+v", userInput)
+	w.WriteHeader(http.StatusOK)
+	fmt.Printf("New user: %s", userInput.Email)
+	fmt.Fprintf(w, "User %+v created", userInput.Email)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -58,16 +60,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user models.User
-	userExists, userExistsError := getAndHandleUserExists(&user, userInput.UserName)
+	userExists, userExistsError := getAndHandleUserExists(&user, userInput.Email)
 	if userExistsError != nil {
 		fmt.Println(userExistsError)
 		return
 	}
 
 	if userExists == false {
-		fmt.Println("User doesn't exist")
+		fmt.Printf("User %s doesn't exist\n", userInput.Email)
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "User doesn't exist")
+		fmt.Fprintf(w, "User %s doesn't exist\n", userInput.Email)
 		return
 	}
 
@@ -85,8 +87,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	fmt.Println("user login")
-	fmt.Fprintf(w, "Access for %+v has been granted", userInput.UserName)
+	fmt.Printf("New Login: %s", userInput.Email)
+	fmt.Fprintf(w, "Access for %+v has been granted", userInput.Email)
 }
 
 func hashAndSaltPassword(password string) (hashedPassword string, err error) {
@@ -112,8 +114,8 @@ func getHashedPassword(userName string, user *models.User) error {
 	return nil
 }
 
-func getAndHandleUserExists(user *models.User, userName string) (exists bool, err error) {
-	userExistsQuery := storage.DB.Where("user_name = ?", strings.ToLower(userName)).Limit(1).Find(&user)
+func getAndHandleUserExists(user *models.User, email string) (exists bool, err error) {
+	userExistsQuery := storage.DB.Where("email = ?", strings.ToLower(email)).Limit(1).Find(&user)
 	if userExistsQuery.Error != nil {
 		return false, userExistsQuery.Error
 	}
