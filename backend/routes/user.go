@@ -11,6 +11,10 @@ import (
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	w.Header().Set("Access-Control-Max-Age", "15")
+
 	var userInput RegisterUserInput
 
 	err := json.NewDecoder(r.Body).Decode(&userInput)
@@ -47,11 +51,15 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	storage.DB.Create(&newUser)
 
 	w.WriteHeader(http.StatusOK)
-	fmt.Printf("New user: %s", userInput.Email)
+	fmt.Printf("New user: %s\n", userInput.Email)
 	fmt.Fprintf(w, "User %+v created", userInput.Email)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	w.Header().Set("Access-Control-Max-Age", "15")
+
 	var userInput RegisterUserInput
 
 	err := json.NewDecoder(r.Body).Decode(&userInput)
@@ -87,7 +95,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	fmt.Printf("New Login: %s", userInput.Email)
+	fmt.Printf("New Login: %s\n", userInput.Email)
 	fmt.Fprintf(w, "Access for %+v has been granted", userInput.Email)
 }
 
