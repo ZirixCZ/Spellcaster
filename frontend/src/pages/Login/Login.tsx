@@ -1,17 +1,23 @@
-import React, {useRef} from "react";
+import * as React from "react";
+import {FormEvent, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import FormInput from "../../components/FormInput/FormInput";
 import callApi from "../../scripts/callApi/callApi";
+import {GFullCenterWrapper} from "../../globalStyle";
 
-function Login() {
+const Login = (): JSX.Element => {
 
     const navigate = useNavigate();
 
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);
+    const emailRef = useRef<HTMLInputElement | undefined>();
+    const passwordRef = useRef<HTMLInputElement | undefined>();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent) => {
+        if (!emailRef?.current?.value || !passwordRef?.current?.value) {
+            return;
+        }
+
         e.preventDefault();
         callApi("POST", "http://localhost:8080/api/user/login", JSON.stringify({
             "email": emailRef.current.value,
@@ -22,14 +28,6 @@ function Login() {
             }
         })
     }
-
-    const Container = styled.div`
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    `
 
     const Form = styled.form`
         width: 25%;
@@ -57,7 +55,7 @@ function Login() {
     `
 
     return (
-        <Container>
+        <GFullCenterWrapper>
             <Form onSubmit={handleSubmit}>
                 <FormInput refer={emailRef} placeholder="email" type="text" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                            errorMessage="email invalid"/>
@@ -65,7 +63,7 @@ function Login() {
                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
                 <Button>Login</Button>
             </Form>
-        </Container>
+        </GFullCenterWrapper>
     );
 
 }

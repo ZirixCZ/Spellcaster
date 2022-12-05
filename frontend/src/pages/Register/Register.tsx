@@ -1,18 +1,23 @@
-import React, {useRef} from "react";
+import * as React from "react";
+import {FormEvent, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import FormInput from "../../components/FormInput/FormInput";
 import callApi from "../../scripts/callApi/callApi";
+import {GFullCenterWrapper} from "../../globalStyle";
 
-function Register() {
+const Register = (): JSX.Element => {
 
     const navigate = useNavigate();
 
-    const userNameRef = useRef(null);
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);
+    const userNameRef = useRef<HTMLInputElement | undefined>();
+    const emailRef = useRef<HTMLInputElement | undefined>();
+    const passwordRef = useRef<HTMLInputElement | undefined>();
 
     const checkValidityRegex = () => {
+        if (!userNameRef?.current?.value || !emailRef?.current?.value || !passwordRef?.current?.value) {
+            return;
+        }
         const validate = [
             /^[a-z0-9_.]+$/.test(userNameRef.current.value),
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailRef.current.value),
@@ -26,14 +31,14 @@ function Register() {
         return validate;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         const handleValidation = checkValidityRegex();
         if (handleValidation === true) {
             callApi("POST", "http://localhost:8080/api/user/register", JSON.stringify({
-                "userName": userNameRef.current.value,
-                "email": emailRef.current.value,
-                "password": passwordRef.current.value
+                "userName": userNameRef?.current?.value,
+                "email": emailRef?.current?.value,
+                "password": passwordRef?.current?.value
             })).then((res) => {
                 if (res.ok) {
                     navigate("/");
@@ -42,16 +47,10 @@ function Register() {
             return;
         }
 
-        alert(`Invalid fields: ${!handleValidation[0] ? "Username" : ""} ${!handleValidation[1] ? "Email" : ""} ${!handleValidation[2] ? "Password" : ""}`);
+        if (handleValidation) {
+            alert(`Invalid fields: ${!handleValidation[0] ? "Username" : ""} ${!handleValidation[1] ? "Email" : ""} ${!handleValidation[2] ? "Password" : ""}`);
+        }
     }
-
-    const Container = styled.div`
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    `
 
     const Form = styled.form`
         width: 25%;
@@ -79,7 +78,7 @@ function Register() {
     `
 
     return (
-        <Container>
+        <GFullCenterWrapper>
             <Form onSubmit={handleSubmit}>
                 <FormInput refer={userNameRef} placeholder="user name" type="text" pattern="^[a-z0-9_.]+$"
                            errorMessage="username invalid"/>
@@ -89,7 +88,7 @@ function Register() {
                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
                 <Button>Register</Button>
             </Form>
-        </Container>
+        </GFullCenterWrapper>
     );
 
 }
