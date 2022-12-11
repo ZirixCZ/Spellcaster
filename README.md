@@ -1,8 +1,11 @@
 # Spellit
-An online spelling application that merges the act of learning English with play. It is best to be used with a bunch of friends or at school. However
-don't worry if you've got no one to play with as Spellit also features online lobbies.
+An online spelling application that merges the act of learning English with play.
+It is best to be used with a bunch of friends or at school.
+However, don't worry if you've got no one to play with as Spellit also features online lobbies.
 
-Spellit makes it easier for you to learn English by having fun. The project is being developed within a <a href="https://www.delta-skola.cz/talentovy-program-delta-topgun">school program at DELTA - Střední škola informatiky a ekonomie, s.r.o.</a>
+Spellit makes it easier for you to learn English by having fun.
+The project is being developed within a 
+<a href="https://www.delta-skola.cz/talentovy-program-delta-topgun">school program at DELTA - Střední škola informatiky a ekonomie, s.r.o.</a>
 
 ## User stories
 
@@ -24,11 +27,6 @@ Spellit makes it easier for you to learn English by having fun. The project is b
 
 A web based application allowing simultaneous connection of multiple users across multiple lobbies.
 
-### guest
-
-Anyone who wants to participate needs to create an account. Each account always consists of a username, email address and password.
-
-
 ### Authentication
 
 #### Register
@@ -36,6 +34,10 @@ The register page should consist of a submit button and of three input fields. O
 
 #### Login
 The login page will consist of a submit button, an input field for email address, an input field for password and a checkmark for saving the user login. This means that the next time they will visit Spellit, they'll be automatically authenticated without filling their information in considering they did not log out.
+
+### guest
+
+Anyone who wants to participate needs to create an account. Each account always consists of a username, email address and password.
 
 #### Account
 
@@ -52,7 +54,7 @@ After registering, the guest will receive an email containing a link with a "agr
 
 ### user
 
-After creating an account and agreeing to TOS, we consider the client to be a user. They now have access to the application.
+After creating an account and agreeing to TOS, we consider the guest to be a user. They now have access to the application.
 They can create a **new lobby**, join an **existing lobby**, view their **profile**, view the **global leaderboard**.
 
 #### profile
@@ -70,17 +72,166 @@ As a user you can create a new lobby and invite your friends to play with you. A
 
 ### player
 After joining an existing lobby, or creating a new lobby you become a **player**. You've now got two roles to play as. 
-Either you are a **speller_player** or **input_player**
+Either you are a **input_player** or **speller_player**
 
-TODO: **speller_player**, **input_player** (rename, criteria)
+### input_player
+Every iteration (one iteration = once have all the players became the input_player at least once) is a player input_player.
+As this role, the player inputs a valid English word into the prompt that shows up on screen. The word is then played out loud
+to speller_player role. After inputting the word, the input_player gains 1 point.
+
+### speller_player
+As this role you're supposed to spell the word given by an input_player. The word is always played out loud and you can choose to
+play it again. After spelling out the word correctly, you gain 1 point.
+
+## Technical Overview
+### Frontend
+The application's frontend is written in the React ecosystem. Using React as the frontend library of choice. React router as the 
+router. For styling the application uses styled-components with the additional vanilla CSS when convenient.
+
+### Backend
+The API is written using the Go programming language. For the database the application uses Postgresql.
+
+#### Endpoints
+
+**POST** *Registers a new user*
+
+Successful request will result in: 201 Created
+
+Unsuccessful request will result in: 
+* 400 Bad Request - user already has an account created.
+```
+{{baseUri}}/api/user/register/{"userName":string,"email":string,"password":string}
+```
+
+**GET** *Login an existing user*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 400 Bad Request - user doesn't exist.
+```
+{{baseUri}}/api/user/login/{"email":string,"password":string}
+```
+
+**GET** *Shows user information*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 400 Bad Request - user doesn't exist.
+```
+{{baseUri}}/api/user/profile/{"email":string}
+```
+
+**GET** *Shows global leaderboard*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 500 Internal Server Error - server encountered an unexpected condition
+```
+{{baseUri}}/api/leaderboard}
+```
+
+**GET** *Shows not started active lobbies*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 500 Internal Server Error - server encountered an unexpected condition
+```
+{{baseUri}}/api/lobby}
+```
+
+**POST** *Create a new lobby*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 400 Bad Request - client error
+* 403 Forbidden - an active lobby with the same name already exists
+```
+{{baseUri}}/api/lobby/new/{"name":string}}
+```
+
+**POST** *Join a lobby*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 403 Forbidden - lobby is full
+```
+{{baseUri}}/api/lobby/{"name":string}}
+```
+
+**POST** *Start the game*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 403 Forbidden - lobby could not be started (usually because the player count did not exceed 1)
+```
+{{baseUri}}/api/lobby/start/{"name":string,"email":string}}
+```
+
+**GET** *List players in lobby*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 400 Bad Request - lobby does not exist
+```
+{{baseUri}}/api/lobby/players/{"name":string}}
+```
+
+**POST** *Inputs word to be spelled by input_player*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 400 Bad Request - the word did not match accepted pattern
+* 403 - user roles did not match
+```
+{{baseUri}}/api/lobby/spellit/{"word":string}}
+```
+
+**POST** *Inputs spelled word by speller_player*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 400 Bad Request - the string did not match accepted pattern
+* 403 - user roles did not match
+```
+{{baseUri}}/api/lobby/spelled/{"word":string}}
+```
+
+**GET** *Lobby score*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 400 Bad Request - lobby does not exist
+```
+{{baseUri}}/api/lobby/stats/"name":string}
+```
+
+**POST** *Increase score*
+
+Successful request will result in: 200 OK
+
+Unsuccessful request will result in:
+* 400 Bad Request - user does not exist
+```
+{{baseUri}}/api/lobby/increase/"email":string,"value":number}
+```
+
+## Component Diagram
+TODO
 
 ## Database model
 
 ![data_structure.png](data_structure.png)
-
-## Technical Overview
-
-## Component Diagram
 
 ## Frontend
 
