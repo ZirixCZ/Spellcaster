@@ -1,37 +1,35 @@
 # Spellit
-An online spelling application that merges the act of learning English with play.
-It is best to be used with a bunch of friends or at school.
-However, don't worry if you've got no one to play with as Spellit also features online lobbies.
-
+An online spelling application that combines the act of learning English with playing.
+It is best used with a group of friends or at school.
+However, if you don't have anyone to play with, don't worry because Spellit also offers online lobbies.
 Spellit makes it easier for you to learn English by having fun.
-The project is being developed within a 
+The project is developed within
 <a href="https://www.delta-skola.cz/talentovy-program-delta-topgun">school program at DELTA - Střední škola informatiky a ekonomie, s.r.o.</a>
 
 ## User stories
 
 * as a **guest** I want to be able to create a new account
 * as a **guest** I want to be able to log into my existing account
-* as a **guest** I want my login to be saved, so I don't have to fill in my login details again
+* as a **guest** I want my login information to be saved, so I don't have to fill in my login information again
 * as a **user** I want to be able to log out
-* as a **user** I want to be able to see my statistic so that I can compare myself to my friends
-* as a **user** I want to be able to see a **global leaderboard** so that I can compare myself to all the other players
-* as a **user** I want to be able to join an existing lobby, so that I can join my friend's lobby
-* as a **user** I want to be able to create a new game lobby, so that I can invite other players to join
+* as a **user** I want to be able to see my stats, so I can compare myself to my friends
+* as a **user** I want to be able to see the **global leaderboard**, so I can compare myself to all other players
+* as a **user** I want to be able to join an existing lobby, so I can join my friend's lobby
+* as a **user** I want to be able to create a new game lobby and invite other players to join
 * as a **player** I want to be able to see if the game has already started
-* as a **input_player** I want to be able to input a word for other players to spell
-* as a **speller_player** I want to be able to hear the inputted word by **input_player**, so that I can spell it out
-* as a **player** I want to be able to placed on a game **lobby leaderboard**, so that I can compare myself to other players in the lobby
-* as a **player** I want to be able to win a game, so that I can get a better placement on the **global leaderboard**
+* as an **input_player** I want to be able to input a word that other players can spell
+* as a **speller_player** I want to hear the typed word from the **input_player**, so I can type it
+* as a **player** I want to be able to be placed on the game's **lobby leaderboard** so I can compare myself to other players in the lobby
+* as a **player** I want to be able to win the game so I can rank better in the **global leaderboard**
 
 ## Acceptance criteria
 
-A web based application allowing simultaneous connection of multiple users across multiple lobbies.
+Web application allowing simultaneous connection of multiple users across multiple lobbies.
 
 ### Authentication
 
 #### Register
-The register page should consist of a submit button and of three input fields. One for username, one for email address and one for password. If one of the inputs does not meet the requirements given in Acceptance criteria->Account section, warning text should appear informing the user of their mistake.
-
+The registration page should consist of a submit button and three input fields. One for username, one for email address and one for password. If any of the inputs does not meet the requirements listed in the Acceptance Criteria->Account section, a warning text should appear informing the user of this error.
 #### Login
 The login page will consist of a submit button, an input field for email address, an input field for password and a checkmark for saving the user login. This means that the next time they will visit Spellit, they'll be automatically authenticated without filling their information in considering they did not log out.
 
@@ -227,7 +225,6 @@ Unsuccessful request will result in:
 ```
 
 ## Component Diagram
-TODO
 
 ## Database model
 
