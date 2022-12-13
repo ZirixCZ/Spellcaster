@@ -1,10 +1,15 @@
-# Spellit
-An online spelling application that combines the act of learning English with playing.
-It is best used with a group of friends or at school.
-However, if you don't have anyone to play with, don't worry because Spellit also offers online lobbies.
-Spellit makes it easier for you to learn English by having fun.
-The project is developed within
-<a href="https://www.delta-skola.cz/talentovy-program-delta-topgun">school program at DELTA - Střední škola informatiky a ekonomie, s.r.o.</a>
+# Spellcaster
+Spellcaster is a revolutionary online spelling application that combines the act of learning English with the excitement and engagement of playing a game. This innovative approach to language learning allows users to improve their spelling skills while enjoying themselves, making the process of learning more enjoyable and effective.
+
+Whether you are a student looking to improve your English proficiency or a language enthusiast looking to enhance your spelling abilities, Spellcaster is the perfect tool for you. With its intuitive design and engaging gameplay, Spellcaster makes it easy and fun to learn English.
+
+Additionally, Spellcaster offers the ability to play with friends or classmates, allowing for a more social and collaborative learning experience. However, if you don't have anyone to play with, don't worry – Spellcaster also offers online lobbies where you can connect with other users and play together.
+
+Overall, Spellcaster is a highly effective and enjoyable way to learn English. With its unique blend of learning and gaming, Spellcaster makes it easier and more enjoyable to improve your spelling skills and expand your English vocabulary.
+
+The project is developed within a <a href="https://www.delta-skola.cz/talentovy-program-delta-topgun">school program at DELTA - Střední škola informatiky a ekonomie, s.r.o.</a> This program is designed to foster and support the growth of young talent in the fields of computer science and economics.
+
+As a participant in this program, the project has access to state-of-the-art resources and expertise, allowing for the development of cutting-edge technologies and solutions. The program also provides a unique learning environment that encourages collaboration, creativity, and innovation.
 
 ## User stories
 
@@ -17,72 +22,63 @@ The project is developed within
 * as a **user** I want to be able to join an existing lobby, so I can join my friend's lobby
 * as a **user** I want to be able to create a new game lobby and invite other players to join
 * as a **player** I want to be able to see if the game has already started
-* as an **input_player** I want to be able to input a word that other players can spell
-* as a **speller_player** I want to hear the typed word from the **input_player**, so I can type it
+* as a **Word Master** I want to be able to input a word that other players can spell
+* as a **Word Speller** I want to hear the typed word from the **Word Master**, so I can type it
 * as a **player** I want to be able to be placed on the game's **lobby leaderboard** so I can compare myself to other players in the lobby
-* as a **player** I want to be able to win the game so I can rank better in the **global leaderboard**
+* as a **player** I want to be able to win the game, so I can rank better in the **global leaderboard**
 
 ## Acceptance criteria
 
-Web application allowing simultaneous connection of multiple users across multiple lobbies.
-
+The web application enables the simultaneous connection of multiple users across multiple lobbies. This allows for a highly interactive and engaging experience, as users can join different lobbies and connect with other players from around the world.
 ### Authentication
 
 #### Register
-The registration page should consist of a submit button and three input fields. One for username, one for email address and one for password. If any of the inputs does not meet the requirements listed in the Acceptance Criteria->Account section, a warning text should appear informing the user of this error.
+The registration page should consist of a submit button and three input fields for the user's username, email address, and password. If any of the inputs does not meet the requirements specified in the Acceptance Criteria->Account section, a warning text should appear informing the user of the error. This ensures that users are able to register for the application with accurate and complete information, facilitating a smooth and efficient registration process.
+
 #### Login
-The login page will consist of a submit button, an input field for email address, an input field for password and a checkmark for saving the user login. This means that the next time they will visit Spellit, they'll be automatically authenticated without filling their information in considering they did not log out.
+The login page will consist of a submit button, input fields for the user's email address and password, and a checkmark for saving the user login. This means that when users visit Spellcaster again, they will be automatically authenticated if they did not log out, eliminating the need to re-enter their login information. This feature enhances the user experience by providing a convenient and efficient way to access the application.
 
 ### guest
 
-Anyone who wants to participate needs to create an account. Each account always consists of a username, email address and password.
+In order to participate, users must create an account. Each account consists of a unique username, email address, and password. This ensures that users have secure and personalized access to the application and its features. The requirement for an account ensures that users are able to access the application with a consistent and verifiable identity, facilitating a secure and engaging experience.
 
 #### Account
 
-*username*
-* Username is allowed to consist of lowercase letters, numbers, dots and underscores. The length of username cannot exceed 16 characters.
+* The username is allowed to consist of lowercase letters, numbers, dots, and underscores. However, the length of the username cannot exceed 16 characters. These rules ensure that users are able to create unique and recognizable username, while also limiting the length of the username to prevent potential issues. The restrictions on the username help to maintain the integrity and security of the application, while also providing a consistent and user-friendly experience.
+* Every account has to have a valid email address linked to it. Overall, the requirement for a valid email address linked to each account helps to ensure the security and integrity of the application.
+* The password must contain at least 8 characters, including at least one letter and one number. This requirement ensures that users create strong and secure passwords for their accounts.
 
-*email address*
-* Every account has to have a valid email address linked to it.
-
-*password*
-* Password has to contain at least 8 characters from which there has to be at least one letter and one number.
-
-After registering, the guest will receive an email containing a link with a "agree to TOS" screen. The account exists, but until agreeing to the TOS, it will be marked as not-created and is considered to be a guest account.
-
+After registering, guests will receive an email containing a link to an "agree to TOS" screen. Until the user agrees to the TOS, the account will be considered to be a guest account and will be marked as not-created. This allows users to review the TOS and make an informed decision about whether they want to create an account and use the application. The requirement to agree to the TOS helps to ensure that users are aware of and agree to the terms and conditions governing their use of the application.
 ### user
 
 After creating an account and agreeing to TOS, we consider the guest to be a user. They now have access to the application.
 They can create a **new lobby**, join an **existing lobby**, view their **profile**, view the **global leaderboard**.
 
 #### profile
-Each user will be able to view their profile. They'll see their general information there. General information such as win rate,
-games played, their name and their bio.
+Each user will be able to view their profile, which will display their general information such as their win rate, games played, name, and bio. This allows users to see their personal statistics and profile information, providing a convenient way to track their progress and learn more about themselves and other users. The ability to view one's own profile enhances the user experience by providing users with a comprehensive view of their activity and information within the application.
 
 #### global leaderboard
 All users are displayed on a global leaderboard ranked by their win rate
 
 #### existing lobby
-You can join a lobby given you've got an invitation link. This invitation link will simply be an url to the lobby.
+To join a lobby, you will need to have an invitation link. This invitation link will simply be an url to the lobby.
 
 #### new lobby
-As a user you can create a new lobby and invite your friends to play with you. After creating the lobby, an invitation link is simply the url.
+As a user, you can create a new lobby and invite your friends to play with you. To do this, simply create the lobby and an invitation link will be generated for you to share with your friends. The invitation link will simply be the url to the lobby.
 
 ### player
-After joining an existing lobby, or creating a new lobby you become a **player**. You've now got two roles to play as. 
-Either you are a **input_player** or **speller_player**
+After joining an existing lobby or creating a new one, you will acquire the status of a player. While playing the game, you can become one of two roles: either a **Word Master** or a **Word Speller**.
 
-### input_player
-Every iteration (one iteration = once have all the players became the input_player at least once) is a player input_player.
-As this role, the player inputs a valid English word into the prompt that shows up on screen. The word is then played out loud
-to speller_player role. After inputting the word, the input_player gains 1 point.
+### Word Master
+During each iteration of the game, one of the players will become the Word Master. In this role, the player must input a valid English word into the prompt that appears on the screen. This word will then be played out loud for the Word Speller role to hear and spell. After inputting the word, the Word Master will gain 1 point.
 
-### speller_player
-As this role you're supposed to spell the word given by an input_player. The word is always played out loud and you can choose to
-play it again. After spelling out the word correctly, you gain 1 point.
+### Word Speller
+As a Word Speller, your role is spelling the word given by the Word Master. The word will be played out loud, and you can choose to play it again if needed. Once you have spelled the word correctly, you will gain 1 point.
 
 ## Technical Overview
 ### Frontend
+TODO text to speech, websockets
+
 The application's frontend is written in the React ecosystem. Using React as the frontend library of choice. React router as the 
 router. For styling the application uses styled-components with the additional vanilla CSS when convenient.
 
@@ -98,7 +94,7 @@ Successful request will result in: 201 Created
 Unsuccessful request will result in: 
 * 400 Bad Request - user already has an account created.
 ```
-{{baseUri}}/api/user/register/{"userName":string,"email":string,"password":string}
+{{baseUri}}/api/user/register?{"userName":string,"email":string,"password":string}
 ```
 
 **GET** *Login an existing user*
@@ -108,7 +104,7 @@ Successful request will result in: 200 OK
 Unsuccessful request will result in:
 * 400 Bad Request - user doesn't exist.
 ```
-{{baseUri}}/api/user/login/{"email":string,"password":string}
+{{baseUri}}/api/user/login?{"email":string,"password":string}
 ```
 
 **GET** *Shows user information*
@@ -118,7 +114,7 @@ Successful request will result in: 200 OK
 Unsuccessful request will result in:
 * 400 Bad Request - user doesn't exist.
 ```
-{{baseUri}}/api/user/profile/{"email":string}
+{{baseUri}}/api/user/profile?{"email":string}
 ```
 
 **GET** *Shows global leaderboard*
@@ -149,7 +145,7 @@ Unsuccessful request will result in:
 * 400 Bad Request - client error
 * 403 Forbidden - an active lobby with the same name already exists
 ```
-{{baseUri}}/api/lobby/new/{"name":string}}
+{{baseUri}}/api/lobby/new?{"name":string}}
 ```
 
 **POST** *Join a lobby*
@@ -159,7 +155,7 @@ Successful request will result in: 200 OK
 Unsuccessful request will result in:
 * 403 Forbidden - lobby is full
 ```
-{{baseUri}}/api/lobby/{"name":string}}
+{{baseUri}}/api/lobby?{"name":string}}
 ```
 
 **POST** *Start the game*
@@ -169,7 +165,7 @@ Successful request will result in: 200 OK
 Unsuccessful request will result in:
 * 403 Forbidden - lobby could not be started (usually because the player count did not exceed 1)
 ```
-{{baseUri}}/api/lobby/start/{"name":string,"email":string}}
+{{baseUri}}/api/lobby/start?{"name":string,"email":string}}
 ```
 
 **GET** *List players in lobby*
@@ -179,10 +175,10 @@ Successful request will result in: 200 OK
 Unsuccessful request will result in:
 * 400 Bad Request - lobby does not exist
 ```
-{{baseUri}}/api/lobby/players/{"name":string}}
+{{baseUri}}/api/lobby/players?{"name":string}}
 ```
 
-**POST** *Inputs word to be spelled by input_player*
+**POST** *Inputs word to be spelled by Word Master*
 
 Successful request will result in: 200 OK
 
@@ -190,10 +186,10 @@ Unsuccessful request will result in:
 * 400 Bad Request - the word did not match accepted pattern
 * 403 - user roles did not match
 ```
-{{baseUri}}/api/lobby/spellit/{"word":string}}
+{{baseUri}}/api/lobby/Spellcaster?{"word":string}}
 ```
 
-**POST** *Inputs spelled word by speller_player*
+**POST** *Inputs spelled word by Word Speller*
 
 Successful request will result in: 200 OK
 
@@ -201,7 +197,7 @@ Unsuccessful request will result in:
 * 400 Bad Request - the string did not match accepted pattern
 * 403 - user roles did not match
 ```
-{{baseUri}}/api/lobby/spelled/{"word":string}}
+{{baseUri}}/api/lobby/spelled?{"word":string}}
 ```
 
 **GET** *Lobby score*
@@ -211,20 +207,21 @@ Successful request will result in: 200 OK
 Unsuccessful request will result in:
 * 400 Bad Request - lobby does not exist
 ```
-{{baseUri}}/api/lobby/stats/"name":string}
+{{baseUri}}/api/lobby/stats?"name":string}
 ```
 
 **POST** *Increase score*
 
-Successful request will result in: 200 OK
+Successful request will result in: 200 OK$
 
 Unsuccessful request will result in:
 * 400 Bad Request - user does not exist
 ```
-{{baseUri}}/api/lobby/increase/"email":string,"value":number}
+{{baseUri}}/api/lobby/increase?"email":string,"value":number}
 ```
 
 ## Component Diagram
+
 
 ## Database model
 
