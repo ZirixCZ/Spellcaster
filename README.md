@@ -1,5 +1,5 @@
 # Spellcaster
-Spellcaster is a revolutionary online spelling application that combines the act of learning English with the excitement and engagement of playing a game. This innovative approach to language learning allows users to improve their spelling skills while enjoying themselves, making the process of learning more enjoyable and effective.
+Spellcaster is an online spelling application that combines the act of learning English with the excitement and engagement of playing a game. This innovative approach to language learning allows users to improve their spelling skills while enjoying themselves, making the process of learning more enjoyable and effective.
 
 Whether you are a student looking to improve your English proficiency or a language enthusiast looking to enhance your spelling abilities, Spellcaster is the perfect tool for you. With its intuitive design and engaging gameplay, Spellcaster makes it easy and fun to learn English.
 
@@ -30,7 +30,7 @@ As a participant in this program, the project has access to state-of-the-art res
 ## Acceptance criteria
 
 The web application enables the simultaneous connection of multiple users across multiple lobbies. This allows for a highly interactive and engaging experience, as users can join different lobbies and connect with other players from around the world.
-### Authentication
+### Account
 
 #### Register
 The registration page should consist of a submit button and three input fields for the user's username, email address, and password. If any of the inputs does not meet the requirements specified in the Acceptance Criteria->Account section, a warning text should appear informing the user of the error. This ensures that users are able to register for the application with accurate and complete information, facilitating a smooth and efficient registration process.
@@ -41,8 +41,6 @@ The login page will consist of a submit button, input fields for the user's emai
 ### guest
 
 In order to participate, users must create an account. Each account consists of a unique username, email address, and password. This ensures that users have secure and personalized access to the application and its features. The requirement for an account ensures that users are able to access the application with a consistent and verifiable identity, facilitating a secure and engaging experience.
-
-#### Account
 
 * The username is allowed to consist of lowercase letters, numbers, dots, and underscores. However, the length of the username cannot exceed 16 characters. These rules ensure that users are able to create unique and recognizable username, while also limiting the length of the username to prevent potential issues. The restrictions on the username help to maintain the integrity and security of the application, while also providing a consistent and user-friendly experience.
 * Every account has to have a valid email address linked to it. Overall, the requirement for a valid email address linked to each account helps to ensure the security and integrity of the application.
@@ -76,11 +74,15 @@ During each iteration of the game, one of the players will become the Word Maste
 As a Word Speller, your role is spelling the word given by the Word Master. The word will be played out loud, and you can choose to play it again if needed. Once you have spelled the word correctly, you will gain 1 point.
 
 ## Technical Overview
-### Frontend
-TODO text to speech, websockets
 
-The application's frontend is written in the React ecosystem. Using React as the frontend library of choice. React router as the 
-router. For styling the application uses styled-components with the additional vanilla CSS when convenient.
+### Authentication
+
+This application uses JWT (JSON Web Tokens) for authorization and authentication. When a user logs in, the application generates a JWT that contains information about the user's identity and permissions. This JWT is then stored in localStorage. When the client makes a request to the server, the JWT is included in the request header, allowing the server to verify the user's identity and authorize access to the requested resources.
+
+### Frontend
+The frontend of the application is written using the React ecosystem, including React as the frontend library and React Router as the router. For styling, the application uses styled-components, along with vanilla CSS when appropriate. The audio in the game will be generated on the client using the SpeechSynthesis interface of the Web Speech API.
+
+Communication with the backend is handled using a combination of HTTP and websockets. Websockets are used primarily for in-game state, while HTTP is used for tasks such as logging in, creating a lobby, and other similar operations.
 
 ### Backend
 The API is written using the Go programming language. For the database the application uses Postgresql.
@@ -212,7 +214,7 @@ Unsuccessful request will result in:
 
 **POST** *Increase score*
 
-Successful request will result in: 200 OK$
+Successful request will result in: 200 OK
 
 Unsuccessful request will result in:
 * 400 Bad Request - user does not exist
