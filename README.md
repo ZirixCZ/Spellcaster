@@ -224,6 +224,22 @@ Unsuccessful request will result in:
 
 ## Component Diagram
 
+The application utilizes both HTTP and WebSockets to handle its API calls. HTTP is used for standalone requests that only need to be performed once, such as registering or creating a lobby. On the other hand, WebSockets are used for requests that are expected to be repeated and require a duplex connection to receive a response, such as when a player is playing a game or when the Word Master is giving a word. This allows for efficient communication and real-time interactions within the application.
+
+### HTTP
+For example:
+* Registering
+* Logging in
+* Joining a lobby
+
+### Websocket
+Handling the in-game state of the game. When the player connects to a lobby all the API call are handled by a websocket. An example of these calls:
+
+for example:
+* Getting information about connected users in a lobby
+* Playing as a Word Speller or Word Master
+
+
 
 ## Database model
 
