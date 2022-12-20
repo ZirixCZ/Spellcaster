@@ -89,7 +89,15 @@ The API is written using the Go programming language. For the database the appli
 
 #### Endpoints
 
-**POST** *Registers a new user*
+public - anyone can access this endpoint
+protected
+* user - logged in client [has to be authenticated]
+* player - user in a lobby [has to be user]
+* lobbymaster - creator of given lobby [has to be user]
+* wordmaster - player that gives word to spell [has to be player]
+* wordspeller - player that spells given word [has to be player]
+
+public **POST** *Registers a new user*
 
 Successful request will result in: 201 Created
 
@@ -99,7 +107,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/user/register?{"userName":string,"email":string,"password":string}
 ```
 
-**GET** *Login an existing user*
+public **GET** *Login an existing user*
 
 Successful request will result in: 200 OK
 
@@ -109,7 +117,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/user/login?{"email":string,"password":string}
 ```
 
-**GET** *Shows user information*
+protected [user] **GET** *Shows user information*
 
 Successful request will result in: 200 OK
 
@@ -119,7 +127,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/user/profile?{"email":string}
 ```
 
-**GET** *Shows global leaderboard*
+protected [user] **GET** *Shows global leaderboard*
 
 Successful request will result in: 200 OK
 
@@ -129,7 +137,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/leaderboard}
 ```
 
-**GET** *Shows not started active lobbies*
+protected [user] **GET** *Shows not started active lobbies*
 
 Successful request will result in: 200 OK
 
@@ -139,7 +147,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/lobby}
 ```
 
-**POST** *Create a new lobby*
+protected [user] **POST** *Create a new lobby*
 
 Successful request will result in: 200 OK
 
@@ -150,7 +158,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/lobby/new?{"name":string}}
 ```
 
-**POST** *Join a lobby*
+protected [user] **POST** *Join a lobby*
 
 Successful request will result in: 200 OK
 
@@ -160,7 +168,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/lobby?{"name":string}}
 ```
 
-**POST** *Start the game*
+protected [lobbymaster] **POST** *Start the game*
 
 Successful request will result in: 200 OK
 
@@ -170,7 +178,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/lobby/start?{"name":string,"email":string}}
 ```
 
-**GET** *List players in lobby*
+protected [player] **GET** *List players in lobby*
 
 Successful request will result in: 200 OK
 
@@ -180,7 +188,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/lobby/players?{"name":string}}
 ```
 
-**POST** *Inputs word to be spelled by Word Master*
+protected [wordmaster] **POST** *Inputs word to be spelled by Word Master*
 
 Successful request will result in: 200 OK
 
@@ -191,7 +199,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/lobby/Spellcaster?{"word":string}}
 ```
 
-**POST** *Inputs spelled word by Word Speller*
+protected [wordspeller] **POST** *Inputs spelled word by Word Speller*
 
 Successful request will result in: 200 OK
 
@@ -202,7 +210,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/lobby/spelled?{"word":string}}
 ```
 
-**GET** *Lobby score*
+protected [player] **GET** *Lobby score*
 
 Successful request will result in: 200 OK
 
@@ -212,7 +220,7 @@ Unsuccessful request will result in:
 {{baseUri}}/api/lobby/stats?"name":string}
 ```
 
-**POST** *Increase score*
+protected [user] **POST** *Increase score*
 
 Successful request will result in: 200 OK
 
@@ -239,7 +247,7 @@ for example:
 * Getting information about connected users in a lobby
 * Playing as a Word Speller or Word Master
 
-
+![simple diagram.png](..%2F..%2FPictures%2FScreenshots%2FScreenshot%20from%202022-12-20%2010-24-16.png)
 
 ## Database model
 
