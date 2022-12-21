@@ -5,14 +5,15 @@ import styled from "styled-components";
 import FormInput from "../../components/FormInput/FormInput";
 import callApi from "../../scripts/callApi/callApi";
 import {GFullCenterWrapper} from "../../globalStyle";
+import App from "../../App";
 
 const Register = (): JSX.Element => {
 
     const navigate = useNavigate();
 
-    const userNameRef = useRef<HTMLInputElement | undefined>();
-    const emailRef = useRef<HTMLInputElement | undefined>();
-    const passwordRef = useRef<HTMLInputElement | undefined>();
+    const userNameRef = useRef<HTMLInputElement | null>(null);
+    const emailRef = useRef<HTMLInputElement | null>(null);
+    const passwordRef = useRef<HTMLInputElement | null>(null);
 
     const checkValidityRegex = () => {
         if (!userNameRef?.current?.value || !emailRef?.current?.value || !passwordRef?.current?.value) {

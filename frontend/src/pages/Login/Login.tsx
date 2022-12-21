@@ -10,8 +10,8 @@ const Login = (): JSX.Element => {
 
     const navigate = useNavigate();
 
-    const emailRef = useRef<HTMLInputElement | undefined>();
-    const passwordRef = useRef<HTMLInputElement | undefined>();
+    const emailRef = useRef<HTMLInputElement | null>(null);
+    const passwordRef = useRef<HTMLInputElement | null>(null);
 
     const handleSubmit = (e: FormEvent) => {
         if (!emailRef?.current?.value || !passwordRef?.current?.value) {

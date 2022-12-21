@@ -1,8 +1,17 @@
-import React from "react";
+import * as React from "react";
 import {GInput} from "../../globalStyle";
 import styled from "styled-components";
+import {MutableRefObject} from "react";
 
-const FormInput = (props) => {
+type AppProps = {
+    refer: React.RefObject<HTMLInputElement> | null,
+    placeholder: string,
+    type: string,
+    pattern: string,
+    errorMessage: string
+};
+
+const FormInput = (props: AppProps): JSX.Element => {
 
     const Span = styled.span`
         font-size: 1em;
@@ -12,7 +21,7 @@ const FormInput = (props) => {
         visibility: hidden;
     `
 
-    const InputValidator = styled.form`
+    const InputValidator = styled.div`
         width: 100%;
         padding-bottom: 1.75rem;
         &:invalid ${Span} {
