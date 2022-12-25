@@ -247,11 +247,13 @@ for example:
 * Getting information about connected users in a lobby
 * Playing as a Word Speller or Word Master
 
-![simple diagram.png](..%2F..%2FPictures%2FScreenshots%2FScreenshot%20from%202022-12-20%2010-24-16.png)
+![simplediagram](https://user-images.githubusercontent.com/49836430/208713927-4f8f04d9-0010-494c-9f24-490562aa99f0.png)
 
 ## Database model
 
-![data_structure.png](data_structure.png)
+![databasemodel](https://user-images.githubusercontent.com/49836430/208713850-08cafa11-95ac-4105-8364-51a2afa4b5aa.png)
+
+
 
 ## Frontend
 
