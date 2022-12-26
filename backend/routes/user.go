@@ -5,9 +5,12 @@ import (
 	"backend/spellit/storage"
 	"encoding/json"
 	"fmt"
+	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"os"
 	"strings"
+	"time"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +53,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	storage.DB.Create(&newUser)
 
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 	fmt.Printf("New user: %s\n", userInput.Email)
 	fmt.Fprintf(w, "User %+v created", userInput.Email)
 }
@@ -97,6 +100,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Printf("New Login: %s\n", userInput.Email)
 	fmt.Fprintf(w, "Access for %+v has been granted", userInput.Email)
+}
+
+func generateJWT() (string, error) {
+	token := jwt.New(jwt.SigningMethodEdDSA)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["exp"] = time.Now().Add(10 * time.Minute)
+	claims["authorized"] = true
+	claims["user"] = "username"
+
+	tokenString, err := token.SignedString(os.Getenv("JWT_KEY"))
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
 }
 
 func hashAndSaltPassword(password string) (hashedPassword string, err error) {
