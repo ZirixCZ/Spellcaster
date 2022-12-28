@@ -5,7 +5,6 @@ import (
 	"github.com/golang-jwt/jwt"
 	"net/http"
 	"os"
-	"time"
 )
 
 func VerifyJWT(endpointHandler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
@@ -17,12 +16,15 @@ func VerifyJWT(endpointHandler func(w http.ResponseWriter, r *http.Request)) htt
 
 			return []byte(os.Getenv("JWT_KEY")), nil
 		})
-		fmt.Println(err)
-		fmt.Println(token)
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Unauthorized"))
+			return
+		}
 
 		claims := token.Claims.(jwt.MapClaims)
-		fmt.Println(claims["authorized"], claims["username"])
-
+		fmt.Printf("authorized request made by %s\n", claims["username"])
+		
 		endpointHandler(w, r)
 	})
 }
@@ -31,11 +33,10 @@ func GenerateJWT(username string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(60 * time.Minute)
 	claims["authorized"] = true
 	claims["username"] = username
 
-	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_KEY")))
 	if err != nil {
 		return "", err
 	}
