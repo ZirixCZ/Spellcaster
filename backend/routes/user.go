@@ -5,15 +5,18 @@ import (
 	"backend/spellit/storage"
 	"encoding/json"
 	"fmt"
-	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
-	"os"
 	"strings"
-	"time"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		w.Write([]byte("Method not allowed"))
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Max-Age", "15")
@@ -59,6 +62,12 @@ func Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		w.Write([]byte("Method not allowed"))
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Max-Age", "15")
@@ -84,7 +93,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashError := getHashedPassword(userInput.UserName, &user)
+	hashError := getHashedPassword(userInput.Email, &user)
 	if hashError != nil {
 		fmt.Println("An error occurred")
 		return
@@ -97,25 +106,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Passwords do not match")
 	}
 
+	jwt, err := GenerateJWT(userInput.Email)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(jwt)
+
 	w.WriteHeader(http.StatusOK)
 	fmt.Printf("New Login: %s\n", userInput.Email)
 	fmt.Fprintf(w, "Access for %+v has been granted", userInput.Email)
-}
-
-func generateJWT() (string, error) {
-	token := jwt.New(jwt.SigningMethodEdDSA)
-
-	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(10 * time.Minute)
-	claims["authorized"] = true
-	claims["user"] = "username"
-
-	tokenString, err := token.SignedString(os.Getenv("JWT_KEY"))
-	if err != nil {
-		return "", err
-	}
-
-	return tokenString, nil
 }
 
 func hashAndSaltPassword(password string) (hashedPassword string, err error) {
