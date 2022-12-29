@@ -5,22 +5,14 @@ import (
 	"backend/spellit/storage"
 	"encoding/json"
 	"fmt"
+	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"os"
 	"strings"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		w.Write([]byte("Method not allowed"))
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	w.Header().Set("Access-Control-Max-Age", "15")
-
 	var userInput RegisterUserInput
 
 	err := json.NewDecoder(r.Body).Decode(&userInput)
@@ -62,38 +54,30 @@ func Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		w.Write([]byte("Method not allowed"))
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	w.Header().Set("Access-Control-Max-Age", "15")
-
 	var userInput RegisterUserInput
 
 	err := json.NewDecoder(r.Body).Decode(&userInput)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		fmt.Println(err)
+		return
 	}
 
 	var user models.User
-	userExists, userExistsError := getAndHandleUserExists(&user, userInput.Email)
+	userExists, userExistsError := getAndHandleUserExists(&user, userInput.UserName)
 	if userExistsError != nil {
 		fmt.Println(userExistsError)
 		return
 	}
 
 	if userExists == false {
-		fmt.Printf("User %s doesn't exist\n", userInput.Email)
+		fmt.Printf("User %s doesn't exist\n", userInput.UserName)
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "User %s doesn't exist\n", userInput.Email)
+		fmt.Fprintf(w, "User %s doesn't exist\n", userInput.UserName)
 		return
 	}
 
-	hashError := getHashedPassword(userInput.Email, &user)
+	hashError := getHashedPassword(userInput.UserName, &user)
 	if hashError != nil {
 		fmt.Println("An error occurred")
 		return
@@ -104,9 +88,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Passwords do not match")
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "Passwords do not match")
+		return
 	}
 
-	jwt, err := GenerateJWT(userInput.Email)
+	jwt, err := GenerateJWT(userInput.UserName)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -114,9 +99,25 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(jwt)
 
+	w.Header().Set("Authorization", jwt)
 	w.WriteHeader(http.StatusOK)
-	fmt.Printf("New Login: %s\n", userInput.Email)
-	fmt.Fprintf(w, "Access for %+v has been granted", userInput.Email)
+	fmt.Printf("New Login: %s\n", userInput.UserName)
+	fmt.Fprintf(w, "Access for %+v has been granted", userInput.UserName)
+}
+
+func GenerateJWT(username string) (string, error) {
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["authorized"] = true
+	claims["username"] = username
+
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_KEY")))
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
 }
 
 func hashAndSaltPassword(password string) (hashedPassword string, err error) {
@@ -142,8 +143,8 @@ func getHashedPassword(userName string, user *models.User) error {
 	return nil
 }
 
-func getAndHandleUserExists(user *models.User, email string) (exists bool, err error) {
-	userExistsQuery := storage.DB.Where("email = ?", strings.ToLower(email)).Limit(1).Find(&user)
+func getAndHandleUserExists(user *models.User, userName string) (exists bool, err error) {
+	userExistsQuery := storage.DB.Where("user_name = ?", strings.ToLower(userName)).Limit(1).Find(&user)
 	if userExistsQuery.Error != nil {
 		return false, userExistsQuery.Error
 	}

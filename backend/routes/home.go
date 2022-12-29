@@ -1,6 +1,8 @@
 package routes
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	_, err := w.Write([]byte("Welcome to the home page"))
