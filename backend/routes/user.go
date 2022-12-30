@@ -97,12 +97,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(jwt)
+	resp := make(map[string]string)
+	resp["jwt"] = jwt
+	jsonResp, err := json.Marshal(resp)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
-	w.Header().Set("Authorization", jwt)
 	w.WriteHeader(http.StatusOK)
+	w.Write(jsonResp)
 	fmt.Printf("New Login: %s\n", userInput.UserName)
-	fmt.Fprintf(w, "Access for %+v has been granted", userInput.UserName)
 }
 
 func GenerateJWT(username string) (string, error) {
