@@ -1,6 +1,6 @@
 import * as React from "react";
 import {FormEvent, useRef} from "react";
-import {useNavigate} from "react-router-dom";
+import {json, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import FormInput from "../../components/FormInput/FormInput";
 import callApi from "../../scripts/callApi/callApi";
@@ -10,21 +10,28 @@ const Login = (): JSX.Element => {
 
     const navigate = useNavigate();
 
-    const emailRef = useRef<HTMLInputElement | null>(null);
+    const userNameRef = useRef<HTMLInputElement | null>(null);
     const passwordRef = useRef<HTMLInputElement | null>(null);
 
     const handleSubmit = (e: FormEvent) => {
-        if (!emailRef?.current?.value || !passwordRef?.current?.value) {
+        if (!userNameRef?.current?.value || !passwordRef?.current?.value) {
             return;
         }
 
         e.preventDefault();
         callApi("POST", "http://localhost:8080/api/user/login", JSON.stringify({
-            "email": emailRef.current.value,
+            "userName": userNameRef.current.value,
             "password": passwordRef.current.value
         })).then((res) => {
             if (res.ok) {
-                navigate("/");
+                res.json().then(json => {
+                    const token = json.jwt
+                    if (!token)
+                        return
+
+                    localStorage.setItem("jwt", token)
+                    navigate("/")
+                })
             }
         })
     }
@@ -57,7 +64,7 @@ const Login = (): JSX.Element => {
     return (
         <GFullCenterWrapper>
             <Form onSubmit={handleSubmit}>
-                <FormInput refer={emailRef} placeholder="email" type="text" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                <FormInput refer={userNameRef} placeholder="username" type="text" pattern="^[a-z0-9_.]+$"
                            errorMessage="email invalid"/>
                 <FormInput refer={passwordRef} placeholder="password" type="password"
                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>

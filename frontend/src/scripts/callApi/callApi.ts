@@ -1,5 +1,12 @@
 const callApi = async (method: string, endpoint: RequestInfo, body: string | null) => {
-    return fetch(endpoint, {method: method, body: body});
+    let headers = {}
+    if (localStorage.getItem("jwt")) {
+        headers = {
+            Authorization: "" + localStorage.getItem("jwt")
+        };
+    }
+
+    return fetch(endpoint, {headers: headers, method: method, body: body});
 }
 
 export default callApi;
