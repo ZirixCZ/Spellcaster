@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
@@ -44,6 +45,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		UserName: userInput.UserName,
 		Email:    userInput.Email,
 		Password: hashedPassword,
+		Roles:    userInput.Roles,
 	}
 
 	storage.DB.Create(&newUser)
@@ -116,6 +118,7 @@ func GenerateJWT(username string) (string, error) {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["authorized"] = true
 	claims["username"] = username
+	claims["exp"] = time.Now().UTC().Add(30 * time.Minute).Unix()
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_KEY")))
 	if err != nil {
@@ -167,4 +170,5 @@ type RegisterUserInput struct {
 	UserName string `json:"userName" validate:"required,max=256"`
 	Email    string `json:"email" validate:"required,min=8,max=256"`
 	Password string `json:"password" validate:"required,min=8,max=256"`
+	Roles    string `json:"roles" validate:"required,max=256"`
 }
