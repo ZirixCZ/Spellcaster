@@ -4,6 +4,7 @@ import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import {GContainer} from "./globalStyle";
+import AdminPage from "./pages/AdminPage/AdminPage";
 
 const App = (): JSX.Element => {
 
@@ -13,6 +14,7 @@ const App = (): JSX.Element => {
                 <Routes>
                     <Route path="/">
                         <Route path="/" element={<Dashboard/>}/>
+                        <Route path="/admin" element={<AdminPage/>}/>
                         <Route path="register" element={<Register/>}/>
                         <Route path="login" element={<Login/>}/>
                     </Route>

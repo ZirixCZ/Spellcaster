@@ -5,9 +5,10 @@ import (
 	"github.com/golang-jwt/jwt"
 	"net/http"
 	"os"
+	"strings"
 )
 
-func VerifyJWT(endpointHandler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
+func VerifyJWT(endpointHandler func(w http.ResponseWriter, r *http.Request), requiredRole string) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.Header["Authorization"])
 		if len(r.Header["Authorization"]) < 1 {
@@ -29,8 +30,19 @@ func VerifyJWT(endpointHandler func(w http.ResponseWriter, r *http.Request)) htt
 		}
 
 		claims := token.Claims.(jwt.MapClaims)
-		fmt.Printf("authorized request made by %s\n", claims["username"])
+		roles := claims["roles"]
 
-		endpointHandler(w, r)
+		fmt.Printf("ROLES: %s\n", roles)
+
+		if strings.Contains(roles.(string), requiredRole) {
+			fmt.Println(roles.(string), requiredRole)
+			fmt.Printf("authorized request made by %s\n", claims["username"])
+			endpointHandler(w, r)
+			return
+		}
+		fmt.Printf("unauthorized request made\n")
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Unauthorized"))
+		return
 	})
 }

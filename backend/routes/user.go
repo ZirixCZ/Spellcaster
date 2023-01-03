@@ -23,7 +23,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var newUser models.User
-	userExists, userExistsErr := getAndHandleUserExists(&newUser, userInput.Email)
+	userExists, userExistsErr := getAndHandleUserExists(&newUser, userInput.Email, userInput.UserName)
 	if userExistsErr != nil {
 		fmt.Println(userExistsErr)
 		return
@@ -66,7 +66,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user models.User
-	userExists, userExistsError := getAndHandleUserExists(&user, userInput.UserName)
+	userExists, userExistsError := handleLogin(&user, userInput.UserName)
 	if userExistsError != nil {
 		fmt.Println(userExistsError)
 		return
@@ -93,7 +93,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jwt, err := GenerateJWT(userInput.UserName)
+	jwt, err := GenerateJWT(userInput.UserName, user.Roles)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -101,6 +101,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	resp := make(map[string]string)
 	resp["jwt"] = jwt
+	resp["roles"] = user.Roles
 	jsonResp, err := json.Marshal(resp)
 	if err != nil {
 		fmt.Println(err)
@@ -112,12 +113,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("New Login: %s\n", userInput.UserName)
 }
 
-func GenerateJWT(username string) (string, error) {
+func GenerateJWT(username string, roles string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
 	claims["authorized"] = true
 	claims["username"] = username
+	claims["roles"] = roles
 	claims["exp"] = time.Now().UTC().Add(30 * time.Minute).Unix()
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_KEY")))
@@ -151,13 +153,33 @@ func getHashedPassword(userName string, user *models.User) error {
 	return nil
 }
 
-func getAndHandleUserExists(user *models.User, userName string) (exists bool, err error) {
-	userExistsQuery := storage.DB.Where("user_name = ?", strings.ToLower(userName)).Limit(1).Find(&user)
-	if userExistsQuery.Error != nil {
-		return false, userExistsQuery.Error
+func handleLogin(user *models.User, userName string) (bool, error) {
+	userUserNameExists := storage.DB.Where("user_name = ?", strings.ToLower(userName)).Limit(1).Find(&user)
+	if userUserNameExists.Error != nil {
+		return false, userUserNameExists.Error
 	}
 
-	userExists := userExistsQuery.RowsAffected > 0
+	userExists := userUserNameExists.RowsAffected > 0
+
+	if userExists == true {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+func getAndHandleUserExists(user *models.User, email string, userName string) (exists bool, err error) {
+	userUserNameExists := storage.DB.Where("user_name = ?", strings.ToLower(userName)).Limit(1).Find(&user)
+	userEmailExists := storage.DB.Where("email = ?", strings.ToLower(email)).Limit(1).Find(&user)
+	if userUserNameExists.Error != nil {
+		return false, userUserNameExists.Error
+	}
+
+	if userEmailExists.Error != nil {
+		return false, userEmailExists.Error
+	}
+
+	userExists := userUserNameExists.RowsAffected > 0 || userEmailExists.RowsAffected > 0
 
 	if userExists == true {
 		return true, nil
