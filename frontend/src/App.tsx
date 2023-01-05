@@ -3,13 +3,13 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import {GContainer} from "./globalStyle";
 import AdminPage from "./pages/AdminPage/AdminPage";
+import styled from "styled-components/macro";
 
 const App = (): JSX.Element => {
 
     return (
-        <GContainer>
+        <Container>
             <BrowserRouter>
                 <Routes>
                     <Route path="/">
@@ -20,9 +20,14 @@ const App = (): JSX.Element => {
                     </Route>
                 </Routes>
             </BrowserRouter>
-        </GContainer>
+        </Container>
     );
 
 }
+
+export const Container = styled.div`
+        height: 100vh;
+        width: 100%;
+    `
 
 export default App;

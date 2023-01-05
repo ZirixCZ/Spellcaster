@@ -1,15 +1,12 @@
 import * as React from "react";
 import {FormEvent, useRef} from "react";
 import {json, useNavigate} from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import FormInput from "../../components/FormInput/FormInput";
 import callApi from "../../scripts/callApi/callApi";
 import {
-    GFullCenterWrapper,
+    GWrapperFullCenter,
     GButton,
-    GContainerHalf,
-    GContainer4rem,
-    GTitleLeft,
     GHeaderContainer
 } from "../../globalStyle";
 
@@ -43,7 +40,32 @@ const Login = (): JSX.Element => {
         })
     }
 
-    const Form = styled.form`
+    return (
+        <GWrapperFullCenter>
+            <GHeaderContainer>
+                <h1>Welcome back</h1>
+            </GHeaderContainer>
+            <Form onSubmit={handleSubmit}>
+                    <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
+                    <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
+                               errorMessage="email invalid"/>
+                    <FormInput refer={passwordRef} placeholder="Password" type="password"
+                               pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
+                    <GButton primary medium>Login</GButton>
+            </Form>
+        </GWrapperFullCenter>
+    );
+
+}
+
+export const GTitleLeft = styled.p`
+    width: 100%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: left;
+  `
+
+export const Form = styled.form`
         width: 25%;
         height: fit-content;
         display: flex;
@@ -60,30 +82,5 @@ const Login = (): JSX.Element => {
             width: 75%;
         }
     `
-
-    const Button = styled.button`
-        width: 50%;
-        padding: 1rem;
-        background-color: white;
-        cursor: pointer;
-    `
-
-    return (
-        <GFullCenterWrapper>
-            <GHeaderContainer>
-                <h1>Welcome back</h1>
-            </GHeaderContainer>
-            <Form onSubmit={handleSubmit}>
-                    <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
-                    <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
-                               errorMessage="email invalid"/>
-                    <FormInput refer={passwordRef} placeholder="Password" type="password"
-                               pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
-                    <GButton>Login</GButton>
-            </Form>
-        </GFullCenterWrapper>
-    );
-
-}
 
 export default Login;

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {GFullCenterWrapper} from "../../globalStyle";
+import {GWrapperFullCenter} from "../../globalStyle";
 import callApi from "../../scripts/callApi/callApi";
 
 const AdminPage = (): JSX.Element => {
@@ -22,12 +22,12 @@ const AdminPage = (): JSX.Element => {
     }, [])
 
     return (
-        <GFullCenterWrapper>
+        <GWrapperFullCenter>
             {auth
                 ? <p>ADMIN: You're an Admin!</p>
                 : <p>ADMIN: You weren't authorized</p>
             }
-        </GFullCenterWrapper>
+        </GWrapperFullCenter>
     )
 
 }

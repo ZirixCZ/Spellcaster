@@ -1,16 +1,29 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import "./assets/css/index.css"
 
-// TODO: naming scheme for global components
+const darkPurple = "#735CDD";
+const lightGreen = "#A1D938";
+const darkGray = "#1F191B";
 
-const bruh = "#735CDD";
+export const GContainerFull = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  height: 50%;
+  width: 100%;
+`
 
-export const GContainer = styled.div`
-        height: 100vh;
-        width: 100%;
-    `
+export const GContainerFullFitContent = styled(GContainerFull)`
+      height: fit-content;
+  `
 
-export const GFullCenterWrapper = styled.div`
+export const GContainerHalf = styled(GContainerFull)`
+      height: 50%;
+  `
+
+export const GWrapperFullCenter = styled.div`
         height: 100%;
         width: 100%;
         display: flex;
@@ -37,43 +50,31 @@ export const GHeaderContainer = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
-      padding-top: 1.5rem;
+      flex-direction: column;
+      padding-top: 2rem;
       @media (min-width: 768px) {
         padding-top: 0;
       }
   `
 
-export const GButton = styled.button`
-        background: ${bruh};
+export const GHeaderContainerSpaceEvenly = styled(GHeaderContainer)`
+    justify-content: space-evenly;
+  `
+
+interface Props {
+    primary?: boolean,
+    leaderboard?: boolean
+    small?: boolean
+    medium?: boolean
+    large?: boolean
+}
+
+export const GButton = styled.button<Props>`
+        background: ${({primary, leaderboard}) => (primary ? darkPurple : leaderboard ? lightGreen : darkGray)};
         color: white;
         width: 100%;
-        height: 3.5rem;
+        height: ${({small, medium, large}) => (small ? "2.5rem" : medium ? "3.5rem" : large ? "4.5rem" : "3.5rem")};
         font-weight: 600;
         border-radius: 3px;
         font-size: 1.25em;
     `
-export const GContainerHalf = styled.div`
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: left;
-      height: 50%;
-      width: 100%;
-  `
-
-export const GContainer4rem = styled.div`
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: fit-content;
-      width: 100%;
-  `
-
-export const GTitleLeft = styled.p`
-    width: 100%;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-align: left;
-  `

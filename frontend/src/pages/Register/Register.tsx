@@ -1,11 +1,10 @@
 import * as React from "react";
 import {FormEvent, useRef} from "react";
 import {useNavigate} from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import FormInput from "../../components/FormInput/FormInput";
 import callApi from "../../scripts/callApi/callApi";
-import {GFullCenterWrapper, GButton, GTitleLeft, GHeaderContainer} from "../../globalStyle";
-import App from "../../App";
+import {GWrapperFullCenter, GButton, GHeaderContainer} from "../../globalStyle";
 
 const Register = (): JSX.Element => {
 
@@ -53,7 +52,34 @@ const Register = (): JSX.Element => {
         }
     }
 
-    const Form = styled.form`
+    return (
+        <GWrapperFullCenter>
+            <GHeaderContainer>
+                <h1>Register</h1>
+            </GHeaderContainer>
+            <Form onSubmit={handleSubmit}>
+                <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
+                <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
+                           errorMessage="username invalid"/>
+                <FormInput refer={emailRef} placeholder="Email" type="text" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                           errorMessage="email invalid"/>
+                <FormInput refer={passwordRef} placeholder="Password" type="password"
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
+                <GButton primary medium>Create an account</GButton>
+            </Form>
+        </GWrapperFullCenter>
+    );
+
+}
+
+export const GTitleLeft = styled.p`
+    width: 100%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: left;
+  `
+
+export const Form = styled.form`
         width: 25%;
         height: fit-content;
         display: flex;
@@ -70,32 +96,5 @@ const Register = (): JSX.Element => {
             width: 75%;
         }
     `
-
-    const Button = styled.button`
-        width: 50%;
-        padding: 1rem;
-        background-color: white;
-        cursor: pointer;
-    `
-
-    return (
-        <GFullCenterWrapper>
-            <GHeaderContainer>
-                <h1>Register</h1>
-            </GHeaderContainer>
-            <Form onSubmit={handleSubmit}>
-                <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
-                <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
-                           errorMessage="username invalid"/>
-                <FormInput refer={emailRef} placeholder="Email" type="text" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-                           errorMessage="email invalid"/>
-                <FormInput refer={passwordRef} placeholder="Password" type="password"
-                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
-                <GButton>Create an account</GButton>
-            </Form>
-        </GFullCenterWrapper>
-    );
-
-}
 
 export default Register;
