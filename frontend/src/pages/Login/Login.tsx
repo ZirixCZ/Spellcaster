@@ -4,7 +4,14 @@ import {json, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import FormInput from "../../components/FormInput/FormInput";
 import callApi from "../../scripts/callApi/callApi";
-import {GFullCenterWrapper} from "../../globalStyle";
+import {
+    GFullCenterWrapper,
+    GButton,
+    GContainerHalf,
+    GContainer4rem,
+    GTitleLeft,
+    GHeaderContainer
+} from "../../globalStyle";
 
 const Login = (): JSX.Element => {
 
@@ -38,7 +45,7 @@ const Login = (): JSX.Element => {
 
     const Form = styled.form`
         width: 25%;
-        height: 100%;
+        height: fit-content;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -63,12 +70,16 @@ const Login = (): JSX.Element => {
 
     return (
         <GFullCenterWrapper>
+            <GHeaderContainer>
+                <h1>Welcome back</h1>
+            </GHeaderContainer>
             <Form onSubmit={handleSubmit}>
-                <FormInput refer={userNameRef} placeholder="username" type="text" pattern="^[a-z0-9_.]+$"
-                           errorMessage="email invalid"/>
-                <FormInput refer={passwordRef} placeholder="password" type="password"
-                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
-                <Button>Login</Button>
+                    <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
+                    <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
+                               errorMessage="email invalid"/>
+                    <FormInput refer={passwordRef} placeholder="Password" type="password"
+                               pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
+                    <GButton>Login</GButton>
             </Form>
         </GFullCenterWrapper>
     );

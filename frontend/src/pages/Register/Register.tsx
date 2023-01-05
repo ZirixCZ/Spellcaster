@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import FormInput from "../../components/FormInput/FormInput";
 import callApi from "../../scripts/callApi/callApi";
-import {GFullCenterWrapper} from "../../globalStyle";
+import {GFullCenterWrapper, GButton, GTitleLeft, GHeaderContainer} from "../../globalStyle";
 import App from "../../App";
 
 const Register = (): JSX.Element => {
@@ -55,7 +55,7 @@ const Register = (): JSX.Element => {
 
     const Form = styled.form`
         width: 25%;
-        height: 100%;
+        height: fit-content;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -80,14 +80,18 @@ const Register = (): JSX.Element => {
 
     return (
         <GFullCenterWrapper>
+            <GHeaderContainer>
+                <h1>Register</h1>
+            </GHeaderContainer>
             <Form onSubmit={handleSubmit}>
-                <FormInput refer={userNameRef} placeholder="user name" type="text" pattern="^[a-z0-9_.]+$"
+                <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
+                <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
                            errorMessage="username invalid"/>
-                <FormInput refer={emailRef} placeholder="email" type="text" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                <FormInput refer={emailRef} placeholder="Email" type="text" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                            errorMessage="email invalid"/>
-                <FormInput refer={passwordRef} placeholder="password" type="password"
+                <FormInput refer={passwordRef} placeholder="Password" type="password"
                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
-                <Button>Register</Button>
+                <GButton>Create an account</GButton>
             </Form>
         </GFullCenterWrapper>
     );
