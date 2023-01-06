@@ -5,7 +5,7 @@ import {
     GButton,
     GContainerFullFitContent,
     GWrapperFullCenter,
-    GHeaderContainerSpaceEvenly
+    GHeaderContainerSpaceEvenly, GInput
 } from "../../globalStyle";
 import styled from "styled-components/macro";
 import callApi from "../../scripts/callApi/callApi";
@@ -78,26 +78,13 @@ export const ButtonWrapper = styled.div`
       width: 100%;
     `
 
-export const CodeInput = styled.input`
-      background: #1F191B;
+export const CodeInput = styled(GInput)`
+      background-color: #1F191B;
       color: white;
       text-align: center;
-      width: 100%;
-      height: 3.5rem;
-      font-weight: 600;
-      border-radius: 3px;
       font-size: 1.25em;
-      outline: none;
-      border: none;
-      ::placeholder {
-        color: white;
-        opacity: 1;
-      }
-      :focus {
-        ::placeholder {
-          opacity: 0;
-        }
-      }
+      font-weight: 600;
+      height: 3.5rem;
     `
 
 export default Dashboard;

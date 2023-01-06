@@ -40,9 +40,17 @@ export const GInput = styled.input`
         padding-top: 1.25rem;
         padding-bottom: 1.25rem;
         padding-left: 1rem;
+        border-radius: 3px;
+        outline: none;
+        border: 1px black solid;
         font-size: 1rem;
         ::placeholder {
-          font-weight: 300;
+            opacity: 1;
+        }
+        :focus {
+          ::placeholder {
+              opacity: 0;
+            }
         }
     `
 

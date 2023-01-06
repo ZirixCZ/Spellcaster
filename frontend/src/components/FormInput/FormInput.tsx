@@ -13,22 +13,6 @@ type AppProps = {
 
 const FormInput = (props: AppProps): JSX.Element => {
 
-    const Span = styled.span`
-        font-size: 1em;
-        color: red;
-        position: absolute;
-        display: block;
-        visibility: hidden;
-    `
-
-    const InputValidator = styled.div`
-        width: 100%;
-        padding-bottom: 1.75rem;
-        &:invalid ${Span} {
-            visibility: visible;
-        }
-    `
-
     return (
         <InputValidator>
             <GInput ref={props.refer} type={props.type} placeholder={props.placeholder} pattern={props.pattern}/>
@@ -36,5 +20,21 @@ const FormInput = (props: AppProps): JSX.Element => {
         </InputValidator>
     )
 }
+
+export const Span = styled.span`
+        font-size: 1em;
+        color: red;
+        position: absolute;
+        display: block;
+        visibility: hidden;
+    `
+
+export const InputValidator = styled.div`
+        width: 100%;
+        padding-bottom: 1.75rem;
+        &:invalid ${Span} {
+            visibility: visible;
+        }
+    `
 
 export default FormInput;
