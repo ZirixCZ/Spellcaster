@@ -5,7 +5,7 @@ import styled from "styled-components/macro";
 import {useNavigate} from "react-router-dom";
 import Button from "../../../components/Button";
 
-const Leaderboard = () => {
+const Leaderboard = (): JSX.Element => {
 
     const navigate = useNavigate();
 

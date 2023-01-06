@@ -2,7 +2,7 @@ import * as React from "react";
 import {Routes, Route} from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 
-const Admin = () => {
+const Admin = (): JSX.Element => {
     return (
         <Routes>
             <Route path="/" element={<Dashboard/>}/>

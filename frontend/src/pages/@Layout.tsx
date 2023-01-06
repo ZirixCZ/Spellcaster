@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Outlet} from "react-router-dom";
 
-const Layout = () => {
+const Layout = (): JSX.Element => {
 
     return (
         <Outlet/>

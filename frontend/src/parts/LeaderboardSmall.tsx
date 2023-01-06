@@ -4,7 +4,7 @@ import styled from "styled-components/macro";
 import {GContainerFullFitContent} from "../constants";
 import Button from "../components/Button";
 
-const LeaderboardSmall = () => {
+const LeaderboardSmall = (): JSX.Element => {
 
     const navigate = useNavigate();
 
@@ -50,6 +50,7 @@ const LeaderboardSmall = () => {
         </GContainerFullFitContent>
 
     )
+
 }
 
 export const Leaderboard = styled.table`
