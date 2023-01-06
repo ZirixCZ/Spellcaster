@@ -1,8 +1,12 @@
 import * as React from "react";
+import {useNavigate} from "react-router-dom";
 import styled from "styled-components/macro";
-import {GButton, GContainerFullFitContent} from "../../globalStyle";
+import {GContainerFullFitContent} from "../constants";
+import Button from "../components/Button";
 
-const DashboardLeaderboard = () => {
+const LeaderboardSmall = () => {
+
+    const navigate = useNavigate();
 
     const data = {
         user1: {
@@ -36,8 +40,11 @@ const DashboardLeaderboard = () => {
                         )
                     })}
                 </Leaderboard>
-                <ButtonWrapper>
-                    <GButton leaderboard small>Leaderboard</GButton>
+                <ButtonWrapper onClick={() => {
+                    navigate("/dashboard/leaderboard")
+                }
+                }>
+                    <Button leaderboard small>Leaderboard</Button>
                 </ButtonWrapper>
             </LeaderboardButtonWrapper>
         </GContainerFullFitContent>
@@ -63,4 +70,4 @@ export const ButtonWrapper = styled.div`
       padding-top: 3rem;
     `
 
-export default DashboardLeaderboard;
+export default LeaderboardSmall;

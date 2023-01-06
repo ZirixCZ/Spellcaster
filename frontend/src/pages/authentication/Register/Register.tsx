@@ -2,9 +2,10 @@ import * as React from "react";
 import {FormEvent, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import styled from "styled-components/macro";
-import FormInput from "../../components/FormInput/FormInput";
-import callApi from "../../scripts/callApi/callApi";
-import {GWrapperFullCenter, GButton, GHeaderContainer} from "../../globalStyle";
+import FormInput from "../../../components/FormInput";
+import callApi from "../../../utils/callApi";
+import {GWrapperFullCenter, GHeaderContainer} from "../../../constants";
+import Button from "../../../components/Button";
 
 const Register = (): JSX.Element => {
 
@@ -65,7 +66,7 @@ const Register = (): JSX.Element => {
                            errorMessage="email invalid"/>
                 <FormInput refer={passwordRef} placeholder="Password" type="password"
                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
-                <GButton primary medium>Create an account</GButton>
+                <Button primary medium>Create an account</Button>
             </Form>
         </GWrapperFullCenter>
     );

@@ -1,7 +1,6 @@
 import * as React from "react";
-import {GInput} from "../../globalStyle";
 import styled from "styled-components";
-import {MutableRefObject} from "react";
+import Input from "./Input";
 
 type AppProps = {
     refer: React.RefObject<HTMLInputElement> | null,
@@ -15,7 +14,7 @@ const FormInput = (props: AppProps): JSX.Element => {
 
     return (
         <InputValidator>
-            <GInput ref={props.refer} type={props.type} placeholder={props.placeholder} pattern={props.pattern}/>
+            <Input  refer={props.refer} type={props.type} placeholder={props.placeholder} pattern={props.pattern}/>
             <Span>{props.errorMessage}</Span>
         </InputValidator>
     )

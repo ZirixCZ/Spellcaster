@@ -1,10 +1,11 @@
 import * as React from "react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Register from "./pages/Register/Register";
-import Login from "./pages/Login/Login";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import AdminPage from "./pages/AdminPage/AdminPage";
+import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
+import Register from "./pages/authentication/Register/Register";
+import Login from "./pages/authentication/Login/Login";
 import styled from "styled-components/macro";
+import Layout from "./pages/@Layout";
+import User from "./pages/user";
+import Admin from "./pages/admin";
 
 const App = (): JSX.Element => {
 
@@ -12,9 +13,10 @@ const App = (): JSX.Element => {
         <Container>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/">
-                        <Route path="/" element={<Dashboard/>}/>
-                        <Route path="/admin" element={<AdminPage/>}/>
+                    <Route path="/" element={<Layout />}>
+                        <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
+                        <Route path="dashboard/*" element={<User/>}/>
+                        <Route path="admin/*" element={<Admin/>}/>
                         <Route path="register" element={<Register/>}/>
                         <Route path="login" element={<Login/>}/>
                     </Route>

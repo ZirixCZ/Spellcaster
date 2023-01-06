@@ -1,14 +1,14 @@
 import * as React from "react";
 import {FormEvent, useRef} from "react";
-import {json, useNavigate} from "react-router-dom";
+import Button from "../../../components/Button";
+import {useNavigate} from "react-router-dom";
 import styled from "styled-components/macro";
-import FormInput from "../../components/FormInput/FormInput";
-import callApi from "../../scripts/callApi/callApi";
+import FormInput from "../../../components/FormInput";
+import callApi from "../../../utils/callApi";
 import {
     GWrapperFullCenter,
-    GButton,
     GHeaderContainer
-} from "../../globalStyle";
+} from "../../../constants";
 
 const Login = (): JSX.Element => {
 
@@ -51,7 +51,7 @@ const Login = (): JSX.Element => {
                                errorMessage="email invalid"/>
                     <FormInput refer={passwordRef} placeholder="Password" type="password"
                                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
-                    <GButton primary medium>Login</GButton>
+                    <Button primary medium>Login</Button>
             </Form>
         </GWrapperFullCenter>
     );

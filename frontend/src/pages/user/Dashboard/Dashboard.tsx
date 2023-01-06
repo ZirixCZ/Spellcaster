@@ -1,15 +1,16 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-    GButton,
     GContainerFullFitContent,
     GWrapperFullCenter,
-    GHeaderContainerSpaceEvenly, GInput
-} from "../../globalStyle";
+    GHeaderContainerSpaceEvenly
+} from "../../../constants";
+import {StyledInput} from "../../../components/Input";
 import styled from "styled-components/macro";
-import callApi from "../../scripts/callApi/callApi";
-import DashboardLeaderboard from "../../components/DashboardLeaderboard/DashboardLeaderboard";
+import callApi from "../../../utils/callApi";
+import LeaderboardSmall from "../../../parts/LeaderboardSmall";
+import Button from "../../../components/Button";
 
 const Dashboard = (): JSX.Element => {
 
@@ -36,14 +37,14 @@ const Dashboard = (): JSX.Element => {
                         <h1>Spellcaster</h1>
                     </GHeaderContainerSpaceEvenly>
                     <GContainerFullFitContent>
-                        <DashboardLeaderboard></DashboardLeaderboard>
+                        <LeaderboardSmall></LeaderboardSmall>
                     </GContainerFullFitContent>
                     <GContainerFullFitContent>
                         <ButtonWrapper>
                             <CodeInput placeholder="Enter code..."></CodeInput>
                         </ButtonWrapper>
                         <ButtonWrapper>
-                            <GButton primary medium>Search For Game</GButton>
+                            <Button primary medium>Search For Game</Button>
                         </ButtonWrapper>
                     </GContainerFullFitContent>
                 </Container>
@@ -78,7 +79,7 @@ export const ButtonWrapper = styled.div`
       width: 100%;
     `
 
-export const CodeInput = styled(GInput)`
+export const CodeInput = styled(StyledInput)`
       background-color: #1F191B;
       color: white;
       text-align: center;

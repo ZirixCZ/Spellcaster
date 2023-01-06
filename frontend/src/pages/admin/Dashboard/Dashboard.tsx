@@ -1,10 +1,10 @@
 import * as React from "react";
 import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {GWrapperFullCenter} from "../../globalStyle";
-import callApi from "../../scripts/callApi/callApi";
+import {GWrapperFullCenter} from "../../../constants";
+import callApi from "../../../utils/callApi";
 
-const AdminPage = (): JSX.Element => {
+const Dashboard = (): JSX.Element => {
 
     const navigate = useNavigate();
 
@@ -32,4 +32,4 @@ const AdminPage = (): JSX.Element => {
 
 }
 
-export default AdminPage;
+export default Dashboard;
