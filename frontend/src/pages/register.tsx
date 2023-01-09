@@ -4,8 +4,8 @@ import {useNavigate} from "react-router-dom";
 import styled from "styled-components/macro";
 import FormInput from "../components/FormInput";
 import callApi from "../utils/callApi";
-import {GWrapperFullCenter, GHeaderContainer} from "../constants";
 import Button from "../components/Button";
+import Container from "../components/Container";
 
 const Register = (): JSX.Element => {
 
@@ -54,10 +54,10 @@ const Register = (): JSX.Element => {
     }
 
     return (
-        <GWrapperFullCenter>
-            <GHeaderContainer>
+        <Container height={100} justifyContent="center" justifyContentTablet="start">
+            <StyledHeader>
                 <h1>Register</h1>
-            </GHeaderContainer>
+            </StyledHeader>
             <Form onSubmit={handleSubmit}>
                 <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
                 <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
@@ -68,34 +68,41 @@ const Register = (): JSX.Element => {
                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
                 <Button primary medium>Create an account</Button>
             </Form>
-        </GWrapperFullCenter>
+        </Container>
     );
 
 }
 
+export const StyledHeader = styled.div`
+  padding-top: 2rem;
+  @media (min-width: 768px) {
+    padding-top: 0;
+  }
+`
+
 export const GTitleLeft = styled.p`
-    width: 100%;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-align: left;
-  `
+  width: 100%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: left;
+`
 
 export const Form = styled.form`
-        width: 25%;
-        height: fit-content;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        @media (max-width: 1366px) {
-            width: 35%;
-        }
-        @media (max-width: 1080px) {
-            width: 50%;
-        }
-        @media (max-width: 768px) {
-            width: 75%;
-        }
-    `
+  width: 25%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @media (max-width: 1366px) {
+    width: 35%;
+  }
+  @media (max-width: 1080px) {
+    width: 50%;
+  }
+  @media (max-width: 768px) {
+    width: 75%;
+  }
+`
 
 export default Register;

@@ -14,19 +14,19 @@ const FormInput = (props: AppProps): JSX.Element => {
 
     return (
         <InputValidator>
-            <Input  refer={props.refer} type={props.type} placeholder={props.placeholder} pattern={props.pattern}/>
+            <Input refer={props.refer} type={props.type} placeholder={props.placeholder} pattern={props.pattern}/>
             <Span>{props.errorMessage}</Span>
         </InputValidator>
     )
 }
 
 export const Span = styled.span`
-        font-size: 1em;
-        color: red;
-        position: absolute;
-        display: block;
-        visibility: hidden;
-    `
+  font-size: 1em;
+  color: red;
+  position: absolute;
+  display: block;
+  visibility: hidden;
+`
 
 export const InputValidator = styled.div`
         width: 100%;

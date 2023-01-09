@@ -1,12 +1,12 @@
 import * as React from "react";
-import {GContainerFull} from "../constants";
+import Container from "../components/Container";
 
 const Lobbies = (): JSX.Element => {
 
     return (
-        <GContainerFull>
+        <Container>
             <h1>Lobbies</h1>
-        </GContainerFull>
+        </Container>
     )
 
 }

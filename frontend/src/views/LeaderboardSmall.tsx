@@ -1,8 +1,8 @@
 import * as React from "react";
 import {useNavigate} from "react-router-dom";
 import styled from "styled-components/macro";
-import {GContainerFullFitContent} from "../constants";
 import Button from "../components/Button";
+import Container from "../components/Container";
 
 const LeaderboardSmall = (): JSX.Element => {
 
@@ -27,7 +27,7 @@ const LeaderboardSmall = (): JSX.Element => {
     }
 
     return (
-        <GContainerFullFitContent>
+        <Container>
             <LeaderboardButtonWrapper>
                 <Leaderboard>
                     {Object.values(data).map(user => {
@@ -47,7 +47,7 @@ const LeaderboardSmall = (): JSX.Element => {
                     <Button leaderboard small>Leaderboard</Button>
                 </ButtonWrapper>
             </LeaderboardButtonWrapper>
-        </GContainerFullFitContent>
+        </Container>
 
     )
 

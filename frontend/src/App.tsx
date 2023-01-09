@@ -1,5 +1,5 @@
 import * as React from "react";
-import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Register from "./pages/register";
 import Login from "./pages/login";
 import styled from "styled-components/macro";
@@ -15,7 +15,7 @@ const App = (): JSX.Element => {
         <Container>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Layout />}>
+                    <Route path="/" element={<Layout/>}>
                         <Route path="/" element={<Navigate to="/dashboard"/>}/>
                         <Route path="dashboard" element={<Dashboard/>}/>
                         <Route path="leaderboard" element={<Leaderboard/>}/>
@@ -33,8 +33,8 @@ const App = (): JSX.Element => {
 }
 
 export const Container = styled.div`
-        height: 100vh;
-        width: 100%;
-    `
+  height: 100vh;
+  width: 100%;
+`
 
 export default App;

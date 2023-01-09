@@ -1,8 +1,8 @@
 import * as React from "react";
-import {useState, useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {GWrapperFullCenter} from "../../../constants";
 import callApi from "../../../utils/callApi";
+import Container from "../../../components/Container";
 
 const Dashboard = (): JSX.Element => {
 
@@ -22,12 +22,12 @@ const Dashboard = (): JSX.Element => {
     }, [])
 
     return (
-        <GWrapperFullCenter>
+        <Container height={100} justifyContentTablet="start" justifyContent="center">
             {auth
                 ? <p>ADMIN: You're an Admin!</p>
                 : <p>ADMIN: You weren't authorized</p>
             }
-        </GWrapperFullCenter>
+        </Container>
     )
 
 }
