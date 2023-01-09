@@ -1,14 +1,14 @@
 import * as React from "react";
 import {FormEvent, useRef} from "react";
-import Button from "../../../components/Button";
+import Button from "../components/Button";
 import {useNavigate} from "react-router-dom";
 import styled from "styled-components/macro";
-import FormInput from "../../../components/FormInput";
-import callApi from "../../../utils/callApi";
+import FormInput from "../components/FormInput";
+import callApi from "../utils/callApi";
 import {
     GWrapperFullCenter,
     GHeaderContainer
-} from "../../../constants";
+} from "../constants";
 
 const Login = (): JSX.Element => {
 

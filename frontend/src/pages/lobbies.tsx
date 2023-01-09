@@ -1,5 +1,5 @@
 import * as React from "react";
-import {GContainerFull} from "../../../constants";
+import {GContainerFull} from "../constants";
 
 const Lobbies = (): JSX.Element => {
 

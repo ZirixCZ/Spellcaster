@@ -3,9 +3,10 @@ import {Routes, Route} from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 
 const Admin = (): JSX.Element => {
+
     return (
         <Routes>
-            <Route path="/" element={<Dashboard/>}/>
+            <Route path="dashboard" element={<Dashboard/>}/>
         </Routes>
 
     )

@@ -2,10 +2,10 @@ import * as React from "react";
 import {FormEvent, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import styled from "styled-components/macro";
-import FormInput from "../../../components/FormInput";
-import callApi from "../../../utils/callApi";
-import {GWrapperFullCenter, GHeaderContainer} from "../../../constants";
-import Button from "../../../components/Button";
+import FormInput from "../components/FormInput";
+import callApi from "../utils/callApi";
+import {GWrapperFullCenter, GHeaderContainer} from "../constants";
+import Button from "../components/Button";
 
 const Register = (): JSX.Element => {
 

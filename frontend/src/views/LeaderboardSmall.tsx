@@ -41,7 +41,7 @@ const LeaderboardSmall = (): JSX.Element => {
                     })}
                 </Leaderboard>
                 <ButtonWrapper onClick={() => {
-                    navigate("/dashboard/leaderboard")
+                    navigate("/leaderboard")
                 }
                 }>
                     <Button leaderboard small>Leaderboard</Button>

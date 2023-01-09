@@ -5,12 +5,12 @@ import {
     GContainerFullFitContent,
     GWrapperFullCenter,
     GHeaderContainerSpaceEvenly
-} from "../../../constants";
-import {StyledInput} from "../../../components/Input";
+} from "../constants";
+import {StyledInput} from "../components/Input";
 import styled from "styled-components/macro";
-import callApi from "../../../utils/callApi";
-import LeaderboardSmall from "../../../parts/LeaderboardSmall";
-import Button from "../../../components/Button";
+import callApi from "../utils/callApi";
+import LeaderboardSmall from "../views/LeaderboardSmall";
+import Button from "../components/Button";
 
 const Dashboard = (): JSX.Element => {
 

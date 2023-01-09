@@ -1,11 +1,13 @@
 import * as React from "react";
 import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
-import Register from "./pages/authentication/Register/Register";
-import Login from "./pages/authentication/Login/Login";
+import Register from "./pages/register";
+import Login from "./pages/login";
 import styled from "styled-components/macro";
 import Layout from "./pages/@Layout";
-import User from "./pages/user";
+import Leaderboard from "./pages/leaderboard";
+import Lobbies from "./pages/lobbies";
 import Admin from "./pages/admin";
+import Dashboard from "./pages/dashboard";
 
 const App = (): JSX.Element => {
 
@@ -14,11 +16,14 @@ const App = (): JSX.Element => {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Layout />}>
-                        <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
-                        <Route path="dashboard/*" element={<User/>}/>
-                        <Route path="admin/*" element={<Admin/>}/>
-                        <Route path="register" element={<Register/>}/>
+                        <Route path="/" element={<Navigate to="/dashboard"/>}/>
+                        <Route path="dashboard" element={<Dashboard/>}/>
+                        <Route path="leaderboard" element={<Leaderboard/>}/>
+                        <Route path="lobbies" element={<Lobbies/>}/>
                         <Route path="login" element={<Login/>}/>
+                        <Route path="register" element={<Register/>}/>
+                        <Route path="admin/*" element={<Admin/>}/>
+                        <Route path="*" element={<Navigate to="/"/>}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

@@ -1,9 +1,9 @@
 import * as React from "react";
-import {GContainerFull} from "../../../constants";
-import {ButtonWrapper} from "../Dashboard/Dashboard";
+import {GContainerFull} from "../constants";
+import {ButtonWrapper} from "./dashboard";
 import styled from "styled-components/macro";
 import {useNavigate} from "react-router-dom";
-import Button from "../../../components/Button";
+import Button from "../components/Button";
 
 const Leaderboard = (): JSX.Element => {
 
