@@ -8,6 +8,8 @@ interface Props {
     heightKeyword?: string,
     justifyContent?: string,
     justifyContentTablet?: string,
+    paddingTop?: number,
+    paddingTopTablet?: number,
 }
 
 const Container = (props: Props) => {
@@ -23,6 +25,8 @@ interface Props {
     heightKeyword?: string,
     justifyContent?: string,
     justifyContentTablet?: string,
+    paddingTop?: number,
+    paddingTopTablet?: number,
 }
 
 export const StyledContainer = styled.div<Props>`
@@ -34,8 +38,10 @@ export const StyledContainer = styled.div<Props>`
   height: ${({height}) => height + "%"};
   height: ${({height, heightKeyword}) => height !== undefined ? null : heightKeyword};
   width: 100%;
-  ${({justifyContentTablet}) => tablet(css`
+  padding-top: ${({paddingTop}) => paddingTop !== undefined ? paddingTop + "rem" : null};;
+  ${({justifyContentTablet, paddingTopTablet}) => tablet(css`
     justify-content: ${justifyContentTablet !== undefined ? justifyContentTablet : null};
+    padding-top: ${paddingTopTablet !== undefined ? paddingTopTablet + "rem" : null};
   `)}
 
 `

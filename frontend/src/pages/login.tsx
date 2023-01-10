@@ -1,11 +1,14 @@
 import * as React from "react";
 import {FormEvent, useRef} from "react";
 import Button from "../components/Button";
-import {useNavigate} from "react-router-dom";
-import styled from "styled-components/macro";
+import {Link, useNavigate} from "react-router-dom";
+import styled, {css} from "styled-components/macro";
 import FormInput from "../components/FormInput";
 import callApi from "../utils/callApi";
 import Container from "../components/Container";
+import Paragraph from "../components/Paragraph";
+import {purple, tablet, laptop} from "../Global";
+
 
 const Login = (): JSX.Element => {
 
@@ -39,9 +42,9 @@ const Login = (): JSX.Element => {
 
     return (
         <Container height={100} justifyContent="center" justifyContentTablet="start">
-            <StyledHeader>
+            <Container paddingTop={0} paddingTopTablet={2}>
                 <h1>Welcome back</h1>
-            </StyledHeader>
+            </Container>
             <Form onSubmit={handleSubmit}>
                 <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
                 <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
@@ -50,17 +53,13 @@ const Login = (): JSX.Element => {
                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
                 <Button primary medium>Login</Button>
             </Form>
+            <Container paddingTop={3} paddingTopTablet={2}>
+                <Paragraph size={1} weight={400} color={purple}><Link to="/register">Create an account</Link></Paragraph>
+            </Container>
         </Container>
     );
 
 }
-
-export const StyledHeader = styled.div`
-  padding-top: 2rem;
-  @media (min-width: 768px) {
-    padding-top: 0;
-  }
-`
 
 export const GTitleLeft = styled.p`
   width: 100%;
@@ -76,15 +75,12 @@ export const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  @media (max-width: 1366px) {
-    width: 35%;
-  }
-  @media (max-width: 1080px) {
+  ${laptop(css`
     width: 50%;
-  }
-  @media (max-width: 768px) {
+  `)}
+  ${tablet(css`
     width: 75%;
-  }
+  `)}
 `
 
 export default Login;
