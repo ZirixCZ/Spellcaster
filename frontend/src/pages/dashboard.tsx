@@ -33,7 +33,7 @@ const Dashboard = (): JSX.Element => {
                         <h1>Spellcaster</h1>
                     </StyledHeader>
                     <Container>
-                        <LeaderboardSmall></LeaderboardSmall>
+                        <LeaderboardSmall/>
                     </Container>
                     <Container>
                         <ButtonWrapper>

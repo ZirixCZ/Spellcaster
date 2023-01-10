@@ -20,9 +20,19 @@ const LeaderboardSmall = (): JSX.Element => {
             placement: "2"
         },
         user3: {
-            username: "user3",
+            username: "me",
             score: "6",
             placement: "3"
+        },
+        user4: {
+            username: "user4",
+            score: "6",
+            placement: "4"
+        },
+        user5: {
+            username: "user5",
+            score: "6",
+            placement: "5"
         }
     }
 
@@ -33,9 +43,7 @@ const LeaderboardSmall = (): JSX.Element => {
                     {Object.values(data).map(user => {
                         return (
                             <tr>
-                                <td>{user.placement}</td>
-                                <td>{user.username}</td>
-                                <td>{user.score}</td>
+                                <TableData {...user}/>
                             </tr>
                         )
                     })}
@@ -52,6 +60,41 @@ const LeaderboardSmall = (): JSX.Element => {
     )
 
 }
+
+interface TableDataProps {
+    username?: any | undefined,
+    placement?: any | undefined,
+    score?: any | undefined
+}
+
+export const TableData = (props: TableDataProps): JSX.Element => {
+
+    let {username} = props
+
+    // TODO: get the username from global state
+    let myUsername = "me"
+
+    let isStrong = myUsername === username
+
+    return (
+        <>
+            {Object.values(props).map(prop => {
+                return (
+                    <StyledTableData isStrong={isStrong}>{prop}</StyledTableData>
+                    )
+            })}
+        </>
+    )
+
+}
+
+interface StyledTableDataProps {
+    isStrong?: boolean,
+}
+
+export const StyledTableData = styled.td<StyledTableDataProps>`
+    font-weight: ${({isStrong}) => (isStrong ? "700" : "500")};
+`
 
 export const Leaderboard = styled.table`
       text-align: justify;
