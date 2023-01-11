@@ -7,6 +7,7 @@ import callApi from "../utils/callApi";
 import LeaderboardSmall from "../views/LeaderboardSmall";
 import Button from "../components/Button";
 import Container from "../components/Container";
+import Theme from "../components/Theme";
 
 const Dashboard = (): JSX.Element => {
 
@@ -25,28 +26,31 @@ const Dashboard = (): JSX.Element => {
     }, [])
 
     return (
-        <Container height={100}>
-            {auth
-                ?
-                <Container justifyContent="space-evenly" height={100} widthMobile={75} widthTablet={60} widthLaptop={45} widthDesktop={25}>
-                    <StyledHeader>
-                        <h1>Spellcaster</h1>
-                    </StyledHeader>
-                    <Container width={100}>
-                        <LeaderboardSmall/>
+        <Theme>
+            <Container height={100}>
+                {auth
+                    ?
+                    <Container justifyContent="space-evenly" height={100} widthMobile={75} widthTablet={60}
+                               widthLaptop={45} widthDesktop={25}>
+                        <StyledHeader>
+                            <h1>Spellcaster</h1>
+                        </StyledHeader>
+                        <Container width={100}>
+                            <LeaderboardSmall/>
+                        </Container>
+                        <Container width={100}>
+                            <ButtonWrapper>
+                                <CodeInput placeholder="Enter code..."></CodeInput>
+                            </ButtonWrapper>
+                            <ButtonWrapper>
+                                <Button primary medium>Search For Game</Button>
+                            </ButtonWrapper>
+                        </Container>
                     </Container>
-                    <Container width={100}>
-                        <ButtonWrapper>
-                            <CodeInput placeholder="Enter code..."></CodeInput>
-                        </ButtonWrapper>
-                        <ButtonWrapper>
-                            <Button primary medium>Search For Game</Button>
-                        </ButtonWrapper>
-                    </Container>
-                </Container>
-                : <p>You weren't authorized</p>
-            }
-        </Container>
+                    : <p>You weren't authorized</p>
+                }
+            </Container>
+        </Theme>
     )
 
 }
@@ -66,12 +70,13 @@ export const ButtonWrapper = styled.div`
 `
 
 export const CodeInput = styled(StyledInput)`
-  background-color: #1F191B;
+  background-color: ${({theme}) => theme.gray};
   color: white;
   text-align: center;
   font-size: 1.25em;
   font-weight: 600;
   height: 3.5rem;
+  border: 1px solid white;
 `
 
 export default Dashboard;

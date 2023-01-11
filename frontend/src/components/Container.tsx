@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled, {css} from "styled-components/macro";
-import {mobile, tablet, laptop, desktop} from "../Global";
+import {desktop, laptop, mobile, tablet} from "../Global";
 
 interface Props {
     children?: React.ReactNode,
@@ -50,21 +50,21 @@ export const StyledContainer = styled.div<Props>`
   height: ${({height, heightKeyword}) => height ? height + "%" : heightKeyword ? heightKeyword : null};
   width: ${({width}) => width + "%"};
   padding-top: ${({paddingTop}) => paddingTop !== undefined ? paddingTop + "rem" : null};
-  
+
   ${({widthDesktop}) => desktop(css`
     width: ${widthDesktop + "%"};
   `)}
-  
+
   ${({widthLaptop}) => laptop(css`
     width: ${widthLaptop + "%"};
   `)}
-  
+
   ${({widthTablet, justifyContentTablet, paddingTopTablet}) => tablet(css`
     justify-content: ${justifyContentTablet !== undefined ? justifyContentTablet : null};
     padding-top: ${paddingTopTablet !== undefined ? paddingTopTablet + "rem" : null};
     width: ${widthTablet + "%"};
   `)}
-  
+
   ${({widthMobile}) => mobile(css`
     width: ${widthMobile + "%"};
   `)}

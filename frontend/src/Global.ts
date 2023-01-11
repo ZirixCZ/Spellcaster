@@ -1,4 +1,4 @@
-import styled, {css} from "styled-components/macro";
+import {css} from "styled-components/macro";
 import "./style/Global.css"
 
 const size = {
@@ -8,11 +8,24 @@ const size = {
     desktop: "2560px",
 }
 
-export const purple = "#735CDD";
-export const green = "#A1D938";
-export const gray = "#1F191B";
-export const red = "#F95738";
-export const white = "#FCFCFC";
+export const whiteTheme = {
+    primary: "#735CDD",
+    secondary: "#A1D938",
+    red: "#F95738",
+    gray: "#1F191B",
+    white: "#FCFCFC",
+    text: "#1F191B"
+}
+
+export const darkTheme = {
+    primary: "#1F049AFF",
+    secondary: "#5A7B00FF",
+    red: "#b62509",
+    gray: "#0d0a0b",
+    white: "#111323",
+    text: "#FCFCFC"
+}
+
 
 export const mobile = (inner: any) => css`
   @media (max-width: ${size.mobile}) {

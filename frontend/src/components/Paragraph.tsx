@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components/macro";
+import Theme from "./Theme";
 
 interface ParagraphProps {
     children?: React.ReactNode,
@@ -12,7 +13,9 @@ interface ParagraphProps {
 const Paragraph = (props: ParagraphProps): JSX.Element => {
 
     return (
-        <StyledParagraph {...props}>{props.children}</StyledParagraph>
+        <Theme>
+            <StyledParagraph {...props}>{props.children}</StyledParagraph>
+        </Theme>
     )
 
 }
@@ -27,7 +30,10 @@ interface StyledParagraphProps {
 export const StyledParagraph = styled.p<StyledParagraphProps>`
   font-size: ${({size}) => (size ? size + "rem" : "1rem")};
   font-weight: ${({weight}) => (weight ? weight : 500)};
-  color: ${({color}) => (color ? color : "black")};
+
+  * {
+    color: ${({color, theme}) => (color ? color : theme.primary)};
+  }
 `
 
-export default  Paragraph
+export default Paragraph

@@ -7,7 +7,7 @@ import callApi from "../utils/callApi";
 import Button from "../components/Button";
 import Container from "../components/Container";
 import Paragraph from "../components/Paragraph";
-import {purple, tablet, laptop} from "../Global";
+import {laptop, tablet} from "../Global";
 
 const Register = (): JSX.Element => {
 
@@ -71,7 +71,7 @@ const Register = (): JSX.Element => {
                 <Button primary medium>Create an account</Button>
             </Form>
             <Container paddingTop={3} paddingTopTablet={2}>
-                <Paragraph size={1} weight={400} color={purple}><Link to="/login">Already have an account</Link></Paragraph>
+                <Paragraph size={1} weight={500}><Link to="/login">Already have an account</Link></Paragraph>
             </Container>
         </Container>
     );

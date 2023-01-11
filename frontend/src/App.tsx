@@ -8,10 +8,12 @@ import Leaderboard from "./pages/leaderboard";
 import Lobbies from "./pages/lobbies";
 import Admin from "./pages/admin";
 import Dashboard from "./pages/dashboard";
+import Theme from "./components/Theme";
 
 const App = (): JSX.Element => {
 
     return (
+        <Theme>
         <Container>
             <BrowserRouter>
                 <Routes>
@@ -28,6 +30,7 @@ const App = (): JSX.Element => {
                 </Routes>
             </BrowserRouter>
         </Container>
+        </Theme>
     );
 
 }
@@ -35,6 +38,8 @@ const App = (): JSX.Element => {
 export const Container = styled.div`
   height: 100vh;
   width: 100%;
+  background-color: ${({theme}) => theme.white};
+  color: ${({theme}) => theme.text};
 `
 
 export default App;

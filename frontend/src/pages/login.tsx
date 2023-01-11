@@ -7,7 +7,7 @@ import FormInput from "../components/FormInput";
 import callApi from "../utils/callApi";
 import Container from "../components/Container";
 import Paragraph from "../components/Paragraph";
-import {purple, tablet, laptop} from "../Global";
+import {laptop, tablet} from "../Global";
 
 
 const Login = (): JSX.Element => {
@@ -54,7 +54,7 @@ const Login = (): JSX.Element => {
                 <Button primary medium>Login</Button>
             </Form>
             <Container paddingTop={3} paddingTopTablet={2}>
-                <Paragraph size={1} weight={400} color={purple}><Link to="/register">Create an account</Link></Paragraph>
+                <Paragraph size={1} weight={500}><Link to="/register">Create an account</Link></Paragraph>
             </Container>
         </Container>
     );

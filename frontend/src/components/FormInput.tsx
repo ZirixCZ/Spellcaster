@@ -29,11 +29,12 @@ export const Span = styled.span`
 `
 
 export const InputValidator = styled.div`
-        width: 100%;
-        padding-bottom: 1.75rem;
-        &:invalid ${Span} {
-            visibility: visible;
-        }
-    `
+  width: 100%;
+  padding-bottom: 1.75rem;
+
+  &:invalid ${Span} {
+    visibility: visible;
+  }
+`
 
 export default FormInput;
