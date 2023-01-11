@@ -2,9 +2,9 @@ import styled, {css} from "styled-components/macro";
 import "./style/Global.css"
 
 const size = {
-    mobile: "320px",
-    tablet: "768px",
-    laptop: "1024px",
+    mobile: "768px",
+    tablet: "1024px",
+    laptop: "1366px",
     desktop: "2560px",
 }
 

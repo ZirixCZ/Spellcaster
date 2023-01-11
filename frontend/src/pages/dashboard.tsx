@@ -28,14 +28,14 @@ const Dashboard = (): JSX.Element => {
         <Container height={100}>
             {auth
                 ?
-                <StyledContainer>
+                <Container justifyContent="space-evenly" height={100} widthMobile={75} widthTablet={60} widthLaptop={45} widthDesktop={25}>
                     <StyledHeader>
                         <h1>Spellcaster</h1>
                     </StyledHeader>
-                    <Container>
+                    <Container width={100}>
                         <LeaderboardSmall/>
                     </Container>
-                    <Container>
+                    <Container width={100}>
                         <ButtonWrapper>
                             <CodeInput placeholder="Enter code..."></CodeInput>
                         </ButtonWrapper>
@@ -43,7 +43,7 @@ const Dashboard = (): JSX.Element => {
                             <Button primary medium>Search For Game</Button>
                         </ButtonWrapper>
                     </Container>
-                </StyledContainer>
+                </Container>
                 : <p>You weren't authorized</p>
             }
         </Container>
@@ -55,24 +55,6 @@ export const StyledHeader = styled.div`
   padding-top: 2rem;
   @media (min-width: 768px) {
     padding-top: 0;
-  }
-`
-
-export const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 25%;
-  height: 100%;
-  @media (max-width: 1366px) {
-    width: 35%;
-  }
-  @media (max-width: 1080px) {
-    width: 50%;
-  }
-  @media (max-width: 768px) {
-    width: 75%;
   }
 `
 
