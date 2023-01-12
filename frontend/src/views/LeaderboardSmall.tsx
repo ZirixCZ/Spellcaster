@@ -10,29 +10,29 @@ const LeaderboardSmall = (): JSX.Element => {
 
     const data = {
         user1: {
+            placement: "1",
             username: "user1",
             score: "10",
-            placement: "1"
         },
         user2: {
+            placement: "2",
             username: "user2",
             score: "8",
-            placement: "2"
         },
         user3: {
+            placement: "3",
             username: "me",
             score: "6",
-            placement: "3"
         },
         user4: {
+            placement: "4",
             username: "user4",
             score: "6",
-            placement: "4"
         },
         user5: {
+            placement: "5",
             username: "user5",
             score: "6",
-            placement: "5"
         }
     }
 

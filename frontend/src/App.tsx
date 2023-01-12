@@ -9,6 +9,7 @@ import Lobbies from "./pages/lobbies";
 import Admin from "./pages/admin";
 import Dashboard from "./pages/dashboard";
 import Theme from "./components/Theme";
+import ThemeSwitcher from "./pages/theme";
 
 const App = (): JSX.Element => {
 
@@ -22,8 +23,10 @@ const App = (): JSX.Element => {
                         <Route path="dashboard" element={<Dashboard/>}/>
                         <Route path="leaderboard" element={<Leaderboard/>}/>
                         <Route path="lobbies" element={<Lobbies/>}/>
+                        <Route path="lobbies" element={<Lobbies/>}/>
                         <Route path="login" element={<Login/>}/>
                         <Route path="register" element={<Register/>}/>
+                        <Route path="theme" element={<ThemeSwitcher/>}/>
                         <Route path="admin/*" element={<Admin/>}/>
                         <Route path="*" element={<Navigate to="/"/>}/>
                     </Route>

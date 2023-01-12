@@ -14,6 +14,7 @@ interface Props {
     widthKeyword?: string,
     justifyContent?: string,
     justifyContentTablet?: string,
+    alignItems?: string,
     paddingTop?: number,
     paddingTopTablet?: number,
 }
@@ -37,6 +38,7 @@ interface Props {
     widthKeyword?: string,
     justifyContent?: string,
     justifyContentTablet?: string,
+    alignItems?: string,
     paddingTop?: number,
     paddingTopTablet?: number,
 }
@@ -45,7 +47,7 @@ export const StyledContainer = styled.div<Props>`
   display: flex;
   flex-direction: column;
   justify-content: ${({justifyContent}) => justifyContent !== undefined ? justifyContent : null};
-  align-items: center;
+  align-items: ${({alignItems}) => alignItems ? alignItems : "center"};
   text-align: left;
   height: ${({height, heightKeyword}) => height ? height + "%" : heightKeyword ? heightKeyword : null};
   width: ${({width}) => width + "%"};

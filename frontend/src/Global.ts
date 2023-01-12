@@ -8,7 +8,8 @@ const size = {
     desktop: "2560px",
 }
 
-export const whiteTheme = {
+export const lightTheme = {
+    isLight: true,
     primary: "#735CDD",
     secondary: "#A1D938",
     red: "#F95738",
@@ -18,6 +19,7 @@ export const whiteTheme = {
 }
 
 export const darkTheme = {
+    isLight: false,
     primary: "#1F049AFF",
     secondary: "#5A7B00FF",
     red: "#b62509",

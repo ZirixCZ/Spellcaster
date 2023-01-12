@@ -2,14 +2,19 @@ import * as React from "react";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {StyledInput} from "../components/Input";
-import styled from "styled-components/macro";
+import styled, {css} from "styled-components/macro";
 import callApi from "../utils/callApi";
 import LeaderboardSmall from "../views/LeaderboardSmall";
 import Button from "../components/Button";
 import Container from "../components/Container";
 import Theme from "../components/Theme";
+import {mobile} from "../Global";
+import {useThemeStore} from "../store/themeStore";
 
 const Dashboard = (): JSX.Element => {
+
+    const theme = useThemeStore(state => state.theme);
+    const changeTheme = useThemeStore(state => state.changeTheme);
 
     const navigate = useNavigate();
 
@@ -22,6 +27,9 @@ const Dashboard = (): JSX.Element => {
                     setAuth(true)
                     return
                 }
+                setTimeout(() => {
+                    navigate("/login")
+                }, 2000)
             })
     }, [])
 
@@ -30,6 +38,12 @@ const Dashboard = (): JSX.Element => {
             <Container height={100}>
                 {auth
                     ?
+                    <>
+                        <Container width={100} heightKeyword="fit-content" justifyContent="flex-end" alignItems="flex-end">
+                            <StyledThemeSwitcher onClick={() => {
+                                navigate("/theme")
+                            }}><Button primary>settings</Button></StyledThemeSwitcher>
+                        </Container>
                     <Container justifyContent="space-evenly" height={100} widthMobile={75} widthTablet={60}
                                widthLaptop={45} widthDesktop={25}>
                         <StyledHeader>
@@ -47,7 +61,11 @@ const Dashboard = (): JSX.Element => {
                             </ButtonWrapper>
                         </Container>
                     </Container>
-                    : <p>You weren't authorized</p>
+                    </>
+                    :
+                    <Container justifyContent="center" alignItems="center" height={100}>
+                        <p>You weren't authorized</p>
+                    </Container>
                 }
             </Container>
         </Theme>
@@ -55,11 +73,18 @@ const Dashboard = (): JSX.Element => {
 
 }
 
+export const StyledThemeSwitcher = styled.div`
+  width: fit-content;
+  height: fit-content;
+`
+
 export const StyledHeader = styled.div`
-  padding-top: 2rem;
-  @media (min-width: 768px) {
-    padding-top: 0;
-  }
+  font-size: 2rem;
+  padding-top: 0;
+  ${mobile(css`
+    padding-top: 2rem;
+    font-size: 1.5rem;
+  `)}
 `
 
 export const ButtonWrapper = styled.div`
