@@ -11,7 +11,7 @@ const Dashboard = (): JSX.Element => {
     const [auth, setAuth] = useState(false);
 
     useEffect(() => {
-        callApi("GET", "http://localhost:8080/api/admin", null)
+        callApi("GET", "/api/admin", null)
             .then((res) => {
                 if (res.ok) {
                     setAuth(true)

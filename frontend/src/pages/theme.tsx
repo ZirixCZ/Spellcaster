@@ -25,7 +25,8 @@ const ThemeSwitcher = (): JSX.Element => {
     return (
         <Container height={100}>
             <Container width={100} height={100} justifyContent="space-evenly">
-                <Container widthMobile={75} widthTablet={60} widthLaptop={45} widthDesktop={25} justifyContent="center" alignItems="center">
+                <Container widthMobile={75} widthTablet={60} widthLaptop={45} widthDesktop={25} justifyContent="center"
+                           alignItems="center">
                     <StyledThemeSwitcher onClick={() => {
                         changeTheme(!theme)
                     }}><Button primary>{theme ? "light" : "dark"}</Button></StyledThemeSwitcher>

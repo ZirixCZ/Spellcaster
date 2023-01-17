@@ -1,12 +1,15 @@
+import getToken from "./getToken";
+
 const callApi = async (method: string, endpoint: RequestInfo, body: string | null) => {
     let headers = {}
-    if (localStorage.getItem("jwt")) {
         headers = {
-            Authorization: "" + localStorage.getItem("jwt")
+            Authorization: "" + getToken()
         };
-    }
 
-    return fetch(endpoint, {headers: headers, method: method, body: body});
+    // TODO: .env
+    let uri = "http://localhost:8080" + endpoint
+
+    return fetch(uri, {headers: headers, method: method, body: body});
 }
 
 export default callApi;

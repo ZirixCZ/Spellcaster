@@ -3,8 +3,9 @@ import {useNavigate} from "react-router-dom";
 import styled from "styled-components/macro";
 import Button from "../components/Button";
 import Container from "../components/Container";
+import Leaderboard from "../components/Leaderboard";
 
-const LeaderboardSmall = (): JSX.Element => {
+const LeaderboardView = (): JSX.Element => {
 
     const navigate = useNavigate();
 
@@ -39,15 +40,13 @@ const LeaderboardSmall = (): JSX.Element => {
     return (
         <Container width={100}>
             <LeaderboardButtonWrapper>
-                <Leaderboard>
+                <StyledLeaderboard>
                     {Object.values(data).map(user => {
                         return (
-                            <StyledTableRow>
-                                <TableData {...user}/>
-                            </StyledTableRow>
+                            <Leaderboard {...user}/>
                         )
                     })}
-                </Leaderboard>
+                </StyledLeaderboard>
                 <ButtonWrapper onClick={() => {
                     navigate("/leaderboard")
                 }
@@ -61,53 +60,7 @@ const LeaderboardSmall = (): JSX.Element => {
 
 }
 
-interface TableDataProps {
-    username?: any | undefined,
-    placement?: any | undefined,
-    score?: any | undefined
-}
-
-export const TableData = (props: TableDataProps): JSX.Element => {
-
-    let {username} = props
-
-    // TODO: get the username from global state
-    let myUsername = "me"
-
-    let isStrong = myUsername === username
-    let c: number = -1
-
-    return (
-        <>
-            {Object.values(props).map(prop => {
-                c++
-                return (
-                    <StyledTableData isStrong={isStrong} textAlign={c === 0 ? "left" : c === 1 ? "center" : c === 2 ? "right" : "justify"}>{prop}</StyledTableData>
-                    )
-            })}
-        </>
-    )
-
-}
-
-interface StyledTableDataProps {
-    isStrong?: boolean,
-    textAlign?: string,
-}
-
-export const StyledTableData = styled.td<StyledTableDataProps>`
-    font-weight: ${({isStrong}) => (isStrong ? "700" : "500")};
-    width: 100%;
-    text-align: ${({textAlign}) => (textAlign)};
-`
-
-export const StyledTableRow = styled.tr`
-  display: flex;
-  justify-content: space-around;
-  text-align: left;
-`
-
-export const Leaderboard = styled.table`
+export const StyledLeaderboard = styled.table`
       width: 50%;
     `
 
@@ -117,7 +70,7 @@ export const LeaderboardButtonWrapper = styled.div`
       flex-direction: column;
       justify-content: start;
       align-items: center;
-  width: 100%;
+      width: 100%;
     `
 
 export const ButtonWrapper = styled.div`
@@ -126,4 +79,4 @@ export const ButtonWrapper = styled.div`
       width: 50%;
     `
 
-export default LeaderboardSmall;
+export default LeaderboardView;

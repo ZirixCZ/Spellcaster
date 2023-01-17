@@ -2,7 +2,6 @@ import * as React from "react";
 import {ThemeProvider} from "styled-components/macro";
 import {darkTheme, lightTheme} from "../Global";
 import {useThemeStore} from "../store/themeStore";
-import {useEffect} from "react";
 
 interface ThemeProps {
     children?: React.ReactNode,

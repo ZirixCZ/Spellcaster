@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {StyledInput} from "../components/Input";
 import styled, {css} from "styled-components/macro";
 import callApi from "../utils/callApi";
-import LeaderboardSmall from "../views/LeaderboardSmall";
+import LeaderboardView from "../views/LeaderboardView";
 import Button from "../components/Button";
 import Container from "../components/Container";
 import Theme from "../components/Theme";
@@ -13,15 +13,12 @@ import {useThemeStore} from "../store/themeStore";
 
 const Dashboard = (): JSX.Element => {
 
-    const theme = useThemeStore(state => state.theme);
-    const changeTheme = useThemeStore(state => state.changeTheme);
-
     const navigate = useNavigate();
 
     const [auth, setAuth] = useState(false);
 
     useEffect(() => {
-        callApi("GET", "http://localhost:8080/api/home", null)
+        callApi("GET", "/api/home", null)
             .then((res) => {
                 if (res.ok) {
                     setAuth(true)
@@ -39,28 +36,29 @@ const Dashboard = (): JSX.Element => {
                 {auth
                     ?
                     <>
-                        <Container width={100} heightKeyword="fit-content" justifyContent="flex-end" alignItems="flex-end">
+                        <Container width={100} heightKeyword="fit-content" justifyContent="flex-end"
+                                   alignItems="flex-end">
                             <StyledThemeSwitcher onClick={() => {
                                 navigate("/theme")
                             }}><Button primary>settings</Button></StyledThemeSwitcher>
                         </Container>
-                    <Container justifyContent="space-evenly" height={100} widthMobile={75} widthTablet={60}
-                               widthLaptop={45} widthDesktop={25}>
-                        <StyledHeader>
-                            <h1>Spellcaster</h1>
-                        </StyledHeader>
-                        <Container width={100}>
-                            <LeaderboardSmall/>
+                        <Container justifyContent="space-evenly" height={100} widthMobile={75} widthTablet={60}
+                                   widthLaptop={45} widthDesktop={25}>
+                            <StyledHeader>
+                                <h1>Spellcaster</h1>
+                            </StyledHeader>
+                            <Container width={100}>
+                                <LeaderboardView/>
+                            </Container>
+                            <Container width={100}>
+                                <ButtonWrapper>
+                                    <CodeInput placeholder="Enter code..."></CodeInput>
+                                </ButtonWrapper>
+                                <ButtonWrapper>
+                                    <Button primary medium>Search For Game</Button>
+                                </ButtonWrapper>
+                            </Container>
                         </Container>
-                        <Container width={100}>
-                            <ButtonWrapper>
-                                <CodeInput placeholder="Enter code..."></CodeInput>
-                            </ButtonWrapper>
-                            <ButtonWrapper>
-                                <Button primary medium>Search For Game</Button>
-                            </ButtonWrapper>
-                        </Container>
-                    </Container>
                     </>
                     :
                     <Container justifyContent="center" alignItems="center" height={100}>

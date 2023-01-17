@@ -4,6 +4,7 @@ import styled from "styled-components/macro";
 import {useNavigate} from "react-router-dom";
 import Button from "../components/Button";
 import Container from "../components/Container";
+import LeaderboardView from "../views/LeaderboardView";
 
 const Leaderboard = (): JSX.Element => {
 
@@ -11,13 +12,15 @@ const Leaderboard = (): JSX.Element => {
 
     return (
         <Container height={100}>
-            <StyledContainer>
+            <Container height={100} widthMobile={75} widthTablet={50} widthLaptop={35} widthDesktop={25}
+                       justifyContent="space-evenly">
+                <LeaderboardView></LeaderboardView>
                 <ButtonWrapper onClick={() => {
                     navigate("/")
                 }}>
                     <Button leaderboard medium>Dashboard</Button>
                 </ButtonWrapper>
-            </StyledContainer>
+            </Container>
         </Container>
     )
 

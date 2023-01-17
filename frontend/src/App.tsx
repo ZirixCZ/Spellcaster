@@ -23,7 +23,6 @@ const App = (): JSX.Element => {
                         <Route path="dashboard" element={<Dashboard/>}/>
                         <Route path="leaderboard" element={<Leaderboard/>}/>
                         <Route path="lobbies" element={<Lobbies/>}/>
-                        <Route path="lobbies" element={<Lobbies/>}/>
                         <Route path="login" element={<Login/>}/>
                         <Route path="register" element={<Register/>}/>
                         <Route path="theme" element={<ThemeSwitcher/>}/>

@@ -40,7 +40,11 @@ export const StyledButton = styled.button<Props>`
   height: ${({small, medium, large}) => (small ? "2.5rem" : medium ? "3.5rem" : large ? "4.5rem" : "3.5rem")};
   font-weight: 600;
   border-radius: 3px;
-  border: ${({theme, primary, leaderboard}) => {console.log(theme); return (primary ? null : leaderboard ? null : theme.isLight ? null : `1px solid ${theme.text}`)}};
+  border: ${({
+               theme,
+               primary,
+               leaderboard
+             }) => (primary ? null : leaderboard ? null : theme.isLight ? null : `1px solid ${theme.text}`)};
   font-size: 1.25em;
 `
 
