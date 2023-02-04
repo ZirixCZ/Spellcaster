@@ -17,6 +17,6 @@ func main() {
 	mux.HandleFunc("/api/user/login", middleware.Preflight(routes.Login))
 	mux.HandleFunc("/api/home", middleware.Preflight(middleware.VerifyJWT(routes.Home, "user")))
 	mux.HandleFunc("/api/admin", middleware.Preflight(middleware.VerifyJWT(routes.Home, "admin")))
-
+	mux.HandleFunc("/api/lobby", middleware.Preflight(middleware.VerifyJWT(routes.LobbyHandler, "user")))
 	http.ListenAndServe(":8080", mux)
 }

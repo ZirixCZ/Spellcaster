@@ -18,7 +18,6 @@ const ThemeSwitcher = (): JSX.Element => {
         const localStorageTheme = localStorage.getItem("theme");
         if (localStorageTheme === null)
             return;
-        console.log(localStorageTheme)
         localStorage.setItem("theme", theme ? "light" : "dark");
     }, [theme])
 
