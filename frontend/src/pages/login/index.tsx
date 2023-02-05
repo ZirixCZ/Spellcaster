@@ -64,11 +64,8 @@ export const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  ${laptop(css`
-    width: 50%;
-  `)}
   ${tablet(css`
-    width: 75%;
+    width: 50%;
   `)}
 `
 

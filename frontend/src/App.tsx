@@ -15,31 +15,36 @@ import Game from "./pages/game";
 const App = (): JSX.Element => {
   return (
     <Theme>
-      <Container>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/lobbies" element={<Lobbies />} />
-            <Route path="/lobbies/:name" element={<Game />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/theme" element={<ThemeSwitcher />} />
-            <Route path="/admin/*" element={<Admin />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </BrowserRouter>
-      </Container>
+      <Body>
+        <Container>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/lobbies" element={<Lobbies />} />
+              <Route path="/lobbies/:name" element={<Game />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/theme" element={<ThemeSwitcher />} />
+              <Route path="/admin/*" element={<Admin />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </BrowserRouter>
+        </Container>
+      </Body>
     </Theme>
   );
 };
 
+const Body = styled.body`
+  background-color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.text};
+`;
+
 export const Container = styled.div`
   height: 100vh;
   width: 100%;
-  background-color: ${({ theme }) => theme.white};
-  color: ${({ theme }) => theme.text};
 `;
 
 export default App;
