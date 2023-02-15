@@ -14,9 +14,7 @@ interface ButtonProps {
 const Button = (props: ButtonProps): JSX.Element => {
 
     return (
-        <Theme>
             <StyledButton {...props}>{props.children}</StyledButton>
-        </Theme>
     )
 
 }

@@ -39,7 +39,6 @@ const Lobbies = (): JSX.Element => {
   };
 
   return (
-    <Theme>
       <Container heightKeyword="fit-content" width={100}>
         <ButtonWrapper
           onClick={() => {
@@ -78,7 +77,6 @@ const Lobbies = (): JSX.Element => {
           </Button>
         </Form>
       </Container>
-    </Theme>
   );
 };
 

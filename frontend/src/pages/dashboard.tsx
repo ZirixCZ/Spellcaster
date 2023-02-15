@@ -29,7 +29,6 @@ const Dashboard = (): JSX.Element => {
   }, []);
 
   return (
-    <Theme>
       <Container height={100}>
         {auth ? (
           <>
@@ -79,7 +78,6 @@ const Dashboard = (): JSX.Element => {
           </Container>
         )}
       </Container>
-    </Theme>
   );
 };
 

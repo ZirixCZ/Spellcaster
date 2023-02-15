@@ -13,9 +13,7 @@ interface ParagraphProps {
 const Paragraph = (props: ParagraphProps): JSX.Element => {
 
     return (
-        <Theme>
             <StyledParagraph {...props}>{props.children}</StyledParagraph>
-        </Theme>
     )
 
 }
