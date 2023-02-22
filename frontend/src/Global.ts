@@ -10,12 +10,13 @@ const size = {
 
 export const lightTheme = {
     isLight: true,
-    primary: "#735CDD",
+    primary: "#333333",
     secondary: "#A1D938",
     red: "#F95738",
-    gray: "#1F191B",
-    white: "#FCFCFC",
-    text: "#1F191B"
+    gray: "#333333",
+    buttonHover: "#1F191B",
+    white: "#FFFFF0",
+    text: "#333333"
 }
 
 export const darkTheme = {
@@ -24,6 +25,7 @@ export const darkTheme = {
     secondary: "#5A7B00FF",
     red: "#b62509",
     gray: "#0d0a0b",
+    buttonHover: "#0d0a0b",
     white: "#111323",
     text: "#FCFCFC"
 }

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import Container from "../components/Container";
 import FormInput from "../components/FormInput";
-import { Form, GTitleLeft } from "./register";
+import { Form, GTitleLeft } from "./unprotected/register";
 import Button from "../components/Button";
 import callApi from "../utils/callApi";
 import { tablet, mobile } from "../Global";

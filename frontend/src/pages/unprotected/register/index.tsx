@@ -1,11 +1,11 @@
 import * as React from "react";
 import {Link, useNavigate} from "react-router-dom";
 import styled, {css} from "styled-components/macro";
-import FormInput from "../../components/FormInput";
-import Button from "../../components/Button";
-import Container from "../../components/Container";
-import Paragraph from "../../components/Paragraph";
-import {laptop, tablet} from "../../Global";
+import FormInput from "../../../components/FormInput";
+import Button from "../../../components/Button";
+import Container from "../../../components/Container";
+import Paragraph from "../../../components/Paragraph";
+import {laptop, tablet} from "../../../Global";
 import handleSubmit from "./services/handleSubmit";
 
 const Register = (): JSX.Element => {
@@ -38,12 +38,10 @@ const Register = (): JSX.Element => {
                 <FormInput refer={emailRef} placeholder="Email" type="text" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                            errorMessage="email invalid"/>
                 <FormInput refer={passwordRef} placeholder="Password" type="password"
-                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"/>
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid" isLast={true}/>
+                <Paragraph size={1} weight={500}><Link to="/login">I have an account</Link></Paragraph>
                 <Button primary medium>Create an account</Button>
             </Form>
-            <Container paddingTop={3} paddingTopTablet={2}>
-                <Paragraph size={1} weight={500}><Link to="/login">Already have an account</Link></Paragraph>
-            </Container>
         </Container>
     );
 

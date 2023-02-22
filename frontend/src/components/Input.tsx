@@ -19,6 +19,7 @@ const Input = (props: InputProps): JSX.Element => {
 
 export const StyledInput = styled.input`
   width: 100%;
+  background: ${({ theme }) => theme.white};
   box-sizing: border-box;
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;

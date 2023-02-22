@@ -1,7 +1,7 @@
 import * as React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Register from "./pages/register";
-import Login from "./pages/login";
+import Register from "./pages/unprotected/register";
+import Login from "./pages/unprotected/login";
 import styled from "styled-components/macro";
 import Layout from "./pages/@Layout";
 import Leaderboard from "./pages/leaderboard";
@@ -11,6 +11,8 @@ import Dashboard from "./pages/dashboard";
 import Theme from "./components/Theme";
 import ThemeSwitcher from "./pages/theme";
 import Game from "./pages/game";
+import Auth from "./pages/Auth";
+import Welcome from "./pages/unprotected/welcome/Welcome";
 
 const App = (): JSX.Element => {
   return (
@@ -19,15 +21,17 @@ const App = (): JSX.Element => {
         <Container>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/leaderboard" element={<Leaderboard />} />
-              <Route path="/lobbies" element={<Lobbies />} />
-              <Route path="/lobbies/:name" element={<Game />} />
+              <Route path="/" element={<Auth />}>
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="leaderboard" element={<Leaderboard />} />
+                <Route path="lobbies" element={<Lobbies />} />
+                <Route path="lobbies/:name" element={<Game />} />
+                <Route path="theme" element={<ThemeSwitcher />} />
+                <Route path="admin/*" element={<Admin />} />
+              </Route>
+              <Route path="/welcome" element={<Welcome />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/theme" element={<ThemeSwitcher />} />
-              <Route path="/admin/*" element={<Admin />} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </BrowserRouter>
