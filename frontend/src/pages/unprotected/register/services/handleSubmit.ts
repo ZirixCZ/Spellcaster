@@ -1,5 +1,5 @@
 import * as React from "react";
-import callApi from "../../../utils/callApi";
+import callApi from "../../../../utils/callApi";
 
 const checkValidityRegex = (userName: string | undefined, email: string | undefined, password: string | undefined) => {
     let validate
