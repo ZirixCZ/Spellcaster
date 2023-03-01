@@ -24,7 +24,8 @@ const Login = (): JSX.Element => {
             submitSuccess.then(result => {
                 if (!result) return
 
-                navigate("/")
+                if (result === true || result === false)
+                    navigate("/")
             })
     }, [submitSuccess])
 
@@ -33,12 +34,14 @@ const Login = (): JSX.Element => {
             <StyledContainer paddingTop={0} paddingTopTablet={2} alignItems="flex-start">
                 <Title>Sign in</Title>
             </StyledContainer>
-            <Form onSubmit={(e) => setSubmitSuccess(handleSubmit(e, userNameRef?.current?.value, passwordRef?.current?.value))}>
+            <Form
+                onSubmit={(e) => setSubmitSuccess(handleSubmit(e, userNameRef?.current?.value, passwordRef?.current?.value))}>
                 <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
                 <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
                            errorMessage="email invalid"/>
                 <FormInput refer={passwordRef} placeholder="Password" type="password"
-                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid" isLast={true}/>
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"
+                           isLast={true}/>
                 <Paragraph size={1} weight={500}><Link to="/register">I don't have an account</Link></Paragraph>
                 <Button primary medium>Login</Button>
             </Form>
@@ -48,11 +51,11 @@ const Login = (): JSX.Element => {
 }
 
 const Title = styled.h1`
-    font-size: 4em;
+  font-size: 4em;
 `
 
 const StyledContainer = styled(Container)`
-    text-align: start;
+  text-align: start;
 `
 
 export const GTitleLeft = styled.p`
