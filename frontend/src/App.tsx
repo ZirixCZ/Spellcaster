@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Register from "./pages/unprotected/register";
 import Login from "./pages/unprotected/login";
 import styled from "styled-components/macro";
@@ -15,40 +15,35 @@ import Auth from "./pages/Auth";
 import Welcome from "./pages/unprotected/welcome/Welcome";
 
 const App = (): JSX.Element => {
-  return (
-    <Theme>
-      <Body>
-        <Container>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Auth />}>
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="leaderboard" element={<Leaderboard />} />
-                <Route path="lobbies" element={<Lobbies />} />
-                <Route path="lobbies/:name" element={<Game />} />
-                <Route path="theme" element={<ThemeSwitcher />} />
-                <Route path="admin/*" element={<Admin />} />
-              </Route>
-              <Route path="/welcome" element={<Welcome />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </BrowserRouter>
-        </Container>
-      </Body>
-    </Theme>
-  );
+    return (
+        <Theme>
+            <Container>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Auth/>}>
+                            <Route path="dashboard" element={<Dashboard/>}/>
+                            <Route path="leaderboard" element={<Leaderboard/>}/>
+                            <Route path="lobbies" element={<Lobbies/>}/>
+                            <Route path="lobbies/:name" element={<Game/>}/>
+                            <Route path="theme" element={<ThemeSwitcher/>}/>
+                            <Route path="admin/*" element={<Admin/>}/>
+                        </Route>
+                        <Route path="/welcome" element={<Welcome/>}/>
+                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/register" element={<Register/>}/>
+                        <Route path="*" element={<Navigate to="/"/>}/>
+                    </Routes>
+                </BrowserRouter>
+            </Container>
+        </Theme>
+    );
 };
-
-const Body = styled.body`
-  background-color: ${({ theme }) => theme.white};
-  color: ${({ theme }) => theme.text};
-`;
 
 export const Container = styled.div`
   height: 100vh;
   width: 100%;
+  background-color: ${({theme}) => theme.white};
+  color: ${({theme}) => theme.text};
 `;
 
 export default App;
