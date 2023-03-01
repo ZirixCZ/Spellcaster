@@ -21,7 +21,7 @@ const App = (): JSX.Element => {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Auth/>}>
-                            <Route path="dashboard" element={<Dashboard/>}/>
+                            <Route path="/" element={<Dashboard/>}/>
                             <Route path="leaderboard" element={<Leaderboard/>}/>
                             <Route path="lobbies" element={<Lobbies/>}/>
                             <Route path="lobbies/:name" element={<Game/>}/>
