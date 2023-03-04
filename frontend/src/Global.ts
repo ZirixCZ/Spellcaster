@@ -3,15 +3,15 @@ import "./style/Global.css"
 
 const size = {
     mobile: "768px",
-    tablet: "1024px",
-    laptop: "1366px",
-    desktop: "2560px",
+    tablet: "1366px",
+    laptop: "1800px",
+    desktop: "4560px",
 }
 
 export const lightTheme = {
     isLight: true,
     primary: "#333333",
-    secondary: "#A1D938",
+    secondary: "#03CE60",
     red: "#F95738",
     gray: "#333333",
     buttonHover: "#1F191B",

@@ -55,7 +55,7 @@ const App = (): JSX.Element => {
                 <Symbol src={symbol} alt="Image of a letter symbol"/>
                 <Routes>
                     <Route path="/" element={<Auth/>}>
-                        <Route path="dashboard" element={<Dashboard/>}/>
+                        <Route path="/" element={<Dashboard/>}/>
                         <Route path="leaderboard" element={<Leaderboard/>}/>
                         <Route path="lobbies" element={<Lobbies/>}/>
                         <Route path="lobbies/:name" element={<Game/>}/>
@@ -83,5 +83,6 @@ export const Symbol = styled.img`
   position: absolute;
   height: 100%;
   pointer-events: none;
+  z-index: 0;
 `
 export default App;

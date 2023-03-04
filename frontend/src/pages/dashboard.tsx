@@ -38,21 +38,18 @@ const Dashboard = (): JSX.Element => {
               justifyContent="flex-end"
               alignItems="flex-end"
             >
-              <StyledThemeSwitcher
-                onClick={() => {
-                  navigate("/theme");
-                }}
-              >
-                <Button primary>settings</Button>
-              </StyledThemeSwitcher>
+              {/*<StyledThemeSwitcher*/}
+              {/*  onClick={() => {*/}
+              {/*    navigate("/theme");*/}
+              {/*  }}*/}
+              {/*>*/}
+              {/*  <Button primary>settings</Button>*/}
+              {/*</StyledThemeSwitcher>*/}
             </Container>
             <Container
               justifyContent="space-evenly"
               height={100}
-              widthMobile={75}
-              widthTablet={60}
-              widthLaptop={45}
-              widthDesktop={25}
+              width={75}
             >
               <StyledHeader>
                 <h1>Spellcaster</h1>
@@ -110,6 +107,7 @@ export const CodeInput = styled(StyledInput)`
   font-weight: 600;
   height: 3.5rem;
   border: 1px solid white;
+  border-radius: 15px;
 `;
 
 export default Dashboard;
