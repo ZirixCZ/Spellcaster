@@ -68,19 +68,21 @@ const TextWrapper = styled.div`
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  height: 100%;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   gap: 2rem;
+  margin-top: 2rem;
 `;
 
 const Title = styled.h1`
   font-size: 4em;
   text-align: left;
+  margin-top: 0;
   margin-bottom: 1rem;
+  padding: 0;
 `;
 
 const Subtitle = styled.h3`
