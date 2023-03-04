@@ -17,7 +17,6 @@ const App = (): JSX.Element => {
     return (
         <Theme>
             <Container>
-                <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Auth/>}>
                             <Route path="dashboard" element={<Dashboard/>}/>
@@ -32,7 +31,6 @@ const App = (): JSX.Element => {
                         <Route path="/register" element={<Register/>}/>
                         <Route path="*" element={<Navigate to="/"/>}/>
                     </Routes>
-                </BrowserRouter>
             </Container>
         </Theme>
     );
