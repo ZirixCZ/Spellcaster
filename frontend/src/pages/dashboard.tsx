@@ -29,7 +29,7 @@ const Dashboard = (): JSX.Element => {
   }, []);
 
   return (
-      <Container height={100}>
+      <Container height={100} width={100}>
         {auth ? (
           <>
             <Container
@@ -49,13 +49,14 @@ const Dashboard = (): JSX.Element => {
             <Container
               justifyContent="space-evenly"
               height={100}
-              width={75}
+              width={25}
+              widthMobile={75}
             >
               <StyledHeader>
                 <h1>Spellcaster</h1>
               </StyledHeader>
               <Container width={100}>
-                <LeaderboardView />
+                <LeaderboardView withButton={true} />
               </Container>
               <Container width={100}>
                 <ButtonWrapper>

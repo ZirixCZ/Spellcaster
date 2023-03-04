@@ -11,10 +11,10 @@ const Leaderboard = (): JSX.Element => {
     const navigate = useNavigate();
 
     return (
-        <Container height={100}>
-            <Container height={100} widthMobile={75} widthTablet={50} widthLaptop={35} widthDesktop={25}
+        <Container height={100} width={100}>
+            <Container height={100} width={25} widthMobile={75}
                        justifyContent="space-evenly">
-                <LeaderboardView></LeaderboardView>
+                <LeaderboardView />
                 <ButtonWrapper onClick={() => {
                     navigate("/")
                 }}>
