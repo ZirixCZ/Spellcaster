@@ -3,7 +3,6 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Register from "./pages/unprotected/register";
 import Login from "./pages/unprotected/login";
 import styled from "styled-components/macro";
-import Layout from "./pages/@Layout";
 import Leaderboard from "./pages/leaderboard";
 import Lobbies from "./pages/lobbies";
 import Admin from "./pages/admin";
@@ -46,4 +45,9 @@ export const Container = styled.div`
   color: ${({theme}) => theme.text};
 `;
 
+export const Symbol = styled.img`
+  position: absolute;
+  height: 100%;
+  pointer-events: none;
+`
 export default App;

@@ -6,7 +6,7 @@ import styled, {css} from "styled-components/macro";
 import FormInput from "../../../components/FormInput";
 import Container from "../../../components/Container";
 import Paragraph from "../../../components/Paragraph";
-import {laptop, tablet} from "../../../Global";
+import {mobile, tablet} from "../../../Global";
 import handleSubmit from "./services/handleSubmit";
 
 
@@ -30,15 +30,17 @@ const Login = (): JSX.Element => {
 
     return (
         <Container height={100} justifyContent="center" justifyContentTablet="start">
-            <StyledContainer paddingTop={0} paddingTopTablet={2} alignItems="flex-start">
+            <StyledContainer paddingTop={0} alignItems="start" paddingTopTablet={2}>
                 <Title>Sign in</Title>
             </StyledContainer>
-            <Form onSubmit={(e) => setSubmitSuccess(handleSubmit(e, userNameRef?.current?.value, passwordRef?.current?.value))}>
+            <Form
+                onSubmit={(e) => setSubmitSuccess(handleSubmit(e, userNameRef?.current?.value, passwordRef?.current?.value))}>
                 <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
                 <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
                            errorMessage="email invalid"/>
                 <FormInput refer={passwordRef} placeholder="Password" type="password"
-                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid" isLast={true}/>
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" errorMessage="password invalid"
+                           isLast={true}/>
                 <Paragraph size={1} weight={500}><Link to="/register">I don't have an account</Link></Paragraph>
                 <Button primary medium>Login</Button>
             </Form>
@@ -48,11 +50,20 @@ const Login = (): JSX.Element => {
 }
 
 const Title = styled.h1`
-    font-size: 4em;
+  font-size: 4em;
 `
 
 const StyledContainer = styled(Container)`
-    text-align: start;
+  text-align: start;
+  width: 25%;
+
+  ${tablet(css`
+    width: 50%;
+  `)}
+
+  ${mobile(css`
+    width: 75%;
+  `)}
 `
 
 export const GTitleLeft = styled.p`
@@ -69,8 +80,13 @@ export const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   ${tablet(css`
     width: 50%;
+  `)}
+
+  ${mobile(css`
+    width: 75%;
   `)}
 `
 
