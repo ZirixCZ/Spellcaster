@@ -41,6 +41,7 @@ export const StyledButton = styled.button<Props>`
       ? null
       : `1px solid ${theme.text}`};
   font-size: 1.25em;
+  z-index: 1;
   &:hover {
     background: ${({ theme }) => theme.buttonHover};
     transition: 0.3s;
