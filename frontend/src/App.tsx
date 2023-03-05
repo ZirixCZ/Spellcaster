@@ -12,7 +12,7 @@ import ThemeSwitcher from "./pages/theme";
 import Game from "./pages/game";
 import Auth from "./pages/Auth";
 import Welcome from "./pages/unprotected/welcome/Welcome";
-import {mobile} from "./Global";
+import {tablet} from "./Global";
 
 const App = (): JSX.Element => {
     const [symbol, setSymbol] = React.useState<string>();
@@ -60,10 +60,11 @@ export const Container = styled.div`
 
 export const Symbol = styled.img`
   position: absolute;
-  height: 100%;
+  overflow: hidden;
+  max-height: 100%;
   pointer-events: none;
   z-index: 0;
-  ${mobile(css`
+  ${tablet(css`
     display: none;
   `)}
 `

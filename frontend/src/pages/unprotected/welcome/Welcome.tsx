@@ -84,4 +84,8 @@ const Title = styled.h1`
 const Subtitle = styled.h3`
   font-size: 1.5em;
   margin: 0 0 1rem 0;
+  ${mobile(css`
+    font-size: 1em;
+    margin: 1.5em 0 1.5rem 0;
+  `)}
 `;
