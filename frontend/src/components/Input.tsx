@@ -18,6 +18,7 @@ const Input = (props: InputProps): JSX.Element => {
 }
 
 export const StyledInput = styled.input`
+  position: relative;
   width: 100%;
   background: ${({ theme }) => theme.white};
   box-sizing: border-box;
@@ -28,6 +29,7 @@ export const StyledInput = styled.input`
   outline: none;
   border: 1px black solid;
   font-size: 1rem;
+  z-index: 1;
 
   ::placeholder {
     opacity: 1;

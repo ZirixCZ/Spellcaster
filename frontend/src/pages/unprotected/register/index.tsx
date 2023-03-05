@@ -27,7 +27,7 @@ const Register = (): JSX.Element => {
     }, [submitSuccess])
 
     return (
-        <Container height={100} justifyContent="center" justifyContentTablet="start">
+        <Container height={100} justifyContent="center">
             <StyledContainer paddingTop={0} alignItems="start" paddingTopTablet={2}>
                 <Title>Sign up</Title>
             </StyledContainer>

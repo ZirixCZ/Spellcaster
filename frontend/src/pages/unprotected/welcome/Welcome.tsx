@@ -15,12 +15,9 @@ export default (): JSX.Element => {
                     <Subtitle>
                         spelling application that&nbsp;combines&nbsp;the&nbsp;act
                         <br/>
-                        of&nbsp;learning&nbsp;English
-                    </Subtitle>
-                    <Subtitle>
-                        with the excitement and&nbsp;engagement&nbsp;of
+                        of&nbsp;learning&nbsp;English with the excitement
                         <br/>
-                        playing&nbsp;a&nbsp;game
+                        and&nbsp;engagement&nbsp;of playing&nbsp;a&nbsp;game
                     </Subtitle>
                 </TextWrapper>
                 <ButtonContainer>
@@ -66,24 +63,29 @@ const ButtonWrapper = styled.div`
 const TextWrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
-  height: 100%;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 2rem;
+  margin-top: 2rem;
 `;
 
 const Title = styled.h1`
   font-size: 4em;
-  text-align: left;
+  margin-top: 0;
   margin-bottom: 1rem;
+  padding: 0;
 `;
 
 const Subtitle = styled.h3`
   font-size: 1.5em;
   margin: 0 0 1rem 0;
+  ${mobile(css`
+    font-size: 1em;
+    margin: 1.5em 0 1.5rem 0;
+  `)}
 `;

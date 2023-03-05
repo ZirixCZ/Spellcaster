@@ -39,7 +39,7 @@ export const TableData = (props: TableDataProps): JSX.Element => {
                 c++
                 return (
                     <StyledTableData isStrong={isStrong}
-                                     textAlign={c === 0 ? "left" : c === 1 ? "center" : c === 2 ? "right" : "justify"}>{prop}</StyledTableData>
+                                     textAlign={c === 0 ? "left" : c === 1 ? "left" : c === 2 ? "right" : "justify"}>{prop}</StyledTableData>
                 )
             })}
         </>

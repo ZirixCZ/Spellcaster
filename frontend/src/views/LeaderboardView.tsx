@@ -5,7 +5,11 @@ import Button from "../components/Button";
 import Container from "../components/Container";
 import Leaderboard from "../components/Leaderboard";
 
-const LeaderboardView = (): JSX.Element => {
+interface Props {
+    withButton?: boolean;
+}
+
+const LeaderboardView = (props: Props): JSX.Element => {
 
     const navigate = useNavigate();
 
@@ -47,12 +51,15 @@ const LeaderboardView = (): JSX.Element => {
                         )
                     })}
                 </StyledLeaderboard>
-                <ButtonWrapper onClick={() => {
-                    navigate("/leaderboard")
+                {props.withButton ?
+                    <ButtonWrapper onClick={() => {
+                        navigate("/leaderboard")
+                    }
+                    }>
+                        <Button secondary small>Leaderboard</Button>
+                    </ButtonWrapper>
+                    : null
                 }
-                }>
-                    <Button leaderboard small>Leaderboard</Button>
-                </ButtonWrapper>
             </LeaderboardButtonWrapper>
         </Container>
 
@@ -61,7 +68,7 @@ const LeaderboardView = (): JSX.Element => {
 }
 
 export const StyledLeaderboard = styled.table`
-      width: 50%;
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -76,12 +83,14 @@ export const LeaderboardButtonWrapper = styled.div`
       justify-content: start;
       align-items: center;
       width: 100%;
+    
     `
 
 export const ButtonWrapper = styled.div`
       display: flex;
       padding-top: 3rem;
-      width: 50%;
+      min-width: 50%;
+      width: fit-content;
     `
 
 export default LeaderboardView;

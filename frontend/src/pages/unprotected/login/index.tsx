@@ -9,7 +9,6 @@ import Paragraph from "../../../components/Paragraph";
 import {mobile, tablet} from "../../../Global";
 import handleSubmit from "./services/handleSubmit";
 
-
 const Login = (): JSX.Element => {
 
     const navigate = useNavigate();
@@ -29,7 +28,7 @@ const Login = (): JSX.Element => {
     }, [submitSuccess])
 
     return (
-        <Container height={100} justifyContent="center" justifyContentTablet="start">
+        <Container height={100} justifyContent="center">
             <StyledContainer paddingTop={0} alignItems="start" paddingTopTablet={2}>
                 <Title>Sign in</Title>
             </StyledContainer>

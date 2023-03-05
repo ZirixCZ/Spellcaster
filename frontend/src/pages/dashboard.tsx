@@ -29,7 +29,7 @@ const Dashboard = (): JSX.Element => {
   }, []);
 
   return (
-      <Container height={100}>
+      <Container height={100} width={100}>
         {auth ? (
           <>
             <Container
@@ -38,28 +38,26 @@ const Dashboard = (): JSX.Element => {
               justifyContent="flex-end"
               alignItems="flex-end"
             >
-              <StyledThemeSwitcher
-                onClick={() => {
-                  navigate("/theme");
-                }}
-              >
-                <Button primary>settings</Button>
-              </StyledThemeSwitcher>
+              {/*<StyledThemeSwitcher*/}
+              {/*  onClick={() => {*/}
+              {/*    navigate("/theme");*/}
+              {/*  }}*/}
+              {/*>*/}
+              {/*  <Button primary>settings</Button>*/}
+              {/*</StyledThemeSwitcher>*/}
             </Container>
             <Container
               justifyContent="space-evenly"
               height={100}
+              width={25}
               widthMobile={75}
-              widthTablet={60}
-              widthLaptop={45}
-              widthDesktop={25}
             >
               <StyledHeader>
                 <h1>Spellcaster</h1>
               </StyledHeader>
-              <Container width={100}>
-                <LeaderboardView />
-              </Container>
+              <StyledContainer width={100}>
+                <LeaderboardView withButton={true} />
+              </StyledContainer>
               <Container width={100}>
                 <ButtonWrapper>
                   <CodeInput placeholder="Enter code..."></CodeInput>
@@ -86,6 +84,10 @@ export const StyledThemeSwitcher = styled.div`
   height: fit-content;
 `;
 
+const StyledContainer = styled(Container)`
+  
+`
+
 export const StyledHeader = styled.div`
   font-size: 2rem;
   padding-top: 0;
@@ -110,6 +112,7 @@ export const CodeInput = styled(StyledInput)`
   font-weight: 600;
   height: 3.5rem;
   border: 1px solid white;
+  border-radius: 15px;
 `;
 
 export default Dashboard;
