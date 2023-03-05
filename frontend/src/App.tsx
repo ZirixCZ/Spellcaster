@@ -2,7 +2,7 @@ import * as React from "react";
 import {BrowserRouter, Navigate, Route, Routes, useLocation} from "react-router-dom";
 import Register from "./pages/unprotected/register";
 import Login from "./pages/unprotected/login";
-import styled from "styled-components/macro";
+import styled, {css} from "styled-components/macro";
 import Leaderboard from "./pages/leaderboard";
 import Lobbies from "./pages/lobbies";
 import Admin from "./pages/admin";
@@ -12,6 +12,7 @@ import ThemeSwitcher from "./pages/theme";
 import Game from "./pages/game";
 import Auth from "./pages/Auth";
 import Welcome from "./pages/unprotected/welcome/Welcome";
+import {mobile} from "./Global";
 
 const App = (): JSX.Element => {
     const [symbol, setSymbol] = React.useState<string>();
@@ -26,33 +27,11 @@ const App = (): JSX.Element => {
         return symbols[Math.floor(Math.random() * symbols.length)]
     }
 
-    const handleResize = () => {
-        if (window.innerWidth < 800) {
-            setSymbol("")
-            return false
-        }
-
-        setSymbol(getSymbol())
-        return true
-    }
-
-    React.useEffect(() => {
-        setSymbol(handleResize() ? getSymbol() : "")
-    }, [location.pathname])
-
-    React.useEffect(() => {
-            window.addEventListener("resize", handleResize)
-
-            return () => window.removeEventListener("resize", handleResize)
-
-        }, []
-    )
-
 
     return (
         <Theme>
             <Container>
-                <Symbol src={symbol} alt="Image of a letter symbol"/>
+                <Symbol src={getSymbol()} alt="Image of a letter symbol"/>
                 <Routes>
                     <Route path="/" element={<Auth/>}>
                         <Route path="/" element={<Dashboard/>}/>
@@ -84,5 +63,8 @@ export const Symbol = styled.img`
   height: 100%;
   pointer-events: none;
   z-index: 0;
+  ${mobile(css`
+    display: none;
+  `)}
 `
 export default App;
