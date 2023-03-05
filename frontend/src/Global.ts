@@ -21,13 +21,13 @@ export const lightTheme = {
 
 export const darkTheme = {
     isLight: false,
-    primary: "#1F049AFF",
-    secondary: "#5A7B00FF",
-    red: "#b62509",
-    gray: "#0d0a0b",
-    buttonHover: "#0d0a0b",
-    white: "#111323",
-    text: "#FCFCFC"
+    primary: "#333333",
+    secondary: "#03CE60",
+    red: "#F95738",
+    gray: "#333333",
+    buttonHover: "#1F191B",
+    white: "#FFFFF0",
+    text: "#333333"
 }
 
 

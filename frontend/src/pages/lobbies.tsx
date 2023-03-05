@@ -40,13 +40,6 @@ const Lobbies = (): JSX.Element => {
 
   return (
       <Container heightKeyword="fit-content" width={100}>
-        <ButtonWrapper
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          <Button medium>Back to Dashboard</Button>
-        </ButtonWrapper>
         <StyledLobbies>
           {!lobbies ? (
             <></>
@@ -72,7 +65,7 @@ const Lobbies = (): JSX.Element => {
             pattern="^[a-z0-9_.]+$"
             errorMessage="email invalid"
           />
-          <Button leaderboard medium>
+          <Button secondary medium>
             Create
           </Button>
         </Form>
@@ -112,10 +105,12 @@ const Lobby = styled.div`
   align-items: center;
   width: 7em;
   height: 7em;
-  border-radius: 3px;
+  border-radius: 15px;
   background-color: ${({ theme }) => theme.primary};
   color: white;
   cursor: pointer;
+  z-index: 1;
+  position: relative;
 `;
 
 const Text = styled.p`

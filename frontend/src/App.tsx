@@ -15,10 +15,11 @@ import Welcome from "./pages/unprotected/welcome/Welcome";
 import {tablet} from "./Global";
 
 const App = (): JSX.Element => {
-    const [symbol, setSymbol] = React.useState<string>();
     const location = useLocation();
 
     const getSymbol = () => {
+        if (location.pathname === "/") return "/img/symbolY.svg"
+
         const symbols = [
             "/img/symbolA.svg",
             "/img/symbolS.svg",

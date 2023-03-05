@@ -55,9 +55,9 @@ const Dashboard = (): JSX.Element => {
               <StyledHeader>
                 <h1>Spellcaster</h1>
               </StyledHeader>
-              <Container width={100}>
+              <StyledContainer width={100}>
                 <LeaderboardView withButton={true} />
-              </Container>
+              </StyledContainer>
               <Container width={100}>
                 <ButtonWrapper>
                   <CodeInput placeholder="Enter code..."></CodeInput>
@@ -83,6 +83,10 @@ export const StyledThemeSwitcher = styled.div`
   width: fit-content;
   height: fit-content;
 `;
+
+const StyledContainer = styled(Container)`
+  
+`
 
 export const StyledHeader = styled.div`
   font-size: 2rem;

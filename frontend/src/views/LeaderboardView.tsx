@@ -56,7 +56,7 @@ const LeaderboardView = (props: Props): JSX.Element => {
                         navigate("/leaderboard")
                     }
                     }>
-                        <Button leaderboard small>Leaderboard</Button>
+                        <Button secondary small>Leaderboard</Button>
                     </ButtonWrapper>
                     : null
                 }
@@ -89,6 +89,8 @@ export const LeaderboardButtonWrapper = styled.div`
 export const ButtonWrapper = styled.div`
       display: flex;
       padding-top: 3rem;
+      min-width: 50%;
+      width: fit-content;
     `
 
 export default LeaderboardView;
