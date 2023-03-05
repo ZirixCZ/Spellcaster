@@ -24,6 +24,7 @@ interface Props {
 }
 
 export const StyledButton = styled.button<Props>`
+  position: relative;
   background: ${({ primary, leaderboard, theme }) =>
     primary ? theme.primary : leaderboard ? theme.secondary : theme.gray};
   color: ${({ theme }) => theme.white};
