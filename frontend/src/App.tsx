@@ -1,5 +1,6 @@
 import * as React from "react";
 import {BrowserRouter, Navigate, Route, Routes, useLocation} from "react-router-dom";
+import {AnimatePresence, motion} from "framer-motion";
 import Register from "./pages/unprotected/register";
 import Login from "./pages/unprotected/login";
 import styled, {css} from "styled-components/macro";
@@ -13,26 +14,58 @@ import Game from "./pages/game";
 import Auth from "./pages/Auth";
 import Welcome from "./pages/unprotected/welcome/Welcome";
 import {tablet} from "./Global";
+import {useEffect} from "react";
 
 const App = (): JSX.Element => {
     const location = useLocation();
 
     const getSymbol = () => {
-        if (location.pathname === "/") return "/img/symbolY.svg"
-
         const symbols = [
             "/img/symbolA.svg",
+            "/img/symbolB.svg",
+            "/img/symbolC.svg",
+            "/img/symbolD.svg",
+            "/img/symbolE.svg",
+            "/img/symbolF.svg",
+            "/img/symbolG.svg",
+            "/img/symbolH.svg",
+            "/img/symbolI.svg",
+            "/img/symbolJ.svg",
+            "/img/symbolK.svg",
+            "/img/symbolL.svg",
+            "/img/symbolM.svg",
+            "/img/symbolN.svg",
+            "/img/symbolO.svg",
+            "/img/symbolP.svg",
+            "/img/symbolR.svg",
             "/img/symbolS.svg",
-            "/img/symbolY.svg"
+            "/img/symbolT.svg",
+            "/img/symbolU.svg",
+            "/img/symbolV.svg",
+            "/img/symbolW.svg",
+            "/img/symbolX.svg",
+            "/img/symbolY.svg",
+            "/img/symbolZ.svg",
         ]
         return symbols[Math.floor(Math.random() * symbols.length)]
     }
 
-
     return (
         <Theme>
             <Container>
-                <Symbol src={getSymbol()} alt="Image of a letter symbol"/>
+                <SymbolWrapper>
+                    <AnimatePresence>
+                        <motion.div
+                            key={location.pathname}
+                            transition={{type: "spring", stiffness: 100, mass: 0.5}}
+                            initial={{x: -500, y: 500}}
+                            animate={{x: 0, y: 0}}
+                        >
+                            <Symbol src={getSymbol()} alt="Image of a letter symbol"/>
+                        </motion.div>
+                    </AnimatePresence>
+                </SymbolWrapper>
+
                 <Routes>
                     <Route path="/" element={<Auth/>}>
                         <Route path="/" element={<Dashboard/>}/>
@@ -52,6 +85,20 @@ const App = (): JSX.Element => {
     );
 };
 
+const SymbolWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  max-width: 100%;
+  max-height: 100%;
+  ${tablet(css`
+    display: none;
+  `)}
+
+`
+
 export const Container = styled.div`
   height: 100vh;
   width: 100%;
@@ -60,13 +107,6 @@ export const Container = styled.div`
 `;
 
 export const Symbol = styled.img`
-  position: absolute;
-  overflow: hidden;
-  max-height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  ${tablet(css`
-    display: none;
-  `)}
+  height: 60em;
 `
 export default App;

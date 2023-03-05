@@ -62,35 +62,34 @@ const LeaderboardView = (props: Props): JSX.Element => {
                 }
             </LeaderboardButtonWrapper>
         </Container>
-
     )
 
 }
 
 export const StyledLeaderboard = styled.table`
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      position: relative;
-    `
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+`
 
 export const LeaderboardButtonWrapper = styled.div`
-      height: fit-content;
-      display: flex;
-      flex-direction: column;
-      justify-content: start;
-      align-items: center;
-      width: 100%;
-    
-    `
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+
+`
 
 export const ButtonWrapper = styled.div`
-      display: flex;
-      padding-top: 3rem;
-      min-width: 50%;
-      width: fit-content;
-    `
+  display: flex;
+  padding-top: 3rem;
+  min-width: 50%;
+  width: fit-content;
+`
 
 export default LeaderboardView;
