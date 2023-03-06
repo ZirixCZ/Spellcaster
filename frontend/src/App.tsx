@@ -1,5 +1,5 @@
 import * as React from "react";
-import {BrowserRouter, Navigate, Route, Routes, useLocation} from "react-router-dom";
+import {Navigate, Route, Routes, useLocation} from "react-router-dom";
 import {AnimatePresence, motion} from "framer-motion";
 import Register from "./pages/unprotected/register";
 import Login from "./pages/unprotected/login";
@@ -14,11 +14,10 @@ import Game from "./pages/game";
 import Auth from "./pages/Auth";
 import Welcome from "./pages/unprotected/welcome/Welcome";
 import {tablet} from "./Global";
-import {useEffect} from "react";
 
 const App = (): JSX.Element => {
     const location = useLocation();
-
+    const [symbol, setSymbol] = React.useState("")
     const getSymbol = () => {
         const symbols = [
             "/img/symbolA.svg",
@@ -50,6 +49,10 @@ const App = (): JSX.Element => {
         return symbols[Math.floor(Math.random() * symbols.length)]
     }
 
+    React.useEffect(() => {
+        setSymbol(getSymbol())
+    }, [location.pathname])
+
     return (
         <Theme>
             <Container>
@@ -61,7 +64,7 @@ const App = (): JSX.Element => {
                             initial={{x: -500, y: 500}}
                             animate={{x: 0, y: 0}}
                         >
-                            <Symbol src={getSymbol()} alt="Image of a letter symbol"/>
+                            <Symbol src={symbol} alt="Image of a letter symbol"/>
                         </motion.div>
                     </AnimatePresence>
                 </SymbolWrapper>
@@ -88,7 +91,6 @@ const App = (): JSX.Element => {
 const SymbolWrapper = styled.div`
   position: absolute;
   top: 0;
-  overflow: hidden;
   z-index: 0;
   pointer-events: none;
   max-width: 100%;
