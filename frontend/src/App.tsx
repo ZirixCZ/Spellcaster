@@ -110,5 +110,6 @@ export const Container = styled.div`
 
 export const Symbol = styled.img`
   height: 60em;
+  max-height: 100vh;
 `
 export default App;
