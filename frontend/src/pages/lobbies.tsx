@@ -9,11 +9,12 @@ import callApi from "../utils/callApi";
 import {tablet, mobile} from "../Global";
 import Theme from "../components/Theme";
 import {motion} from "framer-motion";
+import {LobbyInterface} from "../types/Lobby";
 
 
 const Lobbies = (): JSX.Element => {
     const newLobby = React.useRef<HTMLInputElement | null>(null);
-    const [lobbies, setLobbies] = React.useState<any[] | null>(null);
+    const [lobbies, setLobbies] = React.useState<LobbyInterface[] | null>(null);
 
     const navigate = useNavigate();
 
@@ -77,8 +78,8 @@ const Lobbies = (): JSX.Element => {
                                    whileTap={{scale: 0.9}}
                                    onClick={() => navigate(`/lobbies/${item.name ?? null}`)}
                             >
-                                <Text>{item.name ?? "error"}</Text>
-                                <Text>1/9</Text>
+                                <Text>{item.name ? item.name : "noname"}</Text>
+                                <Text>{item.playerCount ? item.playerCount : "0"}/{item.maxPlayers ? item.maxPlayers : "9"}</Text>
                             </Lobby>
                         );
                     })
@@ -134,8 +135,8 @@ const Lobby = styled(motion.div)`
   width: 7em;
   height: 7em;
   border-radius: 15px;
-  background: rgb(105,245,231);
-  background: linear-gradient(180deg, rgba(105,245,231,1) 0%, rgba(0,219,197,1) 100%);
+  background: rgb(105, 245, 231);
+  background: linear-gradient(180deg, rgba(105, 245, 231, 1) 0%, rgba(0, 219, 197, 1) 100%);
   color: white;
   cursor: pointer;
   z-index: 1;
@@ -143,8 +144,8 @@ const Lobby = styled(motion.div)`
   transition: 0.3s;
 
   &:hover {
-    background: rgb(105,245,231);
-    background: linear-gradient(180deg, rgba(105,245,231,1) 0%, rgba(105,245,231,1) 100%);
+    background: rgb(105, 245, 231);
+    background: linear-gradient(180deg, rgba(105, 245, 231, 1) 0%, rgba(105, 245, 231, 1) 100%);
   }
 `;
 
