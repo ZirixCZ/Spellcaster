@@ -1,5 +1,6 @@
 import * as React from "react";
-import {BrowserRouter, Navigate, Route, Routes, useLocation} from "react-router-dom";
+import {Navigate, Route, Routes, useLocation} from "react-router-dom";
+import {AnimatePresence, motion} from "framer-motion";
 import Register from "./pages/unprotected/register";
 import Login from "./pages/unprotected/login";
 import styled, {css} from "styled-components/macro";
@@ -13,26 +14,13 @@ import Game from "./pages/game";
 import Auth from "./pages/Auth";
 import Welcome from "./pages/unprotected/welcome/Welcome";
 import {tablet} from "./Global";
+import Symbol from "./components/Symbol";
 
 const App = (): JSX.Element => {
-    const location = useLocation();
-
-    const getSymbol = () => {
-        if (location.pathname === "/") return "/img/symbolY.svg"
-
-        const symbols = [
-            "/img/symbolA.svg",
-            "/img/symbolS.svg",
-            "/img/symbolY.svg"
-        ]
-        return symbols[Math.floor(Math.random() * symbols.length)]
-    }
-
-
     return (
         <Theme>
             <Container>
-                <Symbol src={getSymbol()} alt="Image of a letter symbol"/>
+                <Symbol/>
                 <Routes>
                     <Route path="/" element={<Auth/>}>
                         <Route path="/" element={<Dashboard/>}/>
@@ -58,15 +46,4 @@ export const Container = styled.div`
   background-color: ${({theme}) => theme.white};
   color: ${({theme}) => theme.text};
 `;
-
-export const Symbol = styled.img`
-  position: absolute;
-  overflow: hidden;
-  max-height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  ${tablet(css`
-    display: none;
-  `)}
-`
 export default App;

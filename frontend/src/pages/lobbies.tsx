@@ -1,79 +1,108 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
-import styled, { css } from "styled-components";
+import {useNavigate} from "react-router-dom";
+import styled, {css} from "styled-components";
 import Container from "../components/Container";
 import FormInput from "../components/FormInput";
-import { Form, GTitleLeft } from "./unprotected/register";
+import {Form, GTitleLeft} from "./unprotected/register";
 import Button from "../components/Button";
 import callApi from "../utils/callApi";
-import { tablet, mobile } from "../Global";
+import {tablet, mobile} from "../Global";
 import Theme from "../components/Theme";
+import {motion} from "framer-motion";
+import {LobbyInterface} from "../types/Lobby";
+
 
 const Lobbies = (): JSX.Element => {
-  const newLobby = React.useRef<HTMLInputElement | null>(null);
-  const [lobbies, setLobbies] = React.useState<any[] | null>(null);
+    const newLobby = React.useRef<HTMLInputElement | null>(null);
+    const [lobbies, setLobbies] = React.useState<LobbyInterface[] | null>(null);
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  // fetch lobbies
-  React.useEffect(() => {
-    callApi("GET", "/api/lobby", null).then((res) => {
-      res.json().then((json) => {
-        setLobbies(json);
-      });
-    });
-  }, []);
+    // fetch lobbies
+    React.useEffect(() => {
+        callApi("GET", "/api/lobby", null).then((res) => {
+            res.json().then((json) => {
+                setLobbies(json);
+            });
+        });
+    }, []);
 
-  // create a new lobby
-  const onFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    callApi(
-      "POST",
-      "/api/lobby",
-      JSON.stringify({
-        name: newLobby.current?.value,
-      })
-    ).then(() => {
-      navigate(`/lobbies/${newLobby.current?.value}`);
-    });
-  };
-
-  return (
-      <Container heightKeyword="fit-content" width={100}>
-        <StyledLobbies>
-          {!lobbies ? (
-            <></>
-          ) : (
-            lobbies.map((item, i) => {
-              return (
-                <Lobby
-                  onClick={() => navigate(`/lobbies/${item.name ?? null}`)}
-                >
-                  <Text>{item.name ?? "error"}</Text>
-                  <Text>1/9</Text>
-                </Lobby>
-              );
+    // create a new lobby
+    const onFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        callApi(
+            "POST",
+            "/api/lobby",
+            JSON.stringify({
+                name: newLobby.current?.value,
             })
-          )}
-        </StyledLobbies>
-        <Form onSubmit={(e) => onFormSubmit(e)}>
-          <GTitleLeft>CREATE A NEW LOBBY</GTitleLeft>
-          <FormInput
-            refer={newLobby}
-            placeholder="think about a name..."
-            type="text"
-            pattern="^[a-z0-9_.]+$"
-            errorMessage="email invalid"
-          />
-          <Button secondary medium>
-            Create
-          </Button>
-        </Form>
-      </Container>
-  );
+        ).then(() => {
+            navigate(`/lobbies/${newLobby.current?.value}`);
+        });
+    };
+
+    const container = {
+        hidden: {opacity: 1, scale: 0},
+        visible: {
+            opacity: 1,
+            scale: 1,
+            transition: {
+                delayChildren: 0.3,
+                staggerChildren: 0.2
+            }
+        }
+    };
+
+    const motionItem = {
+        hidden: {y: 10},
+        visible: {
+            y: 0,
+        },
+    };
+
+    return (
+        <Container heightKeyword="fit-content" width={100}>
+            <StyledLobbies
+                variants={container}
+                initial="hidden"
+                animate="visible">
+                {!lobbies ? (
+                    <></>
+                ) : (
+                    lobbies.map((item, i) => {
+                        return (
+                            <Lobby variants={motionItem} whileHover={{
+                                scale: 1.2,
+                                transition: {duration: 0.25},
+                            }}
+                                   whileTap={{scale: 0.9}}
+                                   onClick={() => navigate(`/lobbies/${item.name ?? null}`)}
+                            >
+                                <Text>{item.name ? item.name : "noname"}</Text>
+                                <Text>{item.playerCount ? item.playerCount : "0"}/{item.maxPlayers ? item.maxPlayers : "9"}</Text>
+                            </Lobby>
+                        );
+                    })
+                )}
+            </StyledLobbies>
+            <Form onSubmit={(e) => onFormSubmit(e)}>
+                <GTitleLeft>CREATE A NEW LOBBY</GTitleLeft>
+                <FormInput
+                    refer={newLobby}
+                    placeholder="think about a name..."
+                    type="text"
+                    pattern="^[a-z0-9_.]+$"
+                    errorMessage="email invalid"
+                />
+                <Button secondary medium>
+                    Create
+                </Button>
+            </Form>
+        </Container>
+    );
 };
 
-const StyledLobbies = styled.div`
+const StyledLobbies = styled(motion.div)`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -98,7 +127,7 @@ const ButtonWrapper = styled.div`
   margin: 5em;
 `;
 
-const Lobby = styled.div`
+const Lobby = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -106,11 +135,18 @@ const Lobby = styled.div`
   width: 7em;
   height: 7em;
   border-radius: 15px;
-  background-color: ${({ theme }) => theme.primary};
+  background: rgb(105, 245, 231);
+  background: linear-gradient(180deg, rgba(105, 245, 231, 1) 0%, rgba(0, 219, 197, 1) 100%);
   color: white;
   cursor: pointer;
   z-index: 1;
   position: relative;
+  transition: 0.3s;
+
+  &:hover {
+    background: rgb(105, 245, 231);
+    background: linear-gradient(180deg, rgba(105, 245, 231, 1) 0%, rgba(105, 245, 231, 1) 100%);
+  }
 `;
 
 const Text = styled.p`
