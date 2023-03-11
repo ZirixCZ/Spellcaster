@@ -14,6 +14,8 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
+var clients = make(map[*websocket.Conn]bool)
+
 func JoinLobby(w http.ResponseWriter, r *http.Request) {
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	// upgrade this connection to a WebSocket
@@ -25,7 +27,6 @@ func JoinLobby(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("Client Connected")
-	err = ws.WriteMessage(1, []byte("Hello client you've connected!"))
 	if err != nil {
 		log.Println(err)
 	}
@@ -55,6 +56,24 @@ func JoinLobby(w http.ResponseWriter, r *http.Request) {
 	(*lobbyList)[index].PlayerCount++
 	newUser := routes.User{UserName: data.Username, Master: false}
 	(*lobbyList)[index].User = append((*lobbyList)[index].User, newUser)
+
+	lobbyListJSON, err := json.Marshal((*lobbyList)[index])
+	if err != nil {
+		return
+	}
+
+	// Write the JSON-encoded lobby list to the response writer
+	writer(ws, lobbyListJSON)
+	// Add the new client to the clients map
+	clients[ws] = true
+
+}
+
+func writer(conn *websocket.Conn, message []byte) {
+	err := conn.WriteMessage(websocket.TextMessage, message)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func reader(conn *websocket.Conn) (string, error) {

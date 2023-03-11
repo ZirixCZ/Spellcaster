@@ -3,6 +3,9 @@ import getLobbyFromURL from "../utils/getLobbyFromURL";
 import { useLocation } from "react-router-dom";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import callApi from "../utils/callApi";
+import {User} from "../types/Lobby";
+import styled from "styled-components/macro";
+import Container from "../components/Container";
 
 interface Game {
   data: string
@@ -13,14 +16,14 @@ export default (): JSX.Element => {
   const [username, setUsername] = React.useState<string | null>(null);
   const [socketUrl] = React.useState('ws://localhost:8000/ws/lobby');
   const [messageHistory, setMessageHistory] = React.useState<Game[]>([]);
+  const [connectedUsers, setConnectedUsers] = React.useState<User[]>([]);
   const location = useLocation();
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
   React.useEffect(() => {
     if (lastMessage !== null) {
-      // @ts-ignore
-      setMessageHistory((prev) => prev.concat(lastMessage));
+      setConnectedUsers(JSON.parse(lastMessage.data).user);
     }
   }, [lastMessage, setMessageHistory]);
 
@@ -58,24 +61,29 @@ export default (): JSX.Element => {
   }, [readyState])
 
   return (
-    <div>
+    <Container width={100} height={100} justifyContent="center" alignItems="center">
       <h1>{title}</h1>
       <p>{connectionStatus} {readyState === ReadyState.OPEN && username  ? `as ${username}` : null}</p>
 
-      <div>
         <button
             onClick={() => {}}
             disabled={readyState !== ReadyState.OPEN}
         >
-          Click Me to send 'Hello'
+          Click to start
         </button>
-        {lastMessage ? <span>Last message: {lastMessage.data}</span> : null}
-        <ul>
-          {messageHistory.map((message, i) => (
-              <span key={i}>{message ? message.data : null}</span>
+        <UnorderedList>
+          {connectedUsers?.map((user, i) => (
+              <span key={i}>{user ? user.name : null}</span>
           ))}
-        </ul>
-      </div>
-    </div>
+        </UnorderedList>
+    </Container>
   );
 };
+
+const UnorderedList = styled.ul`
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 25%;
+    flex-wrap: wrap;
+`

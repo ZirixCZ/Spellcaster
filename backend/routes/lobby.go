@@ -62,7 +62,7 @@ func getLobbies(w http.ResponseWriter, r *http.Request) {
 }
 
 func addLobby(name string, lobbyMaster string) {
-	lobby := Lobbies{Name: name, MasterUserName: lobbyMaster, User: []User{{UserName: lobbyMaster, Master: true}}}
+	lobby := Lobbies{Name: name, MasterUserName: lobbyMaster}
 	LobbyList = append(LobbyList, lobby)
 }
 
