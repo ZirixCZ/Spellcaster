@@ -10,6 +10,7 @@ interface Game {
 
 export default (): JSX.Element => {
   const [title, setTitle] = React.useState<string | null>(null);
+  const [username, setUsername] = React.useState<string | null>(null);
   const [socketUrl] = React.useState('ws://localhost:8000/ws/lobby');
   const [messageHistory, setMessageHistory] = React.useState<Game[]>([]);
   const location = useLocation();
@@ -46,10 +47,10 @@ export default (): JSX.Element => {
 
   React.useEffect(() => {
    if (readyState !== ReadyState.OPEN) return;
-   callApi('GET', '/api/user/getusername', null).then((res) => {
+   callApi('GET', '/api/user/verifyusername', null).then((res) => {
      res.json().then((data) => {
-       console.log(data)
-         sendMessage(JSON.stringify({username: data.username}))
+         setUsername(data.userName)
+         sendMessage(JSON.stringify({username: data.userName}))
      })
    })
   }, [readyState])
@@ -57,7 +58,8 @@ export default (): JSX.Element => {
   return (
     <div>
       <h1>{title}</h1>
-      <p>{connectionStatus}</p>
+      <p>{connectionStatus} {readyState === ReadyState.OPEN && username  ? `as ${username}` : null}</p>
+
       <div>
         <button
             onClick={handleClickSendMessage}

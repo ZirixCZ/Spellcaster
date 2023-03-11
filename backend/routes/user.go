@@ -114,7 +114,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("New Login: %s\n", userInput.UserName)
 }
 
-func GetUsername(w http.ResponseWriter, r *http.Request) {
+func VerifyUsername(w http.ResponseWriter, r *http.Request) {
 	userName, err := utils.ParseJWT(r, "username")
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)

@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-var lobbies []Lobbies
+var LobbyList []Lobbies
 
 func LobbyHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -43,9 +43,9 @@ func createLobby(w http.ResponseWriter, r *http.Request) {
 }
 
 func getLobbies(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("%+v\n", lobbies)
+	fmt.Printf("%+v\n", LobbyList)
 
-	resp, err := json.Marshal(lobbies)
+	resp, err := json.Marshal(LobbyList)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -55,13 +55,19 @@ func getLobbies(w http.ResponseWriter, r *http.Request) {
 
 func addLobby(name string) {
 	lobby := Lobbies{Name: name}
-	lobbies = append(lobbies, lobby)
+	LobbyList = append(LobbyList, lobby)
 }
 
 type LobbyInput struct {
 	Name string `json:"name" validate:"required,max=256"`
 }
 
+type User struct {
+	UserName string `json:"name" validate:"required,max=256"`
+	Master   bool   `json:"lobbymaster"`
+}
+
 type Lobbies struct {
 	Name string `json:"name" validate:"required,max=256"`
+	User User   `json:"user"`
 }
