@@ -2,8 +2,11 @@ export interface LobbyInterface {
     name: string
     playerCount: number
     maxPlayers: number
-    user: {
-        name: string
-        lobbymaster: boolean
-    }
+    masterUsername: string
+    user: User[]
+}
+
+export interface User {
+    name: string
+    lobbymaster: boolean
 }

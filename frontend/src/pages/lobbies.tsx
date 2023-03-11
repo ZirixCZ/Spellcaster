@@ -81,7 +81,7 @@ const Lobbies = (): JSX.Element => {
                             >
                                 <Text weight={800}>{item.name ? item.name : "noname"}</Text>
                                 <Text>{item.playerCount ? item.playerCount : "0"}/{item.maxPlayers ? item.maxPlayers : "9"}</Text>
-                                <Text>{item.user.name ? item.user.name : "error"}</Text>
+                                <Text>{item.masterUsername ? item.masterUsername : "error"}</Text>
                             </Lobby>
                         );
                     })

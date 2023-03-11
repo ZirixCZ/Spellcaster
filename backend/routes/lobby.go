@@ -62,7 +62,7 @@ func getLobbies(w http.ResponseWriter, r *http.Request) {
 }
 
 func addLobby(name string, lobbyMaster string) {
-	lobby := Lobbies{Name: name, User: []User{{UserName: lobbyMaster, Master: true}}}
+	lobby := Lobbies{Name: name, MasterUserName: lobbyMaster, User: []User{{UserName: lobbyMaster, Master: true}}}
 	LobbyList = append(LobbyList, lobby)
 }
 
@@ -80,7 +80,8 @@ type User struct {
 }
 
 type Lobbies struct {
-	Name        string `json:"name" validate:"required,max=256"`
-	PlayerCount int    `json:"playerCount"`
-	User        []User `json:"user"`
+	Name           string `json:"name" validate:"required,max=256"`
+	PlayerCount    int    `json:"playerCount"`
+	User           []User `json:"user"`
+	MasterUserName string `json:"masterUsername"`
 }
