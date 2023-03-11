@@ -1,6 +1,7 @@
 import * as React from "react";
 import getLobbyFromURL from "../utils/getLobbyFromURL";
 import { useLocation } from "react-router-dom";
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 export default (): JSX.Element => {
   const [title, setTitle] = React.useState<string | null>(null);

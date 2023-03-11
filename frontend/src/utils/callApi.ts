@@ -7,7 +7,7 @@ const callApi = async (method: string, endpoint: RequestInfo, body: string | nul
         };
 
     // TODO: .env
-    let uri = "http://localhost:8080" + endpoint
+    let uri = "http://localhost:8000" + endpoint
 
     return fetch(uri, {headers: headers, method: method, body: body});
 }
