@@ -25,8 +25,6 @@ export default (): JSX.Element => {
   }, [lastMessage, setMessageHistory]);
 
 
-  const handleClickSendMessage = React.useCallback(() => sendMessage('Hello'), []);
-
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
     [ReadyState.OPEN]: 'Connected',
@@ -39,6 +37,11 @@ export default (): JSX.Element => {
     setTitle(getLobbyFromURL(location.pathname));
   }, []);
 
+  React.useEffect(() => {
+    if (!title || !username) return;
+    sendMessage(JSON.stringify({name: title, username: username}))
+  }, [title, username])
+
   // TODO: fetch information about lobby depending on name
   React.useEffect(() => {
     if (!title) return;
@@ -50,7 +53,6 @@ export default (): JSX.Element => {
    callApi('GET', '/api/user/verifyusername', null).then((res) => {
      res.json().then((data) => {
          setUsername(data.userName)
-         sendMessage(JSON.stringify({username: data.userName}))
      })
    })
   }, [readyState])
@@ -62,7 +64,7 @@ export default (): JSX.Element => {
 
       <div>
         <button
-            onClick={handleClickSendMessage}
+            onClick={() => {}}
             disabled={readyState !== ReadyState.OPEN}
         >
           Click Me to send 'Hello'

@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"backend/spellit/utils"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -28,7 +29,14 @@ func createLobby(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	addLobby(input.Name)
+	lobbyMaster, err := utils.ParseJWT(r, "username")
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Could not parse token"))
+		return
+	}
+
+	addLobby(input.Name, lobbyMaster)
 
 	resp := make(map[string]string)
 	resp["name"] = input.Name
@@ -53,9 +61,13 @@ func getLobbies(w http.ResponseWriter, r *http.Request) {
 	w.Write(resp)
 }
 
-func addLobby(name string) {
-	lobby := Lobbies{Name: name}
+func addLobby(name string, lobbyMaster string) {
+	lobby := Lobbies{Name: name, User: []User{{UserName: lobbyMaster, Master: true}}}
 	LobbyList = append(LobbyList, lobby)
+}
+
+func ReturnLobbyList() *[]Lobbies {
+	return &LobbyList
 }
 
 type LobbyInput struct {
@@ -68,6 +80,7 @@ type User struct {
 }
 
 type Lobbies struct {
-	Name string `json:"name" validate:"required,max=256"`
-	User User   `json:"user"`
+	Name        string `json:"name" validate:"required,max=256"`
+	PlayerCount int    `json:"playerCount"`
+	User        []User `json:"user"`
 }
