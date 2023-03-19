@@ -4,9 +4,10 @@ import (
 	"backend/spellit/routes"
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/websocket"
 )
 
 var upgrader = websocket.Upgrader{
@@ -20,6 +21,7 @@ func JoinLobby(w http.ResponseWriter, r *http.Request) {
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	// upgrade this connection to a WebSocket
 	// connection
+
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
@@ -27,13 +29,11 @@ func JoinLobby(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("Client Connected")
-	if err != nil {
-		log.Println(err)
-	}
 
 	str, err := reader(ws)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 
 	// Unmarshal the JSON object into the struct
@@ -48,14 +48,18 @@ func JoinLobby(w http.ResponseWriter, r *http.Request) {
 	// Modify the contents of the LobbyList variable
 	index := findLobbyIndex(*lobbyList, data.Name)
 	if index < 0 {
-		fmt.Println("Could not find lobby")
+		fmt.Println("Lobby with name " + data.Name + " not found")
 		return
 	}
 
-	//	indexUser := findUserIndex((*lobbyList)[index].User, data.Username)
-	(*lobbyList)[index].PlayerCount++
-	newUser := routes.User{UserName: data.Username, Master: false}
-	(*lobbyList)[index].User = append((*lobbyList)[index].User, newUser)
+	userIndex := findUserIndex((*lobbyList)[index].User, data.Username)
+	if userIndex >= 0 {
+		fmt.Println("User with name " + data.Username + " already in lobby")
+	} else {
+		(*lobbyList)[index].PlayerCount++
+		newUser := routes.User{UserName: data.Username, Master: false}
+		(*lobbyList)[index].User = append((*lobbyList)[index].User, newUser)
+	}
 
 	lobbyListJSON, err := json.Marshal((*lobbyList)[index])
 	if err != nil {
@@ -105,6 +109,11 @@ func findLobbyIndex(lobbyList []routes.Lobbies, name string) int {
 		}
 	}
 	return -1
+}
+
+func remove(userList []routes.User, i int) []routes.User {
+	userList[i] = userList[len(userList)-1]
+	return userList[:len(userList)-1]
 }
 
 func findUserIndex(userList []routes.User, username string) int {

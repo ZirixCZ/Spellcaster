@@ -1,20 +1,20 @@
 import * as React from "react";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 import getLobbyFromURL from "../utils/getLobbyFromURL";
 import { useLocation } from "react-router-dom";
-import useWebSocket, { ReadyState } from 'react-use-websocket';
 import callApi from "../utils/callApi";
-import {User} from "../types/Lobby";
+import { User } from "../types/Lobby";
 import styled from "styled-components/macro";
 import Container from "../components/Container";
 
 interface Game {
-  data: string
+  data: string;
 }
 
 export default (): JSX.Element => {
   const [title, setTitle] = React.useState<string | null>(null);
   const [username, setUsername] = React.useState<string | null>(null);
-  const [socketUrl] = React.useState('ws://localhost:8000/ws/lobby');
+  const [socketUrl] = React.useState("ws://localhost:8000/ws/lobby");
   const [messageHistory, setMessageHistory] = React.useState<Game[]>([]);
   const [connectedUsers, setConnectedUsers] = React.useState<User[]>([]);
   const location = useLocation();
@@ -25,15 +25,21 @@ export default (): JSX.Element => {
     if (lastMessage !== null) {
       setConnectedUsers(JSON.parse(lastMessage.data).user);
     }
+
+    // TODO: on unmount send message to server to remove user from lobby
+    // return () => {
+    //   sendMessage(JSON.stringify({ name: title, username: username }));
+    //  setConnectedUsers([]);
+    //  setTitle(null);
+    //  };
   }, [lastMessage, setMessageHistory]);
 
-
   const connectionStatus = {
-    [ReadyState.CONNECTING]: 'Connecting',
-    [ReadyState.OPEN]: 'Connected',
-    [ReadyState.CLOSING]: 'Disconnecting',
-    [ReadyState.CLOSED]: 'Disconnected',
-    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Connected",
+    [ReadyState.CLOSING]: "Disconnecting",
+    [ReadyState.CLOSED]: "Disconnected",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
   React.useEffect(() => {
@@ -42,48 +48,53 @@ export default (): JSX.Element => {
 
   React.useEffect(() => {
     if (!title || !username) return;
-    sendMessage(JSON.stringify({name: title, username: username}))
-  }, [title, username])
+    sendMessage(JSON.stringify({ name: title, username: username }));
+  }, [title, username]);
 
   // TODO: fetch information about lobby depending on name
   React.useEffect(() => {
     if (!title) return;
-    return
+    return;
   }, [title]);
 
   React.useEffect(() => {
-   if (readyState !== ReadyState.OPEN) return;
-   callApi('GET', '/api/user/verifyusername', null).then((res) => {
-     res.json().then((data) => {
-         setUsername(data.userName)
-     })
-   })
-  }, [readyState])
+    if (readyState !== ReadyState.OPEN) return;
+    callApi("GET", "/api/user/verifyusername", null).then((res) => {
+      res.json().then((data) => {
+        setUsername(data.userName);
+      });
+    });
+  }, [readyState]);
 
   return (
-    <Container width={100} height={100} justifyContent="center" alignItems="center">
+    <Container
+      width={100}
+      height={100}
+      justifyContent="center"
+      alignItems="center"
+    >
       <h1>{title}</h1>
-      <p>{connectionStatus} {readyState === ReadyState.OPEN && username  ? `as ${username}` : null}</p>
+      <p>
+        {connectionStatus}{" "}
+        {readyState === ReadyState.OPEN && username ? `as ${username}` : null}
+      </p>
 
-        <button
-            onClick={() => {}}
-            disabled={readyState !== ReadyState.OPEN}
-        >
-          Click to start
-        </button>
-        <UnorderedList>
-          {connectedUsers?.map((user, i) => (
-              <span key={i}>{user ? user.name : null}</span>
-          ))}
-        </UnorderedList>
+      <button onClick={() => {}} disabled={readyState !== ReadyState.OPEN}>
+        Click to start
+      </button>
+      <UnorderedList>
+        {connectedUsers?.map((user, i) => (
+          <span key={i}>{user ? user.name : null}</span>
+        ))}
+      </UnorderedList>
     </Container>
   );
 };
 
 const UnorderedList = styled.ul`
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    width: 25%;
-    flex-wrap: wrap;
-`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  width: 25%;
+  flex-wrap: wrap;
+`;
