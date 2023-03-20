@@ -18,12 +18,9 @@ const Login = (): JSX.Element => {
   const [submitSuccess, setSubmitSuccess] = React.useState<Promise<boolean>>();
 
   React.useEffect(() => {
-    console.log(submitSuccess);
     if (typeof submitSuccess !== "undefined")
       submitSuccess.then((result) => {
         if (!result) return;
-        console.log(result);
-        console.log(localStorage.getItem("jwt"));
 
         if (result === true || result === false) navigate("/");
       });
