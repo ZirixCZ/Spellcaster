@@ -5,7 +5,7 @@ import FormInput from "../../../components/FormInput";
 import Button from "../../../components/Button";
 import Container from "../../../components/Container";
 import Paragraph from "../../../components/Paragraph";
-import {laptop, tablet} from "../../../Global";
+import {mobile, tablet} from "../../../Global";
 import handleSubmit from "./services/handleSubmit";
 
 const Register = (): JSX.Element => {
@@ -27,10 +27,10 @@ const Register = (): JSX.Element => {
     }, [submitSuccess])
 
     return (
-        <Container height={100} justifyContent="center" justifyContentTablet="start">
-            <Container paddingTop={0} paddingTopTablet={2}>
-                <h1>Register</h1>
-            </Container>
+        <Container height={100} justifyContent="center">
+            <StyledContainer paddingTop={0} alignItems="start" paddingTopTablet={2}>
+                <Title>Sign up</Title>
+            </StyledContainer>
             <Form onSubmit={(e) => setSubmitSuccess(handleSubmit(e, userNameRef?.current?.value, emailRef?.current?.value, passwordRef?.current?.value))}>
                 <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
                 <FormInput refer={userNameRef} placeholder="Username" type="text" pattern="^[a-z0-9_.]+$"
@@ -47,6 +47,23 @@ const Register = (): JSX.Element => {
 
 }
 
+const Title = styled.h1`
+  font-size: 4em;
+`
+
+const StyledContainer = styled(Container)`
+  text-align: start;
+  width: 25%;
+  
+  ${tablet(css`
+    width: 50%;
+  `)}
+
+  ${mobile(css`
+    width: 75%;
+  `)}
+`
+
 export const GTitleLeft = styled.p`
   width: 100%;
   font-size: 0.75rem;
@@ -61,9 +78,13 @@ export const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   ${tablet(css`
     width: 50%;
   `)}
 
+  ${mobile(css`
+    width: 75%;
+  `)}
 `
 export default Register;

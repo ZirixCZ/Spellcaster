@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/gorilla/mux v1.8.0
-	github.com/joho/godotenv v1.4.0
+	github.com/joho/godotenv v1.5.1
 	github.com/kataras/iris/v12 v12.1.8
 	github.com/rs/cors v1.8.3
 	gorm.io/gorm v1.24.1

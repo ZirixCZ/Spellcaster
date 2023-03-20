@@ -6,9 +6,8 @@ import styled, {css} from "styled-components/macro";
 import FormInput from "../../../components/FormInput";
 import Container from "../../../components/Container";
 import Paragraph from "../../../components/Paragraph";
-import {laptop, tablet} from "../../../Global";
+import {mobile, tablet} from "../../../Global";
 import handleSubmit from "./services/handleSubmit";
-
 
 const Login = (): JSX.Element => {
 
@@ -30,8 +29,8 @@ const Login = (): JSX.Element => {
     }, [submitSuccess])
 
     return (
-        <Container height={100} justifyContent="center" justifyContentTablet="start">
-            <StyledContainer paddingTop={0} paddingTopTablet={2} alignItems="flex-start">
+        <Container height={100} justifyContent="center">
+            <StyledContainer paddingTop={0} alignItems="start" paddingTopTablet={2}>
                 <Title>Sign in</Title>
             </StyledContainer>
             <Form
@@ -56,6 +55,15 @@ const Title = styled.h1`
 
 const StyledContainer = styled(Container)`
   text-align: start;
+  width: 25%;
+
+  ${tablet(css`
+    width: 50%;
+  `)}
+
+  ${mobile(css`
+    width: 75%;
+  `)}
 `
 
 export const GTitleLeft = styled.p`
@@ -72,8 +80,13 @@ export const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   ${tablet(css`
     width: 50%;
+  `)}
+
+  ${mobile(css`
+    width: 75%;
   `)}
 `
 

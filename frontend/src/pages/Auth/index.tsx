@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import callApi from "../../utils/callApi";
+import Navbar from "../../views/Navbar";
 
 export default () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export default () => {
     });
   }, []);
 
-  return <Container>{auth ? <Outlet /> : <Loader />}</Container>;
+  return <Container>{auth ? <><Navbar /><Outlet /></> : <Loader />}</Container>;
 };
 
 const Container = styled.div`
