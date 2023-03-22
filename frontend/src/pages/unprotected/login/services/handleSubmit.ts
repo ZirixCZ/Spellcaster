@@ -1,32 +1,39 @@
-import {FormEvent} from "react";
+import { FormEvent } from "react";
 import callApi from "../../../../utils/callApi";
 
-const handleSubmit = async (e: FormEvent, userName: string | undefined, password: string | undefined) => {
-    if (!userName || !password) {
-        return false;
-    }
+const handleSubmit = async (
+  e: FormEvent,
+  userName: string | undefined,
+  password: string | undefined
+) => {
+  if (!userName || !password) {
+    return false;
+  }
 
-    e.preventDefault();
+  e.preventDefault();
 
-    let success = await callApi("POST", "/api/user/login", JSON.stringify({
-        "userName": userName,
-        "password": password
-    })).then((res) => {
-        if (res.ok) {
-            res.json().then(json => {
-                const token = json.jwt
-                if (!token) {
-                    return
-                }
-
-                localStorage.setItem("jwt", token)
-            })
-            return true
-        }
-        return false
+  const res = await callApi(
+    "POST",
+    "/api/user/login",
+    JSON.stringify({
+      userName: userName,
+      password: password,
     })
+  );
 
-    return success.valueOf()
-}
+  if (!res.ok) {
+    return false;
+  }
 
-export default handleSubmit
+  const json = await res.json();
+  const token = json.jwt;
+
+  if (!token) {
+    return false;
+  }
+
+  localStorage.setItem("jwt", token);
+  return true;
+};
+
+export default handleSubmit;
