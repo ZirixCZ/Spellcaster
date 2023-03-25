@@ -1,31 +1,31 @@
 import * as React from "react";
-import {useNavigate} from "react-router-dom";
-import styled, {css} from "styled-components/macro";
-import {tablet, mobile} from "../Global";
+import { useNavigate } from "react-router-dom";
+import styled, { css } from "styled-components/macro";
+import { tablet, mobile } from "../Global";
 
 interface Props {
-    children?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const Navbar = (props: Props) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    return (
-        <StyledNavbar>
-            <StyledContainer>
-                <Item onClick={() => navigate("/")}>Dashboard</Item>
-                <Item onClick={() => navigate("/leaderboard")}>Leaderboard</Item>
-                <Item onClick={() => navigate("/lobbies")}>Lobbies</Item>
-            </StyledContainer>
-        </StyledNavbar>
-    )
-}
+  return (
+    <StyledNavbar>
+      <StyledContainer>
+        <Item onClick={() => navigate("/")}>Dashboard</Item>
+        <Item onClick={() => navigate("/leaderboard")}>Leaderboard</Item>
+        <Item onClick={() => navigate("/lobbies")}>Lobbies</Item>
+      </StyledContainer>
+    </StyledNavbar>
+  );
+};
 
 const Item = styled.a`
   font-size: 1.25rem;
   font-weight: 600;
   cursor: pointer;
-`
+`;
 
 const StyledContainer = styled.div`
   display: flex;
@@ -54,16 +54,18 @@ const StyledContainer = styled.div`
   ${mobile(css`
     gap: 0.75em;
   `)}
-`
+`;
 
 const StyledNavbar = styled.div`
   height: 4rem;
   width: 100%;
   position: absolute;
   z-index: 1;
-  background-color: ${({theme}) => theme.white};
+  background-color: ${({ theme }) => theme.white};
   top: 0;
-  border-bottom: 1px solid black;
-`
+  border-width: 4px;
+  border-style: solid;
+  border-image: linear-gradient(to right, darkblue, darkorchid) 1;
+`;
 
 export default Navbar;
