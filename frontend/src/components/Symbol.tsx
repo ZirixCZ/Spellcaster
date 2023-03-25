@@ -3,14 +3,16 @@ import { useLocation } from "react-router-dom";
 import styled, { css } from "styled-components/macro";
 import { tablet } from "../Global";
 import { getSymbol } from "../utils/symbol";
+import { useSymbolStore } from "../store/symbolStore";
 import { AnimatePresence, motion } from "framer-motion";
 
 const Symbol = () => {
+  const symbol = useSymbolStore((state) => state.symbol);
+  const changeSymbol = useSymbolStore((state) => state.changeSymbol);
   const location = useLocation();
-  const [symbol, setSymbol] = React.useState("");
 
   React.useEffect(() => {
-    setSymbol(getSymbol());
+    changeSymbol();
   }, [location.pathname]);
 
   return (

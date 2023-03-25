@@ -2,12 +2,16 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components/macro";
 import { tablet, mobile } from "../Global";
+import { useSymbolStore } from "../store/symbolStore";
 
 interface Props {
   children?: React.ReactNode;
 }
 
 const Navbar = (props: Props) => {
+  const symbol = useSymbolStore((state) => state.symbol);
+  const changeSymbol = useSymbolStore((state) => state.changeSymbol);
+
   const navigate = useNavigate();
 
   return (
@@ -63,9 +67,9 @@ const StyledNavbar = styled.div`
   z-index: 1;
   background-color: ${({ theme }) => theme.white};
   top: 0;
-  border-width: 4px;
-  border-style: solid;
-  border-image: linear-gradient(to right, darkblue, darkorchid) 1;
+  border-bottom-width: 4px;
+  border-bottom-style: solid;
+  border-bottom-image: linear-gradient(to right, darkblue, darkorchid) 1;
 `;
 
 export default Navbar;
