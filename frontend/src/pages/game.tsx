@@ -14,7 +14,7 @@ interface Game {
 export default (): JSX.Element => {
   const [title, setTitle] = React.useState<string | null>(null);
   const [username, setUsername] = React.useState<string | null>(null);
-  const [socketUrl] = React.useState("ws://localhost:8000/ws/lobby");
+  const [socketUrl] = React.useState("ws://localhost:8000/ws/lobby/state");
   const [messageHistory, setMessageHistory] = React.useState<Game[]>([]);
   const [connectedUsers, setConnectedUsers] = React.useState<User[]>([]);
   const location = useLocation();
@@ -25,13 +25,6 @@ export default (): JSX.Element => {
     if (lastMessage !== null) {
       setConnectedUsers(JSON.parse(lastMessage.data).user);
     }
-
-    // TODO: on unmount send message to server to remove user from lobby
-    // return () => {
-    //   sendMessage(JSON.stringify({ name: title, username: username }));
-    //  setConnectedUsers([]);
-    //  setTitle(null);
-    //  };
   }, [lastMessage, setMessageHistory]);
 
   const connectionStatus = {

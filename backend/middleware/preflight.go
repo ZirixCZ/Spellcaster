@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"log"
 	"net/http"
 )
 
@@ -13,7 +12,6 @@ func Preflight(endpointHandler func(w http.ResponseWriter, r *http.Request)) htt
 		w.Header().Set("Access-Control-Allow-Headers", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "*")
 		if r.Method == "OPTIONS" {
-			log.Print("preflight detected: ", r.Header)
 			w.Header().Add("Connection", "keep-alive")
 			w.Header().Add("Access-Control-Request-Headers", "*")
 			w.WriteHeader(http.StatusOK)

@@ -17,10 +17,12 @@ var upgrader = websocket.Upgrader{
 
 var clients = make(map[*websocket.Conn]bool)
 
+func LeaveLobby(w http.ResponseWriter, r *http.Request) {
+	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
+}
+
 func JoinLobby(w http.ResponseWriter, r *http.Request) {
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
-	// upgrade this connection to a WebSocket
-	// connection
 
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -35,6 +37,9 @@ func JoinLobby(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+
+	fmt.Println("read the websocket message")
+	fmt.Println(str)
 
 	// Unmarshal the JSON object into the struct
 	var data JoinLobbyStruct
@@ -70,6 +75,35 @@ func JoinLobby(w http.ResponseWriter, r *http.Request) {
 	writer(ws, lobbyListJSON)
 	// Add the new client to the clients map
 	clients[ws] = true
+	for {
+		var message struct {
+			Type string `json:"type"`
+		}
+		err := ws.ReadJSON(&message)
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				log.Printf("error: %v", err)
+				// remove user from the user list and do all the good stuff
+
+				index := findLobbyIndex(*lobbyList, data.Name)
+				userIndex := findUserIndex((*lobbyList)[index].User, data.Username)
+				if userIndex >= 0 {
+					fmt.Println("Removing " + data.Username + " from" + data.Name)
+					(*lobbyList)[index].PlayerCount--
+					fmt.Println((*lobbyList)[index].User)
+					(*lobbyList)[index].User = remove((*lobbyList)[index].User, userIndex)
+					fmt.Println((*lobbyList)[index].User)
+				}
+			}
+			break
+		}
+
+		if message.Type == "disconnect" {
+			ws.Close()
+			fmt.Println("Client disconnected.")
+			break
+		}
+	}
 
 }
 
