@@ -17,11 +17,7 @@ var upgrader = websocket.Upgrader{
 
 var clients = make(map[*websocket.Conn]bool)
 
-func LeaveLobby(w http.ResponseWriter, r *http.Request) {
-	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
-}
-
-func JoinLobby(w http.ResponseWriter, r *http.Request) {
+func LobbyConnection(w http.ResponseWriter, r *http.Request) {
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
 	ws, err := upgrader.Upgrade(w, r, nil)
@@ -71,20 +67,29 @@ func JoinLobby(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Write the JSON-encoded lobby list to the response writer
-	writer(ws, lobbyListJSON)
 	// Add the new client to the clients map
 	clients[ws] = true
+
+	// Write the JSON-encoded lobby list to the response writer
+	writer(ws, lobbyListJSON)
+
+	// keep the connection open
+	Connection(ws, lobbyList, data)
+
+}
+
+func Connection(ws *websocket.Conn, lobbyList *[]routes.Lobbies, data JoinLobbyStruct) {
 	for {
 		var message struct {
 			Type string `json:"type"`
 		}
+
 		err := ws.ReadJSON(&message)
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
-				// remove user from the user list and do all the good stuff
 
+				// Remove the user from the lobby
 				index := findLobbyIndex(*lobbyList, data.Name)
 				userIndex := findUserIndex((*lobbyList)[index].User, data.Username)
 				if userIndex >= 0 {
@@ -104,7 +109,6 @@ func JoinLobby(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-
 }
 
 func writer(conn *websocket.Conn, message []byte) {

@@ -21,6 +21,6 @@ func main() {
 	mux.HandleFunc("/api/home", middleware.Preflight(middleware.VerifyJWT(routes.Home, "user")))
 	mux.HandleFunc("/api/admin", middleware.Preflight(middleware.VerifyJWT(routes.Home, "admin")))
 	mux.HandleFunc("/api/lobby", middleware.Preflight(middleware.VerifyJWT(routes.LobbyHandler, "user")))
-	mux.HandleFunc("/ws/lobby/state", middleware.Preflight(ws.JoinLobby))
+	mux.HandleFunc("/ws/lobby/state", middleware.Preflight(ws.LobbyConnection))
 	http.ListenAndServe(":8000", mux)
 }
