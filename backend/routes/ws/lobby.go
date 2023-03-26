@@ -34,9 +34,6 @@ func LobbyConnection(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("read the websocket message")
-	fmt.Println(str)
-
 	// Unmarshal the JSON object into the struct
 	var data JoinLobbyStruct
 	err = json.Unmarshal([]byte(str), &data)
@@ -44,8 +41,16 @@ func LobbyConnection(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	lobbyList := routes.ReturnLobbyList()
+	switch data.Type {
+	case "join":
+		JoinLobby(ws, data)
+	default:
+		fmt.Println("Invalid type")
+	}
+}
 
+func JoinLobby(ws *websocket.Conn, data JoinLobbyStruct) {
+	lobbyList := routes.ReturnLobbyList()
 	// Modify the contents of the LobbyList variable
 	index := findLobbyIndex(*lobbyList, data.Name)
 	if index < 0 {
@@ -166,4 +171,5 @@ func findUserIndex(userList []routes.User, username string) int {
 type JoinLobbyStruct struct {
 	Name     string `json:"name"`
 	Username string `json:"username"`
+	Type     string `json:"type"`
 }

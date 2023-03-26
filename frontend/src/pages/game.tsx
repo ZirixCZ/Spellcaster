@@ -21,8 +21,10 @@ export default (): JSX.Element => {
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
+  // listen for websocket messages
   React.useEffect(() => {
     if (lastMessage !== null) {
+      console.log("incoming message", lastMessage.data);
       setConnectedUsers(JSON.parse(lastMessage.data).user);
     }
   }, [lastMessage, setMessageHistory]);
@@ -41,14 +43,10 @@ export default (): JSX.Element => {
 
   React.useEffect(() => {
     if (!title || !username) return;
-    sendMessage(JSON.stringify({ name: title, username: username }));
+    sendMessage(
+      JSON.stringify({ name: title, username: username, type: "join" })
+    );
   }, [title, username]);
-
-  // TODO: fetch information about lobby depending on name
-  React.useEffect(() => {
-    if (!title) return;
-    return;
-  }, [title]);
 
   React.useEffect(() => {
     if (readyState !== ReadyState.OPEN) return;
