@@ -6,12 +6,13 @@ import (
 	"backend/spellit/utils"
 	"encoding/json"
 	"fmt"
-	"github.com/golang-jwt/jwt"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/golang-jwt/jwt"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +47,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		UserName: userInput.UserName,
 		Email:    userInput.Email,
 		Password: hashedPassword,
-		Roles:    userInput.Roles,
+		Roles:    "user",
 	}
 
 	storage.DB.Create(&newUser)
