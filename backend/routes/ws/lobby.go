@@ -51,6 +51,7 @@ func LobbyConnection(w http.ResponseWriter, r *http.Request) {
 
 func JoinLobby(ws *websocket.Conn, data JoinLobbyStruct) {
 	lobbyList := routes.ReturnLobbyList()
+
 	// Modify the contents of the LobbyList variable
 	index := findLobbyIndex(*lobbyList, data.Name)
 	if index < 0 {
@@ -80,7 +81,6 @@ func JoinLobby(ws *websocket.Conn, data JoinLobbyStruct) {
 
 	// keep the connection open
 	Connection(ws, lobbyList, data)
-
 }
 
 func Connection(ws *websocket.Conn, lobbyList *[]routes.Lobbies, data JoinLobbyStruct) {
