@@ -40,6 +40,7 @@ func LobbyConnection(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(data)
 
 	switch data.Type {
 	case "join":
@@ -108,12 +109,19 @@ func Connection(ws *websocket.Conn, lobbyList *[]routes.Lobbies, data JoinLobbyS
 			break
 		}
 
+		if message.Type == "start" {
+			StartLobby(ws, data)
+		}
 		if message.Type == "disconnect" {
 			ws.Close()
 			fmt.Println("Client disconnected.")
 			break
 		}
 	}
+}
+
+func StartLobby(ws *websocket.Conn, data JoinLobbyStruct) {
+	fmt.Println("Starting lobby")
 }
 
 func writer(conn *websocket.Conn, message []byte) {

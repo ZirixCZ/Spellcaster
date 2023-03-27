@@ -74,7 +74,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if userExists == false {
+	if !userExists {
 		fmt.Printf("User %s doesn't exist\n", userInput.UserName)
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "User %s doesn't exist\n", userInput.UserName)

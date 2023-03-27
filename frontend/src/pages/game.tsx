@@ -57,6 +57,13 @@ export default (): JSX.Element => {
     });
   }, [readyState]);
 
+  const startGame = () => {
+    // do stuff
+    sendMessage(
+      JSON.stringify({ name: title, username: username, type: "start" })
+    );
+  };
+
   return (
     <Container
       width={100}
@@ -70,7 +77,10 @@ export default (): JSX.Element => {
         {readyState === ReadyState.OPEN && username ? `as ${username}` : null}
       </p>
 
-      <button onClick={() => {}} disabled={readyState !== ReadyState.OPEN}>
+      <button
+        onClick={() => startGame()}
+        disabled={readyState !== ReadyState.OPEN}
+      >
         Click to start
       </button>
       <UnorderedList>
