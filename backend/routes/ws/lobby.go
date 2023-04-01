@@ -10,6 +10,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// TODO: websocket routing -> keep connection between user and lobby and only the lobby that they're connected to
+// subscribe depending on target_id from client
+// for each lobby create a hub, that broadcasts to clients. -> perhaps different types of hubs [notification hub, state hub..]
+// pair client target_id with hub
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
@@ -17,7 +21,7 @@ var upgrader = websocket.Upgrader{
 
 var clients = make(map[*websocket.Conn]bool)
 
-func LobbyConnection(w http.ResponseWriter, r *http.Request) {
+func (h *Hub) LobbyConnection(w http.ResponseWriter, r *http.Request) {
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
 	ws, err := upgrader.Upgrade(w, r, nil)
@@ -26,28 +30,40 @@ func LobbyConnection(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	client := NewClient(ws, h)
+	h.addClient(client)
+
 	log.Println("Client Connected")
 
-	str, err := reader(ws)
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	go client.readMessages()
+	go client.writeMessages()
 
-	// Unmarshal the JSON object into the struct
-	var data JoinLobbyStruct
-	err = json.Unmarshal([]byte(str), &data)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(data)
-
-	switch data.Type {
-	case "join":
-		JoinLobby(ws, data)
-	default:
-		fmt.Println("Invalid type")
-	}
+	// str, err := reader(ws)
+	//
+	//	if err != nil {
+	//		log.Println(err)
+	//		return
+	//	}
+	//
+	// // Unmarshal the JSON object into the struct
+	// var data JoinLobbyStruct
+	// err = json.Unmarshal([]byte(str), &data)
+	//
+	//	if err != nil {
+	//		panic(err)
+	//	}
+	//
+	// fmt.Println(data)
+	//
+	// switch data.Type {
+	// case "join":
+	//
+	//	JoinLobby(ws, data)
+	//
+	// default:
+	//
+	//		fmt.Println("Invalid type")
+	//	}
 }
 
 func JoinLobby(ws *websocket.Conn, data JoinLobbyStruct) {

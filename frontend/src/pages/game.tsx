@@ -44,7 +44,11 @@ export default (): JSX.Element => {
   React.useEffect(() => {
     if (!title || !username) return;
     sendMessage(
-      JSON.stringify({ name: title, username: username, type: "join" })
+      JSON.stringify({
+        target_id: title,
+        username: username,
+        type: "join_lobby",
+      })
     );
   }, [title, username]);
 
@@ -60,7 +64,7 @@ export default (): JSX.Element => {
   const startGame = () => {
     // do stuff
     sendMessage(
-      JSON.stringify({ name: title, username: username, type: "start" })
+      JSON.stringify({ target_id: title, username: username, type: "start" })
     );
   };
 
