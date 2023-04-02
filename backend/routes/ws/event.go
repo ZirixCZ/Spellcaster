@@ -3,6 +3,7 @@ package ws
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -38,6 +39,9 @@ func JoinLobbyHandler(event Event, c *Client) error {
 		return fmt.Errorf("bad payload in request: %v", err)
 	}
 
+	handleTarget(event, c)
+	log.Println("Client Lobby: ", c.lobby)
+	log.Println("Target Lobby: ", payload.Target)
 	var broadMessage NewMessageEvent
 	broadMessage.Username = payload.Username
 	broadMessage.Target = payload.Target
@@ -53,8 +57,22 @@ func JoinLobbyHandler(event Event, c *Client) error {
 	outgoingEvent.Payload = data
 
 	for client := range c.hub.clients {
-		client.egress <- outgoingEvent
+		if client.lobby == c.lobby {
+			client.egress <- outgoingEvent
+		}
 	}
+
+	return nil
+}
+
+func handleTarget(event Event, c *Client) error {
+	var lobby JoinLobbyEvent
+	if err := json.Unmarshal(event.Payload, &lobby); err != nil {
+		fmt.Errorf("bad payload in request: %v", err)
+	}
+	c.lobby = lobby.Target
+
+	log.Println("Lobby: ", lobby.Target)
 
 	return nil
 }

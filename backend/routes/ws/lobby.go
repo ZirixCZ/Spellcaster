@@ -34,7 +34,6 @@ func (h *Hub) LobbyConnection(w http.ResponseWriter, r *http.Request) {
 	h.addClient(client)
 
 	log.Println("Client Connected")
-
 	go client.readMessages()
 	go client.writeMessages()
 

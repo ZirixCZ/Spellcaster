@@ -28,6 +28,7 @@ type Client struct {
 	// manager is the manager used to manage the client
 	hub    *Hub
 	egress chan Event
+	lobby  string
 }
 
 // NewClient is used to initialize a new Client with all required values initialized
