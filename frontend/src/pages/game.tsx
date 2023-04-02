@@ -43,13 +43,14 @@ export default (): JSX.Element => {
 
   React.useEffect(() => {
     if (!title || !username) return;
-    sendMessage(
-      JSON.stringify({
+    const joinLobby = {
+      type: "join_lobby",
+      payload: {
         target_id: title,
         username: username,
-        type: "join_lobby",
-      })
-    );
+      },
+    };
+    sendMessage(JSON.stringify(joinLobby));
   }, [title, username]);
 
   React.useEffect(() => {

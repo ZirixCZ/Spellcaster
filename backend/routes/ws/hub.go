@@ -2,7 +2,6 @@ package ws
 
 import (
 	"errors"
-	"fmt"
 	"sync"
 )
 
@@ -28,10 +27,7 @@ func NewHub() *Hub {
 
 // setupEventHandlers configures and adds all handlers
 func (h *Hub) setupEventHandlers() {
-	h.handlers[EventJoinLobby] = func(e Event, c *Client) error {
-		fmt.Println(e)
-		return nil
-	}
+	h.handlers[EventJoinLobby] = JoinLobbyHandler
 }
 
 // routeEvent is used to make sure the correct event goes into the correct handler
