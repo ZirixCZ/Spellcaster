@@ -39,5 +39,5 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ${{ steps.commit-hash.outputs.short }}
+          tags: zirixcz/spellcaster_backend:${{ steps.commit-hash.outputs.short }}
           labels: ${{ steps.meta.outputs.labels }}
