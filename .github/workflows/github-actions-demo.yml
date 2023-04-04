@@ -36,5 +36,5 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ git rev-parse --short "$GITHUB_SHA" }}
           labels: ${{ steps.meta.outputs.labels }}
