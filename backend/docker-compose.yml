@@ -15,7 +15,7 @@ services:
     environment:
       DB_CONNECTION_STRING: "host=db user=postgres password=password dbname=postgres sslmode=disable"
     ports:
-      - "8080:8080"
+      - "8000:8080"
     depends_on:
       - db
     volumes:

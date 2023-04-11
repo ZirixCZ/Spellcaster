@@ -1,12 +1,13 @@
 package routes
 
 import (
+	"backend/spellit/utils"
 	"encoding/json"
 	"fmt"
 	"net/http"
 )
 
-var lobbies []Lobbies
+var LobbyList []Lobbies
 
 func LobbyHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -28,7 +29,14 @@ func createLobby(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	addLobby(input.Name)
+	lobbyMaster, err := utils.ParseJWT(r, "username")
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Could not parse token"))
+		return
+	}
+
+	addLobby(input.Name, lobbyMaster)
 
 	resp := make(map[string]string)
 	resp["name"] = input.Name
@@ -43,9 +51,9 @@ func createLobby(w http.ResponseWriter, r *http.Request) {
 }
 
 func getLobbies(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("%+v\n", lobbies)
+	fmt.Printf("%+v\n", LobbyList)
 
-	resp, err := json.Marshal(lobbies)
+	resp, err := json.Marshal(LobbyList)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -53,15 +61,27 @@ func getLobbies(w http.ResponseWriter, r *http.Request) {
 	w.Write(resp)
 }
 
-func addLobby(name string) {
-	lobby := Lobbies{Name: name}
-	lobbies = append(lobbies, lobby)
+func addLobby(name string, lobbyMaster string) {
+	lobby := Lobbies{Name: name, MasterUserName: lobbyMaster}
+	LobbyList = append(LobbyList, lobby)
+}
+
+func ReturnLobbyList() *[]Lobbies {
+	return &LobbyList
 }
 
 type LobbyInput struct {
 	Name string `json:"name" validate:"required,max=256"`
 }
 
+type User struct {
+	UserName string `json:"name" validate:"required,max=256"`
+	Master   bool   `json:"lobbymaster"`
+}
+
 type Lobbies struct {
-	Name string `json:"name" validate:"required,max=256"`
+	Name           string `json:"name" validate:"required,max=256"`
+	PlayerCount    int    `json:"playerCount"`
+	User           []User `json:"user"`
+	MasterUserName string `json:"masterUsername"`
 }

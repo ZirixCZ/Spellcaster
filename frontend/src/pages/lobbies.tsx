@@ -22,6 +22,7 @@ const Lobbies = (): JSX.Element => {
     React.useEffect(() => {
         callApi("GET", "/api/lobby", null).then((res) => {
             res.json().then((json) => {
+                console.log(json)
                 setLobbies(json);
             });
         });
@@ -78,8 +79,9 @@ const Lobbies = (): JSX.Element => {
                                    whileTap={{scale: 0.9}}
                                    onClick={() => navigate(`/lobbies/${item.name ?? null}`)}
                             >
-                                <Text>{item.name ? item.name : "noname"}</Text>
+                                <Text weight={800}>{item.name ? item.name : "noname"}</Text>
                                 <Text>{item.playerCount ? item.playerCount : "0"}/{item.maxPlayers ? item.maxPlayers : "9"}</Text>
+                                <Text>{item.masterUsername ? item.masterUsername : "error"}</Text>
                             </Lobby>
                         );
                     })
@@ -149,8 +151,12 @@ const Lobby = styled(motion.div)`
   }
 `;
 
+interface TextInterface {
+    weight?: number;
+}
+
 const Text = styled.p`
-  width: 75%;
+  width: 100%;
   margin: 0;
   height: fit-content;
   text-align: center;
@@ -160,6 +166,7 @@ const Text = styled.p`
   -webkit-line-clamp: 2; /* number of lines to show */
   line-clamp: 2;
   -webkit-box-orient: vertical;
+  font-weight: ${(props: TextInterface) => props.weight ?? 400};
 `;
 
 export default Lobbies;

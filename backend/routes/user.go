@@ -3,18 +3,20 @@ package routes
 import (
 	"backend/spellit/models"
 	"backend/spellit/storage"
+	"backend/spellit/utils"
 	"encoding/json"
 	"fmt"
-	"github.com/golang-jwt/jwt"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/golang-jwt/jwt"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	var userInput RegisterUserInput
+	var userInput UserStruct
 
 	err := json.NewDecoder(r.Body).Decode(&userInput)
 	if err != nil {
@@ -45,7 +47,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		UserName: userInput.UserName,
 		Email:    userInput.Email,
 		Password: hashedPassword,
-		Roles:    userInput.Roles,
+		Roles:    "user",
 	}
 
 	storage.DB.Create(&newUser)
@@ -56,7 +58,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	var userInput RegisterUserInput
+	var userInput UserStruct
 
 	err := json.NewDecoder(r.Body).Decode(&userInput)
 	if err != nil {
@@ -72,7 +74,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if userExists == false {
+	if !userExists {
 		fmt.Printf("User %s doesn't exist\n", userInput.UserName)
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "User %s doesn't exist\n", userInput.UserName)
@@ -111,6 +113,26 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResp)
 	fmt.Printf("New Login: %s\n", userInput.UserName)
+}
+
+func VerifyUsername(w http.ResponseWriter, r *http.Request) {
+	userName, err := utils.ParseJWT(r, "username")
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Could not parse token"))
+		return
+	}
+
+	resp := make(map[string]string)
+	resp["userName"] = userName
+	jsonResp, err := json.Marshal(resp)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonResp)
 }
 
 func GenerateJWT(username string, roles string) (string, error) {
@@ -188,7 +210,7 @@ func getAndHandleUserExists(user *models.User, email string, userName string) (e
 	return false, nil
 }
 
-type RegisterUserInput struct {
+type UserStruct struct {
 	UserName string `json:"userName" validate:"required,max=256"`
 	Email    string `json:"email" validate:"required,min=8,max=256"`
 	Password string `json:"password" validate:"required,min=8,max=256"`
