@@ -22,13 +22,10 @@ type ClientList map[*Client]bool
 
 // Client is a websocket client, basically a frontend visitor
 type Client struct {
-	// the websocket connection
 	connection *websocket.Conn
-
-	// manager is the manager used to manage the client
-	hub    *Hub
-	egress chan Event
-	lobby  string
+	hub        *Hub
+	egress     chan Event
+	lobby      string
 }
 
 // NewClient is used to initialize a new Client with all required values initialized
@@ -42,8 +39,6 @@ func NewClient(conn *websocket.Conn, hub *Hub) *Client {
 
 func (c *Client) readMessages() {
 	defer func() {
-		// Graceful Close the Connection once this
-		// function is done
 		c.hub.removeClient(c)
 	}()
 	c.connection.SetReadLimit(1024)

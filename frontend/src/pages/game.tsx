@@ -65,7 +65,10 @@ export default (): JSX.Element => {
   const startGame = () => {
     // do stuff
     sendMessage(
-      JSON.stringify({ target_id: title, username: username, type: "start" })
+      JSON.stringify({
+        type: "start_lobby",
+        payload: { target_id: title, username: username },
+      })
     );
   };
 

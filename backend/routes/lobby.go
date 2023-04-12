@@ -70,6 +70,15 @@ func ReturnLobbyList() *[]Lobbies {
 	return &LobbyList
 }
 
+func FindLobbyIndex(lobbyList []Lobbies, name string) int {
+	for i, lobby := range lobbyList {
+		if lobby.Name == name {
+			return i
+		}
+	}
+	return -1
+}
+
 type LobbyInput struct {
 	Name string `json:"name" validate:"required,max=256"`
 }
