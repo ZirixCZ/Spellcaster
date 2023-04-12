@@ -21,7 +21,18 @@ export default () => {
     });
   }, []);
 
-  return <Container>{auth ? <><Navbar /><Outlet /></> : <Loader />}</Container>;
+  return (
+    <Container>
+      {auth ? (
+        <>
+          <Navbar />
+          <Outlet />
+        </>
+      ) : (
+        <Loader />
+      )}
+    </Container>
+  );
 };
 
 const Container = styled.div`
@@ -30,11 +41,11 @@ const Container = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-`
+`;
 
 const Loader = styled.div`
   border: 16px solid #333333;
-  border-top: 16px solid #3498db; 
+  border-top: 16px solid #3498db;
   border-radius: 50%;
   width: 3em;
   height: 3em;

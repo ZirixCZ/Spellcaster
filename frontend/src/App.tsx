@@ -46,4 +46,5 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.text};
 `;
+
 export default App;

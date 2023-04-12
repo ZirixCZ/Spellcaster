@@ -34,18 +34,18 @@ const Symbol = () => {
 const SymbolWrapper = styled.div`
   position: absolute;
   top: 0;
+  left: 0;
+  text-align: left;
   z-index: 0;
   pointer-events: none;
-  max-width: 100%;
-  max-height: 100%;
-  ${tablet(css`
-    display: none;
-  `)}
+  height: 100%;
+  overflow: hidden;
+  ${tablet(css``)}
 `;
 
 const StyledSymbol = styled.img`
-  height: 60em;
-  max-height: 100vh;
+  height: 100vh;
+  width: 100%;
 `;
 
 export default Symbol;

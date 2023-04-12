@@ -47,6 +47,7 @@ const StyledContainer = styled.div`
   gap: 5rem;
   width: fit-content;
   height: 100%;
+  box-sizing: border-box;
 
   &:first-child {
     padding-left: 5rem;
@@ -78,11 +79,16 @@ const StyledNavbar = styled.div<StyledNavbarInterface>`
   width: 100%;
   position: absolute;
   z-index: 1;
-  background-color: ${({ theme }) => theme.white};
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+
+  background-color: ${({ theme }) => theme.whiteTransparent};
   top: 0;
   border-bottom-width: 1.5px;
   border-top-width: 0;
   border-style: solid;
+  border-left: 0;
+  border-right: 0;
   border-image: ${({ symbol }) =>
     `linear-gradient(to right, ${
       symbol === "K"
