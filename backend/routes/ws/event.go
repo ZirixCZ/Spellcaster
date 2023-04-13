@@ -50,6 +50,15 @@ func JoinLobbyHandler(event Event, c *Client) error {
 		return fmt.Errorf("bad payload in request: %v", err)
 	}
 
+	var lobbyList = routes.ReturnLobbyList()
+	var lobbyIndex = routes.FindLobbyIndex(*lobbyList, payload.Target)
+	if lobbyIndex == -1 {
+		return fmt.Errorf("lobby not found")
+	}
+	if (*lobbyList)[lobbyIndex].IsStarted {
+		return fmt.Errorf("lobby already started")
+	}
+
 	handleTarget(event, c)
 	log.Println("Client Lobby: ", c.lobby)
 	log.Println("Target Lobby: ", payload.Target)
@@ -83,10 +92,13 @@ func StartLobbyHandler(event Event, c *Client) error {
 	}
 
 	var lobbyList = routes.ReturnLobbyList()
-	var lobbyMaster = (*lobbyList)[routes.FindLobbyIndex(*lobbyList, payload.Target)].MasterUserName
+	var lobbyIndex = routes.FindLobbyIndex(*lobbyList, payload.Target)
+	var lobbyMaster = (*lobbyList)[lobbyIndex].MasterUserName
 	if lobbyMaster != payload.Username {
 		return fmt.Errorf("user not lobby master")
 	}
+
+	(*lobbyList)[lobbyIndex].IsStarted = true
 
 	var broadMessage StartLobbyBroadcat
 	broadMessage.Username = payload.Username

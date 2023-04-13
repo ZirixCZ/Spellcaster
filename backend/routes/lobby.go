@@ -93,4 +93,5 @@ type Lobbies struct {
 	PlayerCount    int    `json:"playerCount"`
 	User           []User `json:"user"`
 	MasterUserName string `json:"masterUsername"`
+	IsStarted      bool   `json:"isStarted"`
 }

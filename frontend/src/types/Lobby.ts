@@ -1,12 +1,13 @@
 export interface LobbyInterface {
-    name: string
-    playerCount: number
-    maxPlayers: number
-    masterUsername: string
-    user: User[]
+  name: string;
+  playerCount: number;
+  maxPlayers: number;
+  masterUsername: string;
+  user: User[];
+  isStarted: boolean;
 }
 
 export interface User {
-    name: string
-    lobbymaster: boolean
+  name: string;
+  lobbymaster: boolean;
 }
