@@ -39,6 +39,7 @@ const SymbolWrapper = styled.div`
   z-index: 0;
   pointer-events: none;
   height: 100%;
+  width: calc(fit-content + 100%);
   overflow: hidden;
   ${tablet(css``)}
 `;

@@ -16,7 +16,7 @@ export const lightTheme = {
   gray: "#333333",
   buttonHover: "#1F191B",
   white: "#FFFFF0",
-  whiteTransparent: "rgba(255, 255, 240, 0.6)",
+  whiteTransparent: "rgba(255, 255, 240, 0.3)",
   text: "#333333",
 };
 
@@ -28,7 +28,7 @@ export const darkTheme = {
   gray: "#333333",
   buttonHover: "#1F191B",
   white: "#FFFFF0",
-  whiteTransparent: "rgba(255, 255, 240, 0.6)",
+  whiteTransparent: "rgba(255, 255, 240, 0.3)",
   text: "#333333",
 };
 

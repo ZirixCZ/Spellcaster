@@ -80,7 +80,7 @@ const StyledNavbar = styled.div<StyledNavbarInterface>`
   position: absolute;
   z-index: 1;
   box-sizing: border-box;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(13px);
 
   background-color: ${({ theme }) => theme.whiteTransparent};
   top: 0;

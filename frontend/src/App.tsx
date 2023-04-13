@@ -10,7 +10,7 @@ import Admin from "./pages/admin";
 import Dashboard from "./pages/dashboard";
 import Theme from "./components/Theme";
 import ThemeSwitcher from "./pages/theme";
-import Game from "./pages/game";
+import Lobby from "./pages/lobby";
 import Auth from "./pages/Auth";
 import Welcome from "./pages/unprotected/welcome/Welcome";
 import { tablet } from "./Global";
@@ -26,7 +26,7 @@ const App = (): JSX.Element => {
             <Route path="/" element={<Dashboard />} />
             <Route path="leaderboard" element={<Leaderboard />} />
             <Route path="lobbies" element={<Lobbies />} />
-            <Route path="lobbies/:name" element={<Game />} />
+            <Route path="lobbies/:name" element={<Lobby />} />
             <Route path="theme" element={<ThemeSwitcher />} />
             <Route path="admin/*" element={<Admin />} />
           </Route>
