@@ -10,10 +10,14 @@ import { tablet, mobile } from "../Global";
 import Theme from "../components/Theme";
 import { motion } from "framer-motion";
 import { LobbyInterface } from "../types/Lobby";
+import lobby from "./lobby";
 
 const Lobbies = (): JSX.Element => {
   const newLobby = React.useRef<HTMLInputElement | null>(null);
   const [lobbies, setLobbies] = React.useState<LobbyInterface[] | null>(null);
+  const [scrollAmount, setScrollAmount] = React.useState(0);
+
+  const lobbyContainerRef = React.useRef<HTMLDivElement | null>(null);
 
   const navigate = useNavigate();
 
@@ -21,7 +25,6 @@ const Lobbies = (): JSX.Element => {
   React.useEffect(() => {
     callApi("GET", "/api/lobby", null).then((res) => {
       res.json().then((json) => {
-        console.log(json);
         setLobbies(json);
       });
     });
@@ -60,9 +63,40 @@ const Lobbies = (): JSX.Element => {
     },
   };
 
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrollAmount(lobbyContainerRef?.current?.scrollTop ?? 0);
+    };
+
+    lobbyContainerRef?.current?.addEventListener("scroll", handleScroll);
+
+    return () => {
+      lobbyContainerRef?.current?.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <Container heightKeyword="fit-content" width={100}>
-      <StyledLobbies variants={container} initial="hidden" animate="visible">
+      <ArrowUp
+        src="/img/arrow.svg"
+        alt="arrow"
+        isVisible={scrollAmount > 100}
+        onClick={() => {
+          lobbyContainerRef?.current?.scrollBy({
+            top:
+              lobbyContainerRef.current?.scrollTop -
+              lobbyContainerRef.current?.scrollTop -
+              200,
+            behavior: "smooth",
+          });
+        }}
+      />
+      <StyledLobbies
+        variants={container}
+        initial="hidden"
+        animate="visible"
+        ref={lobbyContainerRef}
+      >
         {!lobbies ? (
           <></>
         ) : (
@@ -72,15 +106,16 @@ const Lobbies = (): JSX.Element => {
                 isStarted={item.isStarted}
                 variants={motionItem}
                 whileHover={{
-                  scale: 1.2,
+                  scale: 1.025,
                   transition: { duration: 0.25 },
                 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() =>
                   !item.isStarted && navigate(`/lobbies/${item.name ?? null}`)
                 }
+                key={i}
               >
-                <Text weight={800}>{item.name ? item.name : "noname"}</Text>
+                <Title weight={800}>{item.name ? item.name : "noname"}</Title>
                 <Text>
                   {item.playerCount ? item.playerCount : "0"}/
                   {item.maxPlayers ? item.maxPlayers : "9"}
@@ -93,6 +128,23 @@ const Lobbies = (): JSX.Element => {
           })
         )}
       </StyledLobbies>
+      <Arrow
+        src="/img/arrow.svg"
+        alt="arrow"
+        isVisible={
+          lobbyContainerRef?.current
+            ? scrollAmount <
+              lobbyContainerRef.current.scrollHeight - scrollAmount + 500
+            : true
+        }
+        onClick={() => {
+          const lobbyContainer = lobbyContainerRef.current;
+          if (lobbyContainer) {
+            const newScrollTop = lobbyContainer.scrollTop + 200;
+            lobbyContainer.scrollTo({ top: newScrollTop, behavior: "smooth" });
+          }
+        }}
+      />
       <Form onSubmit={(e) => onFormSubmit(e)}>
         <GTitleLeft>CREATE A NEW LOBBY</GTitleLeft>
         <FormInput
@@ -110,20 +162,42 @@ const Lobbies = (): JSX.Element => {
   );
 };
 
+interface ArrowInterface {
+  isVisible: boolean;
+}
+
+const Arrow = styled.img<ArrowInterface>`
+  visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
+  width: 2em;
+  filter: invert(20%);
+  cursor: pointer;
+  margin: 0.25rem;
+`;
+
+const ArrowUp = styled(Arrow)`
+  transform: rotate(180deg);
+`;
+
 const StyledLobbies = styled(motion.div)`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 2em;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 25%;
-  margin-bottom: 5em;
+  justify-content: center;
+  width: 50%;
+  margin-bottom: 2.5em;
+  overflow: scroll;
+  max-height: 50vh;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   ${tablet(css`
-    width: 50%;
+    width: 100%;
   `)}
   ${mobile(css`
     justify-content: center;
+    width: 150%;
   `)}
 `;
 
@@ -143,59 +217,36 @@ const Lobby = styled(motion.div)<LobbyButtonInterface>`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  align-items: center;
-  width: 7em;
+  align-items: start;
+  width: 50%;
   height: 7em;
   border-radius: 15px;
+  scroll-snap-align: end;
+
   ${(props) => {
     if (props.isStarted) {
       return css`
         background: rgb(232, 56, 73);
-        background: linear-gradient(
-          180deg,
-          rgb(245, 105, 119) 0%,
-          rgb(232, 56, 73) 100%
-        );
       `;
     } else {
       return css`
         cursor: pointer;
-        background: rgb(105, 245, 231);
-        background: linear-gradient(
-          180deg,
-          rgba(105, 245, 231, 1) 0%,
-          rgba(0, 219, 197, 1) 100%
-        );
+        background-color: ${({ theme }) => theme.gray};
+
+        &:hover {
+          background: rgba(3, 206, 120, 1);
+        }
       `;
     }
   }}
+
   color: white;
   z-index: 1;
   position: relative;
   transition: 0.3s;
 
-  &:hover {
-    ${(props) => {
-      if (props.isStarted) {
-        return css`
-          background: rgb(232, 56, 73);
-          background: linear-gradient(
-            180deg,
-            rgb(245, 105, 119) 0%,
-            rgb(245, 105, 119) 100%
-          );
-        `;
-      } else {
-        return css`
-          background: rgb(105, 245, 231);
-          background: linear-gradient(
-            180deg,
-            rgba(105, 245, 231, 1) 0%,
-            rgba(105, 245, 231, 1) 100%
-          );
-        `;
-      }
-    }}
+  &:first-child {
+    margin-top: 2em;
   }
 `;
 
@@ -204,8 +255,8 @@ interface TextInterface {
 }
 
 const Text = styled.p`
-  width: 100%;
   margin: 0;
+  margin-left: 1.5rem;
   height: fit-content;
   text-align: center;
   overflow: hidden;
@@ -215,6 +266,10 @@ const Text = styled.p`
   line-clamp: 2;
   -webkit-box-orient: vertical;
   font-weight: ${(props: TextInterface) => props.weight ?? 400};
+`;
+
+const Title = styled(Text)`
+  font-size: 1.5rem;
 `;
 
 export default Lobbies;

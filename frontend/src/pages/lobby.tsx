@@ -39,7 +39,7 @@ export default (): JSX.Element => {
 
   React.useEffect(() => {
     setTitle(getLobbyFromURL(location.pathname));
-  }, []);
+  }, [location.pathname]);
 
   React.useEffect(() => {
     if (!title || !username) return;
