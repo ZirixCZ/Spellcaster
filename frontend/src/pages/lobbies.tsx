@@ -16,6 +16,7 @@ import { generateLobbyCode } from "../utils/generateLobbyCode";
 const Lobbies = (): JSX.Element => {
   const newLobby = React.useRef<HTMLInputElement | null>(null);
   const [lobbies, setLobbies] = React.useState<LobbyInterface[] | null>(null);
+  const startedLobbiesRef = React.useRef<LobbyInterface[]>([]);
   const [scrollAmount, setScrollAmount] = React.useState(0);
 
   const lobbyContainerRef = React.useRef<HTMLDivElement | null>(null);
@@ -62,13 +63,6 @@ const Lobbies = (): JSX.Element => {
     },
   };
 
-  const motionItem = {
-    hidden: { y: 10 },
-    visible: {
-      y: 0,
-    },
-  };
-
   React.useEffect(() => {
     const handleScroll = () => {
       setScrollAmount(lobbyContainerRef?.current?.scrollTop ?? 0);
@@ -80,6 +74,19 @@ const Lobbies = (): JSX.Element => {
       lobbyContainerRef?.current?.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const checkIfStarted = (lobby: LobbyInterface): boolean => {
+    if (!lobby) return false;
+
+    if (lobby.isStarted) {
+      if (!startedLobbiesRef.current.includes(lobby))
+        startedLobbiesRef.current.push(lobby);
+
+      return true;
+    }
+
+    return false;
+  };
 
   return (
     <Container heightKeyword="fit-content" width={100}>
@@ -107,25 +114,46 @@ const Lobbies = (): JSX.Element => {
           <></>
         ) : (
           lobbies.map((item, i) => {
+            if (checkIfStarted(item)) {
+              return <></>;
+            }
+
             return (
               <Lobby
                 isStarted={item.isStarted}
-                variants={motionItem}
                 whileHover={{
                   scale: 1.025,
                   transition: { duration: 0.25 },
                 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={() =>
-                  !item.isStarted && navigate(`/lobbies/${item.name ?? null}`)
-                }
+                onClick={() => navigate(`/lobbies/${item.name ?? null}`)}
                 key={i}
               >
                 <Title weight={800}>{item.name ? item.name : "noname"}</Title>
+                <Text>{item.playerCount ? item.playerCount : "0"} players</Text>
                 <Text>
-                  {item.playerCount ? item.playerCount : "0"}/
-                  {item.maxPlayers ? item.maxPlayers : "9"}
+                  {item.masterUsername ? item.masterUsername : "error"}
                 </Text>
+              </Lobby>
+            );
+          })
+        )}
+        {startedLobbiesRef.current.length <= 0 ? (
+          <></>
+        ) : (
+          startedLobbiesRef.current.map((item, i) => {
+            return (
+              <Lobby
+                isStarted={item.isStarted}
+                whileHover={{
+                  scale: 1.025,
+                  transition: { duration: 0.25 },
+                }}
+                whileTap={{ scale: 0.9 }}
+                key={i}
+              >
+                <Title weight={800}>{item.name ? item.name : "noname"}</Title>
+                <Text>{item.playerCount ? item.playerCount : "0"} players</Text>
                 <Text>
                   {item.masterUsername ? item.masterUsername : "error"}
                 </Text>
@@ -154,7 +182,7 @@ const Lobbies = (): JSX.Element => {
       <Form onSubmit={(e) => onFormSubmit(e)}>
         <GTitleLeft>CREATE A NEW LOBBY</GTitleLeft>
         <Button secondary medium>
-          Create new lobby
+          Create
         </Button>
       </Form>
     </Container>
@@ -220,7 +248,7 @@ const Lobby = styled(motion.div)<LobbyButtonInterface>`
   width: 50%;
   height: 7em;
   border-radius: 15px;
-  scroll-snap-align: end;
+  scroll-snap-align: start;
 
   ${(props) => {
     if (props.isStarted) {

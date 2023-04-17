@@ -6,12 +6,11 @@ import callApi from "../utils/callApi";
 import { User } from "../types/Lobby";
 import styled from "styled-components/macro";
 import Container from "../components/Container";
-
 interface Game {
   data: string;
 }
 
-export default (): JSX.Element => {
+const Lobby = (): JSX.Element => {
   const [title, setTitle] = React.useState<string | null>(null);
   const [username, setUsername] = React.useState<string | null>(null);
   const [socketUrl] = React.useState("ws://localhost:8000/ws/lobby/state");
@@ -107,3 +106,5 @@ const UnorderedList = styled.ul`
   width: 25%;
   flex-wrap: wrap;
 `;
+
+export default Lobby;
