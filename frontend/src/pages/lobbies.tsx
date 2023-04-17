@@ -11,6 +11,7 @@ import Theme from "../components/Theme";
 import { motion } from "framer-motion";
 import { LobbyInterface } from "../types/Lobby";
 import lobby from "./lobby";
+import { generateLobbyCode } from "../utils/generateLobbyCode";
 
 const Lobbies = (): JSX.Element => {
   const newLobby = React.useRef<HTMLInputElement | null>(null);
@@ -32,15 +33,20 @@ const Lobbies = (): JSX.Element => {
 
   // create a new lobby
   const onFormSubmit = (e: React.FormEvent) => {
+    let name = generateLobbyCode();
+    while (lobbies && lobbies.find((item) => item.name === name)) {
+      name = generateLobbyCode();
+    }
+
     e.preventDefault();
     callApi(
       "POST",
       "/api/lobby",
       JSON.stringify({
-        name: newLobby.current?.value,
+        name: name,
       })
     ).then(() => {
-      navigate(`/lobbies/${newLobby.current?.value}`);
+      navigate(`/lobbies/${name}`);
     });
   };
 
@@ -147,15 +153,8 @@ const Lobbies = (): JSX.Element => {
       />
       <Form onSubmit={(e) => onFormSubmit(e)}>
         <GTitleLeft>CREATE A NEW LOBBY</GTitleLeft>
-        <FormInput
-          refer={newLobby}
-          placeholder="think about a name..."
-          type="text"
-          pattern="^[a-z0-9_.]+$"
-          errorMessage="email invalid"
-        />
         <Button secondary medium>
-          Create
+          Create new lobby
         </Button>
       </Form>
     </Container>
