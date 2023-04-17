@@ -6,6 +6,7 @@ import callApi from "../utils/callApi";
 import { User } from "../types/Lobby";
 import styled from "styled-components/macro";
 import Container from "../components/Container";
+
 interface Game {
   data: string;
 }

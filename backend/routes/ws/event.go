@@ -19,6 +19,7 @@ type EventHandler func(event Event, c *Client) error
 
 const (
 	EventJoinLobby  = "join_lobby"
+	EventLeaveLobby = "leave_lobby"
 	EventStartLobby = "start_lobby"
 )
 
@@ -31,7 +32,8 @@ type JoinLobbyEvent struct {
 
 type JoinLobbyBroadcast struct {
 	JoinLobbyEvent
-	Sent time.Time `json:"sent"`
+	Usernames []string  `json:"usernames"`
+	Sent      time.Time `json:"sent"`
 }
 
 type StartLobbyEvent struct {
@@ -60,12 +62,19 @@ func JoinLobbyHandler(event Event, c *Client) error {
 	}
 
 	handleTarget(event, c)
+	handleUsername(event, c)
+
 	log.Println("Client Lobby: ", c.lobby)
 	log.Println("Target Lobby: ", payload.Target)
 	var broadMessage JoinLobbyBroadcast
 	broadMessage.Username = payload.Username
 	broadMessage.Target = payload.Target
 	broadMessage.Sent = time.Now()
+	usernames := []string{}
+	for client := range c.hub.clients {
+		usernames = append(usernames, client.username)
+	}
+	broadMessage.Usernames = usernames
 
 	data, err := json.Marshal(broadMessage)
 	if err != nil {
@@ -131,6 +140,19 @@ func handleTarget(event Event, c *Client) error {
 	c.lobby = lobby.Target
 
 	log.Println("Lobby: ", lobby.Target)
+
+	return nil
+}
+
+func handleUsername(event Event, c *Client) error {
+	var client JoinLobbyEvent
+	if err := json.Unmarshal(event.Payload, &client); err != nil {
+		fmt.Errorf("bad payload in request: %v", err)
+	}
+
+	c.username = client.Username
+
+	log.Println("Username: ", client.Username)
 
 	return nil
 }

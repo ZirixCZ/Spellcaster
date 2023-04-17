@@ -33,9 +33,7 @@ func (h *Hub) setupEventHandlers() {
 
 // routeEvent is used to make sure the correct event goes into the correct handler
 func (h *Hub) routeEvent(event Event, c *Client) error {
-	// Check if Handler is present in Map
 	if handler, ok := h.handlers[event.Type]; ok {
-		// Execute the handler and return any err
 		if err := handler(event, c); err != nil {
 			return err
 		}
@@ -47,11 +45,9 @@ func (h *Hub) routeEvent(event Event, c *Client) error {
 
 // addClient will add clients to our clientList
 func (h *Hub) addClient(client *Client) {
-	// Lock so we can manipulate
 	h.Lock()
 	defer h.Unlock()
 
-	// Add Client
 	h.clients[client] = true
 }
 
@@ -60,11 +56,8 @@ func (h *Hub) removeClient(client *Client) {
 	h.Lock()
 	defer h.Unlock()
 
-	// Check if Client exists, then delete it
 	if _, ok := h.clients[client]; ok {
-		// close connection
 		client.connection.Close()
-		// remove
 		delete(h.clients, client)
 	}
 }
