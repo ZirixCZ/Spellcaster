@@ -40,6 +40,7 @@ const SymbolWrapper = styled.div`
   pointer-events: none;
   height: 100%;
   width: calc(fit-content + 100%);
+  padding-right: 10rem;
   overflow: hidden;
   ${tablet(css``)}
 `;

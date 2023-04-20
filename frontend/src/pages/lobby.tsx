@@ -16,16 +16,21 @@ const Lobby = (): JSX.Element => {
   const [username, setUsername] = React.useState<string | null>(null);
   const [socketUrl] = React.useState("ws://localhost:8000/ws/lobby/state");
   const [messageHistory, setMessageHistory] = React.useState<Game[]>([]);
-  const [connectedUsers, setConnectedUsers] = React.useState<User[]>([]);
+  const [connectedUsers, setConnectedUsers] = React.useState<string[]>([]);
+  const [isStarted, setIsStarted] = React.useState<boolean>(false);
   const location = useLocation();
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
   // listen for websocket messages
   React.useEffect(() => {
-    if (lastMessage !== null) {
-      console.log("incoming message", lastMessage.data);
-      setConnectedUsers(JSON.parse(lastMessage.data).user);
+    if (lastMessage === null) return;
+
+    const message = JSON.parse(lastMessage.data);
+    if (message.type === "join_lobby") {
+      setConnectedUsers(message.payload.usernames);
+    } else if (message.type === "start_lobby") {
+      setIsStarted(true);
     }
   }, [lastMessage, setMessageHistory]);
 
@@ -72,7 +77,16 @@ const Lobby = (): JSX.Element => {
     );
   };
 
-  return (
+  return isStarted ? (
+    <Container
+      width={100}
+      height={100}
+      justifyContent="center"
+      alignItems="center"
+    >
+      <input></input>
+    </Container>
+  ) : (
     <Container
       width={100}
       height={100}
@@ -91,21 +105,33 @@ const Lobby = (): JSX.Element => {
       >
         Click to start
       </button>
+      <UsersTitle>Connected Users</UsersTitle>
       <UnorderedList>
         {connectedUsers?.map((user, i) => (
-          <span key={i}>{user ? user.name : null}</span>
+          <span key={i}>{user}</span>
         ))}
       </UnorderedList>
     </Container>
   );
 };
 
+const UsersTitle = styled.h3`
+  margin-top: 5rem;
+  margin-bottom: 0;
+  width: 20rem;
+  text-align: center;
+`;
+
 const UnorderedList = styled.ul`
+  padding-top: 1rem;
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  width: 25%;
+  width: 20rem;
   flex-wrap: wrap;
+  padding-left: 0;
+  margin-left: 0;
+  justify-content: space-evenly;
 `;
 
 export default Lobby;

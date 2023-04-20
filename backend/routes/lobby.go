@@ -90,7 +90,6 @@ type User struct {
 
 type Lobbies struct {
 	Name           string `json:"name" validate:"required,max=256"`
-	PlayerCount    int    `json:"playerCount"`
 	User           []User `json:"user"`
 	MasterUserName string `json:"masterUsername"`
 	IsStarted      bool   `json:"isStarted"`

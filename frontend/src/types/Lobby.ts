@@ -1,7 +1,6 @@
 export interface LobbyInterface {
   name: string;
   playerCount: number;
-  maxPlayers: number;
   masterUsername: string;
   user: User[];
   isStarted: boolean;

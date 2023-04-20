@@ -25,7 +25,7 @@ export const darkTheme = {
   primary: "#333333",
   secondary: "#03CE60",
   red: "#F95738",
-  gray: "#333333",
+  gray: "rgba(37, 37, 37, 1)",
   buttonHover: "#1F191B",
   white: "#FFFFF0",
   whiteTransparent: "rgba(255, 255, 240, 0.3)",

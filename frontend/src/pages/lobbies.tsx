@@ -130,7 +130,6 @@ const Lobbies = (): JSX.Element => {
                 key={i}
               >
                 <Title weight={800}>{item.name ? item.name : "noname"}</Title>
-                <Text>{item.playerCount ? item.playerCount : "0"} players</Text>
                 <Text>
                   {item.masterUsername ? item.masterUsername : "error"}
                 </Text>
@@ -253,15 +252,19 @@ const Lobby = styled(motion.div)<LobbyButtonInterface>`
   ${(props) => {
     if (props.isStarted) {
       return css`
-        background: rgb(232, 56, 73);
+        background: rgba(232, 56, 73, 0.8);
+
+        &:hover {
+          background: rgba(232, 56, 73, 0.9);
+        }
       `;
     } else {
       return css`
         cursor: pointer;
-        background-color: ${({ theme }) => theme.gray};
+        background-color: rgba(37, 37, 37, 0.8);
 
         &:hover {
-          background: rgba(3, 206, 120, 1);
+          background: rgba(37, 37, 37, 0.9);
         }
       `;
     }
