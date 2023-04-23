@@ -21,6 +21,7 @@ const (
 	EventJoinLobby  = "join_lobby"
 	EventLeaveLobby = "leave_lobby"
 	EventStartLobby = "start_lobby"
+	EventError      = "error"
 )
 
 // SendMessageEvent is the payload sent in the
@@ -46,6 +47,10 @@ type StartLobbyBroadcat struct {
 	Sent time.Time `json:"sent"`
 }
 
+type ErrorEvent struct {
+	Message string `json:"message"`
+}
+
 func JoinLobbyHandler(event Event, c *Client) error {
 	var payload JoinLobbyEvent
 	if err := json.Unmarshal(event.Payload, &payload); err != nil {
@@ -57,12 +62,29 @@ func JoinLobbyHandler(event Event, c *Client) error {
 	if lobbyIndex == -1 {
 		return fmt.Errorf("lobby not found")
 	}
-	if (*lobbyList)[lobbyIndex].IsStarted {
-		return fmt.Errorf("lobby already started")
-	}
 
 	handleTarget(event, c)
 	handleUsername(event, c)
+
+	if (*lobbyList)[lobbyIndex].IsStarted {
+		var broadMessage ErrorEvent
+		broadMessage.Message = "Lobby already started"
+		data, err := json.Marshal(broadMessage)
+		if err != nil {
+			return fmt.Errorf("failed to marshal broadcast message: %v", err)
+		}
+
+		var outgoingEvent Event
+		outgoingEvent.Type = EventError
+		outgoingEvent.Payload = data
+
+		for client := range c.hub.clients {
+			if client.lobby == c.lobby {
+				client.egress <- outgoingEvent
+			}
+		}
+		return fmt.Errorf("lobby already started")
+	}
 
 	log.Println("Client Lobby: ", c.lobby)
 	log.Println("Target Lobby: ", payload.Target)

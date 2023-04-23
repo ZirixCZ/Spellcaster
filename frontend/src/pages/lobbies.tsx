@@ -300,6 +300,7 @@ const Text = styled.p`
 
 const Title = styled(Text)`
   font-size: 1.5rem;
+  user-select: none;
 `;
 
 export default Lobbies;

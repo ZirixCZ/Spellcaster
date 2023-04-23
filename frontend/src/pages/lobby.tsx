@@ -1,10 +1,14 @@
 import * as React from "react";
+import styled from "styled-components/macro";
+
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import getLobbyFromURL from "../utils/getLobbyFromURL";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import callApi from "../utils/callApi";
 import { User } from "../types/Lobby";
-import styled from "styled-components/macro";
+import Button from "../components/Button";
+import Input from "../components/Input";
+import Paragraph from "../components/Paragraph";
 import Container from "../components/Container";
 
 interface Game {
@@ -19,6 +23,7 @@ const Lobby = (): JSX.Element => {
   const [connectedUsers, setConnectedUsers] = React.useState<string[]>([]);
   const [isStarted, setIsStarted] = React.useState<boolean>(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
@@ -27,6 +32,9 @@ const Lobby = (): JSX.Element => {
     if (lastMessage === null) return;
 
     const message = JSON.parse(lastMessage.data);
+    if (message.type === "error") {
+      navigate("/lobbies");
+    }
     if (message.type === "join_lobby") {
       setConnectedUsers(message.payload.usernames);
     } else if (message.type === "start_lobby") {
@@ -77,6 +85,10 @@ const Lobby = (): JSX.Element => {
     );
   };
 
+  const inputSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return isStarted ? (
     <Container
       width={100}
@@ -84,7 +96,11 @@ const Lobby = (): JSX.Element => {
       justifyContent="center"
       alignItems="center"
     >
-      <input></input>
+      <StyledForm onSubmit={(e) => inputSubmit(e)}>
+        <h1>Input a word</h1>
+        <StyledInput></StyledInput>
+        <SubmitButton>Submit</SubmitButton>
+      </StyledForm>
     </Container>
   ) : (
     <Container
@@ -114,6 +130,19 @@ const Lobby = (): JSX.Element => {
     </Container>
   );
 };
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+`;
+
+const SubmitButton = styled(Button)`
+  width: 50%;
+`;
+
+const StyledInput = styled(Input)``;
 
 const UsersTitle = styled.h3`
   margin-top: 5rem;
