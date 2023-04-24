@@ -27,6 +27,16 @@ const Lobby = (): JSX.Element => {
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
+  const FetchConnectedUsers = () => {
+    const joinLobby = {
+      type: "fetch_users",
+      payload: {
+        target_id: title,
+      },
+    };
+    sendMessage(JSON.stringify(joinLobby));
+  };
+
   // listen for websocket messages
   React.useEffect(() => {
     if (lastMessage === null) return;
@@ -34,9 +44,11 @@ const Lobby = (): JSX.Element => {
     const message = JSON.parse(lastMessage.data);
     if (message.type === "error") {
       navigate("/lobbies");
-    }
-    if (message.type === "join_lobby") {
+    } else if (message.type === "fetch_users") {
       setConnectedUsers(message.payload.usernames);
+    } else if (message.type === "join_lobby") {
+      setConnectedUsers(message.payload.usernames);
+      setInterval(FetchConnectedUsers, 4000);
     } else if (message.type === "start_lobby") {
       setIsStarted(true);
     }

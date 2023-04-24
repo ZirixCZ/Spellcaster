@@ -29,6 +29,7 @@ func NewHub() *Hub {
 func (h *Hub) setupEventHandlers() {
 	h.handlers[EventJoinLobby] = JoinLobbyHandler
 	h.handlers[EventStartLobby] = StartLobbyHandler
+	h.handlers[EventFetchUsers] = FetchUsersHandler
 }
 
 // routeEvent is used to make sure the correct event goes into the correct handler

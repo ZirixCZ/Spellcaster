@@ -22,6 +22,7 @@ const (
 	EventLeaveLobby = "leave_lobby"
 	EventStartLobby = "start_lobby"
 	EventError      = "error"
+	EventFetchUsers = "fetch_users"
 )
 
 // SendMessageEvent is the payload sent in the
@@ -49,6 +50,16 @@ type StartLobbyBroadcat struct {
 
 type ErrorEvent struct {
 	Message string `json:"message"`
+}
+
+type FetchUsersEvent struct {
+	Target string `json:"target_id"`
+}
+
+type FetchUsersBroadcast struct {
+	FetchUsersEvent
+	Usernames []string  `json:"usernames"`
+	Sent      time.Time `json:"sent"`
 }
 
 func JoinLobbyHandler(event Event, c *Client) error {
@@ -151,6 +162,38 @@ func StartLobbyHandler(event Event, c *Client) error {
 		}
 	}
 
+	return nil
+}
+
+func FetchUsersHandler(event Event, c *Client) error {
+	var payload FetchUsersEvent
+	if err := json.Unmarshal(event.Payload, &payload); err != nil {
+		return fmt.Errorf("bad payload in request: %v", err)
+	}
+
+	var broadMessage FetchUsersBroadcast
+	broadMessage.Sent = time.Now()
+
+	usernames := []string{}
+	for client := range c.hub.clients {
+		usernames = append(usernames, client.username)
+	}
+	broadMessage.Usernames = usernames
+
+	data, err := json.Marshal(broadMessage)
+	if err != nil {
+		return fmt.Errorf("failed to marshal broadcast message: %v", err)
+	}
+
+	var outgoingEvent Event
+	outgoingEvent.Type = EventFetchUsers
+	outgoingEvent.Payload = data
+
+	for client := range c.hub.clients {
+		if client.lobby == c.lobby {
+			client.egress <- outgoingEvent
+		}
+	}
 	return nil
 }
 
