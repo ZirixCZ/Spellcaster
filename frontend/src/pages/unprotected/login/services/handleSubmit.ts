@@ -6,11 +6,10 @@ const handleSubmit = async (
   userName: string | undefined,
   password: string | undefined
 ) => {
+  e.preventDefault();
   if (!userName || !password) {
     return false;
   }
-
-  e.preventDefault();
 
   const res = await callApi(
     "POST",
