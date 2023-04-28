@@ -5,11 +5,8 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import getLobbyFromURL from "../utils/getLobbyFromURL";
 import { useLocation, useNavigate } from "react-router-dom";
 import callApi from "../utils/callApi";
-import { User } from "../types/Lobby";
-import Button from "../components/Button";
-import Input from "../components/Input";
-import Paragraph from "../components/Paragraph";
 import Container from "../components/Container";
+import StartedLobby from "./startedLobby";
 
 interface Game {
   data: string;
@@ -22,6 +19,8 @@ const Lobby = (): JSX.Element => {
   const [messageHistory, setMessageHistory] = React.useState<Game[]>([]);
   const [connectedUsers, setConnectedUsers] = React.useState<string[]>([]);
   const [isStarted, setIsStarted] = React.useState<boolean>(false);
+  const [word, setWord] = React.useState<string | null>(null);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -51,6 +50,8 @@ const Lobby = (): JSX.Element => {
       setInterval(FetchConnectedUsers, 4000);
     } else if (message.type === "start_lobby") {
       setIsStarted(true);
+    } else if (message.type === "input_word") {
+      setWord(message.payload.word);
     }
   }, [lastMessage, setMessageHistory]);
 
@@ -88,7 +89,6 @@ const Lobby = (): JSX.Element => {
   }, [readyState]);
 
   const startGame = () => {
-    // do stuff
     sendMessage(
       JSON.stringify({
         type: "start_lobby",
@@ -97,23 +97,13 @@ const Lobby = (): JSX.Element => {
     );
   };
 
-  const inputSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
   return isStarted ? (
-    <Container
-      width={100}
-      height={100}
-      justifyContent="center"
-      alignItems="center"
-    >
-      <StyledForm onSubmit={(e) => inputSubmit(e)}>
-        <h1>Input a word</h1>
-        <StyledInput></StyledInput>
-        <SubmitButton>Submit</SubmitButton>
-      </StyledForm>
-    </Container>
+    <StartedLobby
+      wordUpdate={word}
+      sendMessage={sendMessage}
+      title={title}
+      username={username}
+    />
   ) : (
     <Container
       width={100}
@@ -142,19 +132,6 @@ const Lobby = (): JSX.Element => {
     </Container>
   );
 };
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-`;
-
-const SubmitButton = styled(Button)`
-  width: 50%;
-`;
-
-const StyledInput = styled(Input)``;
 
 const UsersTitle = styled.h3`
   margin-top: 5rem;

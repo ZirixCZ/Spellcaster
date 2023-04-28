@@ -23,6 +23,7 @@ const (
 	EventStartLobby = "start_lobby"
 	EventError      = "error"
 	EventFetchUsers = "fetch_users"
+	EventInputWord  = "input_word"
 )
 
 // SendMessageEvent is the payload sent in the
@@ -60,6 +61,17 @@ type FetchUsersBroadcast struct {
 	FetchUsersEvent
 	Usernames []string  `json:"usernames"`
 	Sent      time.Time `json:"sent"`
+}
+
+type InputWordEvent struct {
+	Username string `json:"username"`
+	Target   string `json:"target_id"`
+	Word     string `json:"word"`
+}
+
+type InputWordBroadcast struct {
+	InputWordEvent
+	Sent time.Time `json:"sent"`
 }
 
 func JoinLobbyHandler(event Event, c *Client) error {
@@ -187,6 +199,36 @@ func FetchUsersHandler(event Event, c *Client) error {
 
 	var outgoingEvent Event
 	outgoingEvent.Type = EventFetchUsers
+	outgoingEvent.Payload = data
+
+	for client := range c.hub.clients {
+		if client.lobby == c.lobby {
+			client.egress <- outgoingEvent
+		}
+	}
+	return nil
+}
+
+func InputWordHandler(event Event, c *Client) error {
+	var payload InputWordEvent
+	if err := json.Unmarshal(event.Payload, &payload); err != nil {
+		return fmt.Errorf("bad payload in request: %v", err)
+	}
+
+	var broadMessage InputWordBroadcast
+	broadMessage.Sent = time.Now()
+
+	broadMessage.Username = payload.Username
+	broadMessage.Target = payload.Target
+	broadMessage.Word = payload.Word
+
+	data, err := json.Marshal(broadMessage)
+	if err != nil {
+		return fmt.Errorf("failed to marshal broadcast message: %v", err)
+	}
+
+	var outgoingEvent Event
+	outgoingEvent.Type = EventInputWord
 	outgoingEvent.Payload = data
 
 	for client := range c.hub.clients {
