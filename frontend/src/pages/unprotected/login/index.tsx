@@ -54,14 +54,14 @@ const Login = (): JSX.Element => {
         <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
         <FormInput
           refer={userNameRef}
-          placeholder="Username"
+          placeholder="username"
           type="text"
           pattern="^[a-z0-9_.]+$"
           errorMessage="email invalid"
         />
         <FormInput
           refer={passwordRef}
-          placeholder="Password"
+          placeholder="password"
           type="password"
           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
           errorMessage="password invalid"

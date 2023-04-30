@@ -232,7 +232,7 @@ func InputWordHandler(event Event, c *Client) error {
 	outgoingEvent.Payload = data
 
 	for client := range c.hub.clients {
-		if client.lobby == c.lobby {
+		if client.lobby == c.lobby && client.word_master == false {
 			client.egress <- outgoingEvent
 		}
 	}

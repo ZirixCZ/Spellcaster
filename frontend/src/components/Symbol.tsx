@@ -12,7 +12,7 @@ const Symbol = () => {
   const location = useLocation();
 
   React.useEffect(() => {
-    changeSymbol();
+    changeSymbol(location.pathname);
   }, [location.pathname]);
 
   return (
@@ -43,11 +43,17 @@ const SymbolWrapper = styled.div`
   padding-right: 10rem;
   overflow: hidden;
   ${tablet(css``)}
+
+  ${({ theme }) => theme.isLight === false && css``}
 `;
 
 const StyledSymbol = styled.img`
   height: 100vh;
   width: 100%;
+  filter: brightness(2);
+  filter: saturate(80%);
+  filter: contrast(80%);
+  opacity: 1.5;
 `;
 
 export default Symbol;

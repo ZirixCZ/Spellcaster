@@ -198,6 +198,7 @@ const Arrow = styled.img<ArrowInterface>`
   filter: invert(20%);
   cursor: pointer;
   margin: 0.25rem;
+  filter: ${({ theme }) => (theme.isLight ? "" : "invert(100%)")};
 `;
 
 const ArrowUp = styled(Arrow)`

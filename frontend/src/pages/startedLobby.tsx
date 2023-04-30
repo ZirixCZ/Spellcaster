@@ -20,6 +20,8 @@ const StartedLobby = ({ sendMessage, title, username, ...props }: Props) => {
   const wordRef = React.useRef<HTMLInputElement | null>(null);
 
   React.useEffect(() => {
+    if (props.wordUpdate === null) return;
+
     Swal.fire({
       title: "Incoming Word!",
       text: `The word is: ${props.wordUpdate}`,

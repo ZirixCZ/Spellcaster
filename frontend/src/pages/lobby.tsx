@@ -105,7 +105,7 @@ const Lobby = (): JSX.Element => {
       username={username}
     />
   ) : (
-    <Container
+    <StyledContainer
       width={100}
       height={100}
       justifyContent="center"
@@ -129,15 +129,20 @@ const Lobby = (): JSX.Element => {
           <span key={i}>{user}</span>
         ))}
       </UnorderedList>
-    </Container>
+    </StyledContainer>
   );
 };
+
+const StyledContainer = styled(Container)`
+  font-size: 1.5rem;
+`;
 
 const UsersTitle = styled.h3`
   margin-top: 5rem;
   margin-bottom: 0;
   width: 20rem;
   text-align: center;
+  font-size: 1.5rem;
 `;
 
 const UnorderedList = styled.ul`

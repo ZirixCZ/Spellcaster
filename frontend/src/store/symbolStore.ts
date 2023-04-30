@@ -3,10 +3,10 @@ import { getSymbol } from "../utils/symbol";
 
 interface SymbolState {
   symbol: string;
-  changeSymbol: () => void;
+  changeSymbol: (pathname: string | undefined) => void;
 }
 
 export const useSymbolStore = create<SymbolState>()((set) => ({
   symbol: "err",
-  changeSymbol: () => set(() => ({ symbol: getSymbol() })),
+  changeSymbol: (pathname) => set(() => ({ symbol: getSymbol(pathname) })),
 }));

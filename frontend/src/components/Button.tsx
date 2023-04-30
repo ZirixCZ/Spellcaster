@@ -35,7 +35,9 @@ export const StyledButton = styled(motion.button)<Props>`
   position: relative;
   background: ${({ primary, secondary, theme }) =>
     primary
-      ? `linear-gradient(180deg, ${theme.primary} 0%, rgba(67,67,67,1) 100%)`
+      ? `linear-gradient(180deg, ${theme.primary} 0%, rgba(${
+          theme.isLight ? "67,67,67,1" : "white"
+        }) 100%)`
       : secondary
       ? `linear-gradient(180deg, ${theme.secondary} 0%, rgba(3,206,120,1) 100%)`
       : theme.gray};

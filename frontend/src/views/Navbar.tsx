@@ -2,6 +2,7 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components/macro";
 import { tablet, mobile } from "../Global";
+import { StyledThemeSwitcher } from "../pages/dashboard";
 import { useSymbolStore } from "../store/symbolStore";
 
 interface Props {
@@ -9,9 +10,11 @@ interface Props {
 }
 
 const Navbar = (props: Props) => {
-  const navigate = useNavigate();
   const symbol = useSymbolStore((state) => state.symbol);
   const changeSymbol = useSymbolStore((state) => state.changeSymbol);
+
+  const navigate = useNavigate();
+
   const [symbolState, setSymbolState] = React.useState<string>("");
 
   const parseSymbol = (symbol: string) => {

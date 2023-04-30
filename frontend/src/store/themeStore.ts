@@ -1,11 +1,16 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
 interface ThemeState {
-    theme: boolean
-    changeTheme: (by: boolean) => void
+  theme: boolean;
+  changeTheme: (by: boolean) => void;
 }
 
+const writeToLocalStorage = (theme: boolean) => {
+  localStorage.setItem("theme", theme ? "light" : "dark");
+  return theme;
+};
+
 export const useThemeStore = create<ThemeState>()((set) => ({
-    theme: localStorage.getItem("theme") === "light" ? true : false,
-    changeTheme: (by) => set((state) => ({ theme: by })),
-}))
+  theme: localStorage.getItem("theme") === "light" ? true : false,
+  changeTheme: (by) => set((state) => ({ theme: writeToLocalStorage(by) })),
+}));

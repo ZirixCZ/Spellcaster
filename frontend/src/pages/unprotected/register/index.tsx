@@ -48,34 +48,26 @@ const Register = (): JSX.Element => {
         <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
         <FormInput
           refer={userNameRef}
-          placeholder="username_123"
+          placeholder="a-z0-9_."
           type="text"
           pattern="^[a-z0-9_.]+$"
           errorMessage="username invalid"
-          hasNoPadding={true}
         />
-        <InputDescription>a-z0-9_.</InputDescription>
         <FormInput
           refer={emailRef}
-          placeholder="test@test.com"
+          placeholder="example@example.com"
           type="text"
           pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
           errorMessage="email invalid"
-          hasNoPadding={true}
         />
-        <InputDescription>valid email address</InputDescription>
         <FormInput
           refer={passwordRef}
-          placeholder="Example123"
+          placeholder="letter, number, min 8 characters"
           type="password"
           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
           errorMessage="password invalid"
-          hasNoPadding={true}
           isLast={true}
         />
-        <InputDescription hasNoPadding={true}>
-          letter, number, min 8 characters
-        </InputDescription>
         <Paragraph size={1} weight={500}>
           <Link to="/login">I have an account</Link>
         </Paragraph>

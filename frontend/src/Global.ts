@@ -22,14 +22,14 @@ export const lightTheme = {
 
 export const darkTheme = {
   isLight: false,
-  primary: "#333333",
-  secondary: "#03CE60",
+  primary: "rgb(167, 185, 242)",
+  secondary: "rgb(115, 235, 125)",
   red: "#F95738",
-  gray: "rgba(37, 37, 37, 1)",
+  gray: "#FFFFFF",
   buttonHover: "#1F191B",
-  white: "#FFFFF0",
-  whiteTransparent: "rgba(255, 255, 240, 0.3)",
-  text: "#333333",
+  white: "rgb(30, 30, 40)",
+  whiteTransparent: "rgba(30, 30, 40, 0.5)",
+  text: "#FFFFFF",
 };
 
 export const mobile = (inner: any) => css`

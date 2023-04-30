@@ -14,12 +14,19 @@ import Lobby from "./pages/lobby";
 import Auth from "./pages/Auth";
 import Welcome from "./pages/unprotected/welcome/Welcome";
 import { tablet } from "./Global";
+import { useThemeStore } from "./store/themeStore";
 import Symbol from "./components/Symbol";
 
 const App = (): JSX.Element => {
+  const theme = useThemeStore((state) => state.theme);
+  const changeTheme = useThemeStore((state) => state.changeTheme);
+
   return (
     <Theme>
       <Container>
+        <ThemeButton onClick={() => changeTheme(!theme)}>
+          {theme ? "☀️" : "🌑"}
+        </ThemeButton>
         <Symbol />
         <Routes>
           <Route path="/" element={<Auth />}>
@@ -43,8 +50,24 @@ const App = (): JSX.Element => {
 export const Container = styled.div`
   height: 100vh;
   width: 100%;
+  line-height: 1.5;
   background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.text};
+`;
+
+export const ThemeButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0.5rem;
+  margin-right: 1rem;
+  border: none;
+  font-size: 2rem;
+  border-radius: 3px;
+  background-color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.text};
+  cursor: pointer;
+  z-index: 99;
 `;
 
 export default App;
