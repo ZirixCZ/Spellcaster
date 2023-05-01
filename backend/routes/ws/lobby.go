@@ -34,9 +34,3 @@ func (h *Hub) LobbyConnection(w http.ResponseWriter, r *http.Request) {
 	go client.readMessages()
 	go client.writeMessages()
 }
-
-type JoinLobbyStruct struct {
-	Name     string `json:"name"`
-	Username string `json:"username"`
-	Type     string `json:"type"`
-}

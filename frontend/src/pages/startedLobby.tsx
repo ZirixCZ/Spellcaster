@@ -22,6 +22,18 @@ const StartedLobby = ({ sendMessage, title, username, ...props }: Props) => {
   React.useEffect(() => {
     if (props.wordUpdate === null) return;
 
+    if ("speechSynthesis" in window) {
+      const msg = new SpeechSynthesisUtterance(props.wordUpdate);
+      window.speechSynthesis.speak(msg);
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: `Your browser doesn't support text to speech`,
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
+    }
+
     Swal.fire({
       title: "Incoming Word!",
       text: `The word is: ${props.wordUpdate}`,

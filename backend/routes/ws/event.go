@@ -210,6 +210,7 @@ func FetchUsersHandler(event Event, c *Client) error {
 }
 
 func InputWordHandler(event Event, c *Client) error {
+	c.word_master = true
 	var payload InputWordEvent
 	if err := json.Unmarshal(event.Payload, &payload); err != nil {
 		return fmt.Errorf("bad payload in request: %v", err)
@@ -236,6 +237,7 @@ func InputWordHandler(event Event, c *Client) error {
 			client.egress <- outgoingEvent
 		}
 	}
+	c.word_master = false
 	return nil
 }
 
