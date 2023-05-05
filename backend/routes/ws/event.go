@@ -2,6 +2,7 @@ package ws
 
 import (
 	"backend/spellit/routes"
+	"backend/spellit/utils"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -18,12 +19,13 @@ type Event struct {
 type EventHandler func(event Event, c *Client) error
 
 const (
-	EventJoinLobby  = "join_lobby"
-	EventLeaveLobby = "leave_lobby"
-	EventStartLobby = "start_lobby"
-	EventError      = "error"
-	EventFetchUsers = "fetch_users"
-	EventInputWord  = "input_word"
+	EventJoinLobby         = "join_lobby"
+	EventLeaveLobby        = "leave_lobby"
+	EventStartLobby        = "start_lobby"
+	EventInvalidLobbyError = "lobby_error"
+	EventInvalidWordError  = "word_error"
+	EventFetchUsers        = "fetch_users"
+	EventInputWord         = "input_word"
 )
 
 // SendMessageEvent is the payload sent in the
@@ -98,7 +100,7 @@ func JoinLobbyHandler(event Event, c *Client) error {
 		}
 
 		var outgoingEvent Event
-		outgoingEvent.Type = EventError
+		outgoingEvent.Type = EventInvalidLobbyError
 		outgoingEvent.Payload = data
 
 		for client := range c.hub.clients {
@@ -143,6 +145,10 @@ func StartLobbyHandler(event Event, c *Client) error {
 	var payload StartLobbyEvent
 	if err := json.Unmarshal(event.Payload, &payload); err != nil {
 		return fmt.Errorf("bad payload in request: %v", err)
+	}
+
+	if !utils.IsString(payload.Username) || !utils.IsString(payload.Target) {
+		return fmt.Errorf("There's been an error with the payload")
 	}
 
 	var lobbyList = routes.ReturnLobbyList()
@@ -191,6 +197,7 @@ func FetchUsersHandler(event Event, c *Client) error {
 		usernames = append(usernames, client.username)
 	}
 	broadMessage.Usernames = usernames
+	broadMessage.Target = payload.Target
 
 	data, err := json.Marshal(broadMessage)
 	if err != nil {
@@ -214,6 +221,32 @@ func InputWordHandler(event Event, c *Client) error {
 	var payload InputWordEvent
 	if err := json.Unmarshal(event.Payload, &payload); err != nil {
 		return fmt.Errorf("bad payload in request: %v", err)
+	}
+
+	if utils.IsValidWord(payload.Word) == false {
+		log.Println(payload.Word)
+		log.Println("Invalid word")
+
+		var broadMessage ErrorEvent
+
+		broadMessage.Message = payload.Word
+
+		var outgoingEvent Event
+
+		data, err := json.Marshal(broadMessage)
+		if err != nil {
+			return fmt.Errorf("failed to marshal broadcast message: %v", err)
+		}
+
+		outgoingEvent.Type = EventInvalidWordError
+		outgoingEvent.Payload = data
+
+		for client := range c.hub.clients {
+			if client.lobby == c.lobby && client.word_master == true {
+				client.egress <- outgoingEvent
+			}
+		}
+		return fmt.Errorf("invalid word")
 	}
 
 	var broadMessage InputWordBroadcast

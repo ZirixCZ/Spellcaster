@@ -110,56 +110,54 @@ const Lobbies = (): JSX.Element => {
         animate="visible"
         ref={lobbyContainerRef}
       >
-        {!lobbies ? (
-          <></>
-        ) : (
-          lobbies.map((item, i) => {
-            if (checkIfStarted(item)) {
-              return <></>;
-            }
+        {!lobbies
+          ? null
+          : lobbies.map((item, i) => {
+              if (checkIfStarted(item)) {
+                return null;
+              }
 
-            return (
-              <Lobby
-                isStarted={item.isStarted}
-                whileHover={{
-                  scale: 1.025,
-                  transition: { duration: 0.25 },
-                }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => navigate(`/lobbies/${item.name ?? null}`)}
-                key={i}
-              >
-                <Title weight={800}>{item.name ? item.name : "noname"}</Title>
-                <Text>
-                  {item.masterUsername ? item.masterUsername : "error"}
-                </Text>
-              </Lobby>
-            );
-          })
-        )}
-        {startedLobbiesRef.current.length <= 0 ? (
-          <></>
-        ) : (
-          startedLobbiesRef.current.map((item, i) => {
-            return (
-              <Lobby
-                isStarted={item.isStarted}
-                whileHover={{
-                  scale: 1.025,
-                  transition: { duration: 0.25 },
-                }}
-                whileTap={{ scale: 0.9 }}
-                key={i}
-              >
-                <Title weight={800}>{item.name ? item.name : "noname"}</Title>
-                <Text>{item.playerCount ? item.playerCount : "0"} players</Text>
-                <Text>
-                  {item.masterUsername ? item.masterUsername : "error"}
-                </Text>
-              </Lobby>
-            );
-          })
-        )}
+              return (
+                <Lobby
+                  isStarted={item.isStarted}
+                  whileHover={{
+                    scale: 1.025,
+                    transition: { duration: 0.25 },
+                  }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => navigate(`/lobbies/${item.name ?? null}`)}
+                  key={i}
+                >
+                  <Title weight={800}>{item.name ? item.name : "noname"}</Title>
+                  <Text>
+                    {item.masterUsername ? item.masterUsername : "error"}
+                  </Text>
+                </Lobby>
+              );
+            })}
+        {startedLobbiesRef.current.length <= 0
+          ? null
+          : startedLobbiesRef.current.map((item, i) => {
+              return (
+                <Lobby
+                  isStarted={item.isStarted}
+                  whileHover={{
+                    scale: 1.025,
+                    transition: { duration: 0.25 },
+                  }}
+                  whileTap={{ scale: 0.9 }}
+                  key={i}
+                >
+                  <Title weight={800}>{item.name ? item.name : "noname"}</Title>
+                  <Text>
+                    {item.playerCount ? item.playerCount : "0"} players
+                  </Text>
+                  <Text>
+                    {item.masterUsername ? item.masterUsername : "error"}
+                  </Text>
+                </Lobby>
+              );
+            })}
       </StyledLobbies>
       <Arrow
         src="/img/arrow.svg"

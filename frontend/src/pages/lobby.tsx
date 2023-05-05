@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components/macro";
+import Swal from "sweetalert2";
 
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import getLobbyFromURL from "../utils/getLobbyFromURL";
@@ -41,8 +42,15 @@ const Lobby = (): JSX.Element => {
     if (lastMessage === null) return;
 
     const message = JSON.parse(lastMessage.data);
-    if (message.type === "error") {
+    if (message.type === "lobby_error") {
       navigate("/lobbies");
+    } else if (message.type === "word_error") {
+      Swal.fire({
+        title: "Error",
+        text: `The word ${message.payload.message} is not valid.`,
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
     } else if (message.type === "fetch_users") {
       setConnectedUsers(message.payload.usernames);
     } else if (message.type === "join_lobby") {
