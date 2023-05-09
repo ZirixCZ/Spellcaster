@@ -20,6 +20,7 @@ type Client struct {
 	hub         *Hub
 	egress      chan Event
 	lobby       string
+	word        string
 	username    string
 	word_master bool
 }

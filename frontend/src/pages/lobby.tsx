@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import callApi from "../utils/callApi";
 import Container from "../components/Container";
 import StartedLobby from "./startedLobby";
+import { arraysMatch } from "../utils/arraysMatch";
 
 interface Game {
   data: string;
@@ -52,6 +53,7 @@ const Lobby = (): JSX.Element => {
         confirmButtonText: "Ok",
       });
     } else if (message.type === "fetch_users") {
+      if (arraysMatch(message.payload.usernames, connectedUsers)) return;
       setConnectedUsers(message.payload.usernames);
     } else if (message.type === "join_lobby") {
       setConnectedUsers(message.payload.usernames);
@@ -60,6 +62,13 @@ const Lobby = (): JSX.Element => {
       setIsStarted(true);
     } else if (message.type === "input_word") {
       setWord(message.payload.word);
+    } else if (message.type === "success") {
+      Swal.fire({
+        title: "Success",
+        text: `${message.payload.message}`,
+        icon: "success",
+        confirmButtonText: "Ok",
+      });
     }
   }, [lastMessage, setMessageHistory]);
 

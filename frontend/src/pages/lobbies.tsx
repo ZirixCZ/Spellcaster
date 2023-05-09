@@ -150,9 +150,6 @@ const Lobbies = (): JSX.Element => {
                 >
                   <Title weight={800}>{item.name ? item.name : "noname"}</Title>
                   <Text>
-                    {item.playerCount ? item.playerCount : "0"} players
-                  </Text>
-                  <Text>
                     {item.masterUsername ? item.masterUsername : "error"}
                   </Text>
                 </Lobby>

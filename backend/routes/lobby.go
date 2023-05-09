@@ -1,13 +1,14 @@
 package routes
 
 import (
+	"backend/spellit/types"
 	"backend/spellit/utils"
 	"encoding/json"
 	"fmt"
 	"net/http"
 )
 
-var LobbyList []Lobbies
+var LobbyList []types.Lobby
 
 func LobbyHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -62,11 +63,11 @@ func getLobbies(w http.ResponseWriter, r *http.Request) {
 }
 
 func addLobby(name string, lobbyMaster string) {
-	lobby := Lobbies{Name: name, MasterUserName: lobbyMaster}
+	lobby := types.Lobby{Name: name, MasterUserName: lobbyMaster}
 	LobbyList = append(LobbyList, lobby)
 }
 
-func ReturnLobbyList() *[]Lobbies {
+func ReturnLobbyList() *[]types.Lobby {
 	return &LobbyList
 }
 

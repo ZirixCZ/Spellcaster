@@ -26,6 +26,7 @@ const (
 	EventInvalidWordError  = "word_error"
 	EventFetchUsers        = "fetch_users"
 	EventInputWord         = "input_word"
+	EventSuccess           = "success"
 )
 
 // SendMessageEvent is the payload sent in the
@@ -76,22 +77,27 @@ type InputWordBroadcast struct {
 	Sent time.Time `json:"sent"`
 }
 
+type Success struct {
+	Message string `json:"message"`
+}
+
+type SuccessBroadcast struct {
+	Success
+	Sent time.Time `json:"sent"`
+}
+
 func JoinLobbyHandler(event Event, c *Client) error {
 	var payload JoinLobbyEvent
 	if err := json.Unmarshal(event.Payload, &payload); err != nil {
 		return fmt.Errorf("bad payload in request: %v", err)
 	}
 
-	var lobbyList = routes.ReturnLobbyList()
-	var lobbyIndex = routes.FindLobbyIndex(*lobbyList, payload.Target)
-	if lobbyIndex == -1 {
-		return fmt.Errorf("lobby not found")
-	}
+	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
 
 	handleTarget(event, c)
 	handleUsername(event, c)
 
-	if (*lobbyList)[lobbyIndex].IsStarted {
+	if utils.LobbyState(lobby, nil) {
 		var broadMessage ErrorEvent
 		broadMessage.Message = "Lobby already started"
 		data, err := json.Marshal(broadMessage)
@@ -151,14 +157,14 @@ func StartLobbyHandler(event Event, c *Client) error {
 		return fmt.Errorf("There's been an error with the payload")
 	}
 
-	var lobbyList = routes.ReturnLobbyList()
-	var lobbyIndex = routes.FindLobbyIndex(*lobbyList, payload.Target)
-	var lobbyMaster = (*lobbyList)[lobbyIndex].MasterUserName
+	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
+	var lobbyMaster = lobby.MasterUserName
 	if lobbyMaster != payload.Username {
 		return fmt.Errorf("user not lobby master")
 	}
 
-	(*lobbyList)[lobbyIndex].IsStarted = true
+	state := true
+	utils.LobbyState(lobby, &state)
 
 	var broadMessage StartLobbyBroadcat
 	broadMessage.Username = payload.Username
@@ -217,14 +223,18 @@ func FetchUsersHandler(event Event, c *Client) error {
 }
 
 func InputWordHandler(event Event, c *Client) error {
-	c.word_master = true
 	var payload InputWordEvent
 	if err := json.Unmarshal(event.Payload, &payload); err != nil {
 		return fmt.Errorf("bad payload in request: %v", err)
 	}
 
+	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
+
+	if len(lobby.Word) == 0 {
+		c.word_master = true
+	}
+
 	if utils.IsValidWord(payload.Word) == false {
-		log.Println(payload.Word)
 		log.Println("Invalid word")
 
 		var broadMessage ErrorEvent
@@ -247,6 +257,34 @@ func InputWordHandler(event Event, c *Client) error {
 			}
 		}
 		return fmt.Errorf("invalid word")
+	}
+
+	if c.word_master == true {
+		lobby.Word = payload.Word
+	} else {
+		if lobby.Word == payload.Word {
+			// TODO: add point to the user
+
+			var broadMessage SuccessBroadcast
+			broadMessage.Message = "Correct!"
+			broadMessage.Sent = time.Now()
+
+			data, err := json.Marshal(broadMessage)
+			if err != nil {
+				return fmt.Errorf("failed to marshal broadcast message: %v", err)
+			}
+
+			var outgoingEvent Event
+			outgoingEvent.Type = EventSuccess
+			outgoingEvent.Payload = data
+
+			for client := range c.hub.clients {
+				if client.lobby == c.lobby && client.username == c.username {
+					client.egress <- outgoingEvent
+				}
+			}
+			return nil
+		}
 	}
 
 	var broadMessage InputWordBroadcast

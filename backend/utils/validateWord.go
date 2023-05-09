@@ -26,7 +26,6 @@ func IsValidWord(word string) bool {
 	word = strings.ToLower(word)
 
 	for _, w := range wordList {
-		fmt.Println(w)
 		if w == word {
 			return true
 		}
