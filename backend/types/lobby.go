@@ -6,4 +6,5 @@ type Lobby struct {
 	Word           string `json:"word"`
 	MasterUserName string `json:"masterUsername"`
 	IsStarted      bool   `json:"isStarted"`
+	Round          Round  `json:"round"`
 }

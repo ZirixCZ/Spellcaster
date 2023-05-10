@@ -232,6 +232,13 @@ func InputWordHandler(event Event, c *Client) error {
 
 	if len(lobby.Word) == 0 {
 		c.word_master = true
+		defer func() {
+			timer := time.NewTimer(5 * time.Second)
+			timer.Stop()
+			c.word_master = false
+			utils.NewRound(lobby)
+			log.Println("New Round")
+		}()
 	}
 
 	if utils.IsValidWord(payload.Word) == false {
@@ -261,6 +268,8 @@ func InputWordHandler(event Event, c *Client) error {
 
 	if c.word_master == true {
 		lobby.Word = payload.Word
+		lobby.Round.Words = append(lobby.Round.Words, payload.Word)
+		log.Println("Words: ", lobby.Round.Words)
 	} else {
 		if lobby.Word == payload.Word {
 			// TODO: add point to the user
@@ -308,7 +317,6 @@ func InputWordHandler(event Event, c *Client) error {
 			client.egress <- outgoingEvent
 		}
 	}
-	c.word_master = false
 	return nil
 }
 
