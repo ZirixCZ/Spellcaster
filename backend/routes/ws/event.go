@@ -2,6 +2,7 @@ package ws
 
 import (
 	"backend/spellit/routes"
+	"backend/spellit/types"
 	"backend/spellit/utils"
 	"encoding/json"
 	"fmt"
@@ -182,6 +183,7 @@ func StartLobbyHandler(event Event, c *Client) error {
 
 	for client := range c.hub.clients {
 		if client.lobby == c.lobby {
+			lobby.User = append(lobby.User, types.User{UserName: client.username, Score: 0})
 			client.egress <- outgoingEvent
 		}
 	}
@@ -231,17 +233,12 @@ func InputWordHandler(event Event, c *Client) error {
 	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
 
 	if len(lobby.Word) == 0 {
-		c.word_master = true
-		defer func() {
-			timer := time.NewTimer(5 * time.Second)
-			timer.Stop()
-			c.word_master = false
-			utils.NewRound(lobby)
-			log.Println("New Round")
-		}()
+		lobby.Round.CurrentWordMaster = c.username
 	}
+	log.Println(lobby.User)
 
-	if utils.IsValidWord(payload.Word) == false {
+	if utils.IsValidWord(payload.Word) == false && utils.IsWordMaster(lobby, c.username) {
+		log.Println(lobby.Word)
 		log.Println("Invalid word")
 
 		var broadMessage ErrorEvent
@@ -259,16 +256,18 @@ func InputWordHandler(event Event, c *Client) error {
 		outgoingEvent.Payload = data
 
 		for client := range c.hub.clients {
-			if client.lobby == c.lobby && client.word_master == true {
+			if client.lobby == c.lobby && utils.IsWordMaster(lobby, client.username) {
 				client.egress <- outgoingEvent
 			}
 		}
 		return fmt.Errorf("invalid word")
 	}
 
-	if c.word_master == true {
+	if utils.IsWordMaster(lobby, c.username) {
 		lobby.Word = payload.Word
 		lobby.Round.Words = append(lobby.Round.Words, payload.Word)
+		lobby.Round.PastWordMasters = append(lobby.Round.PastWordMasters, c.username)
+		lobby.Round.RoundsPlayed += 1
 		log.Println("Words: ", lobby.Round.Words)
 	} else {
 		if lobby.Word == payload.Word {
@@ -313,7 +312,7 @@ func InputWordHandler(event Event, c *Client) error {
 	outgoingEvent.Payload = data
 
 	for client := range c.hub.clients {
-		if client.lobby == c.lobby && client.word_master == false {
+		if client.lobby == c.lobby && !utils.IsWordMaster(lobby, client.username) {
 			client.egress <- outgoingEvent
 		}
 	}

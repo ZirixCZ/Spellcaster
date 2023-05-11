@@ -16,21 +16,18 @@ var (
 type ClientList map[*Client]bool
 
 type Client struct {
-	connection  *websocket.Conn
-	hub         *Hub
-	egress      chan Event
-	lobby       string
-	word        string
-	username    string
-	word_master bool
+	connection *websocket.Conn
+	hub        *Hub
+	egress     chan Event
+	lobby      string
+	username   string
 }
 
 func NewClient(conn *websocket.Conn, hub *Hub) *Client {
 	return &Client{
-		connection:  conn,
-		hub:         hub,
-		egress:      make(chan Event),
-		word_master: false,
+		connection: conn,
+		hub:        hub,
+		egress:     make(chan Event),
 	}
 }
 

@@ -3,7 +3,7 @@ package types
 type Round struct {
 	RoundsCount       int      `json:"totalRounds"`
 	RoundsPlayed      int      `json:"playedRounds"`
-	PastWordMasters   []User   `json:"pastWordMasters"`
-	CurrentWordMaster User     `json:"currentWordMaster"`
+	PastWordMasters   []string `json:"pastWordMasters"`
+	CurrentWordMaster string   `json:"currentWordMaster"`
 	Words             []string `json:"words"`
 }
