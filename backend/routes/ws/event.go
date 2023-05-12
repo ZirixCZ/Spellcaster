@@ -232,12 +232,18 @@ func InputWordHandler(event Event, c *Client) error {
 
 	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
 
-	if len(lobby.Word) == 0 {
+	if len(lobby.Round.CurrentWordMaster) == 0 {
 		lobby.Round.CurrentWordMaster = c.username
+
+		userIndex, ok := utils.FindUserIndex(lobby, c.username)
+		if ok {
+			return fmt.Errorf("user not found")
+		}
+		lobby.User[userIndex].Score += 1
 	}
 	log.Println(lobby.User)
 
-	if utils.IsValidWord(payload.Word) == false && utils.IsWordMaster(lobby, c.username) {
+	if !utils.IsValidWord(payload.Word) && utils.IsWordMaster(lobby, c.username) {
 		log.Println(lobby.Word)
 		log.Println("Invalid word")
 
