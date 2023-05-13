@@ -13,10 +13,17 @@ interface Props {
   ) => void;
   title: string | null;
   username: string | null;
+  role: string | null;
   wordUpdate: string | null;
 }
 
-const StartedLobby = ({ sendMessage, title, username, ...props }: Props) => {
+const StartedLobby = ({
+  sendMessage,
+  title,
+  username,
+  role,
+  ...props
+}: Props) => {
   const wordRef = React.useRef<HTMLInputElement | null>(null);
 
   React.useEffect(() => {
@@ -64,6 +71,7 @@ const StartedLobby = ({ sendMessage, title, username, ...props }: Props) => {
       justifyContent="center"
       alignItems="center"
     >
+      <p>Role: {role}</p>
       <StyledForm onSubmit={(e) => inputSubmit(e)}>
         <h1>Input a word</h1>
         <StyledInput refer={wordRef}></StyledInput>

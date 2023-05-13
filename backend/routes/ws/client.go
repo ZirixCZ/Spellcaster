@@ -52,7 +52,6 @@ func (c *Client) readMessages() {
 			}
 			break
 		}
-		log.Println("Payload: ", string(payload))
 		var request Event
 		if err := json.Unmarshal(payload, &request); err != nil {
 			log.Println("Error unmarshalling payload: ", err)
@@ -91,7 +90,6 @@ func (c *Client) writeMessages() {
 				log.Println("Error writing message: ", err)
 				return
 			}
-			log.Println("Message sent to client")
 		case <-ticker.C:
 			if err := c.connection.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
 				log.Println("writemsg: ", err)

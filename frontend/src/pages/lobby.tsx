@@ -22,6 +22,7 @@ const Lobby = (): JSX.Element => {
   const [connectedUsers, setConnectedUsers] = React.useState<string[]>([]);
   const [isStarted, setIsStarted] = React.useState<boolean>(false);
   const [word, setWord] = React.useState<string | null>(null);
+  const [role, setRole] = React.useState<string | null>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -60,6 +61,9 @@ const Lobby = (): JSX.Element => {
       setInterval(FetchConnectedUsers, 4000);
     } else if (message.type === "start_lobby") {
       setIsStarted(true);
+    } else if (message.type === "roles") {
+      console.log(message.payload);
+      setRole(message.payload.role);
     } else if (message.type === "input_word") {
       setWord(message.payload.word);
     } else if (message.type === "success") {
@@ -97,6 +101,19 @@ const Lobby = (): JSX.Element => {
   }, [title, username]);
 
   React.useEffect(() => {
+    if (!isStarted) return;
+
+    const getRoles = {
+      type: "roles",
+      payload: {
+        target_id: title,
+        username: username,
+      },
+    };
+    sendMessage(JSON.stringify(getRoles));
+  }, [isStarted]);
+
+  React.useEffect(() => {
     if (readyState !== ReadyState.OPEN) return;
     callApi("GET", "/api/user/verifyusername", null).then((res) => {
       res.json().then((data) => {
@@ -120,6 +137,7 @@ const Lobby = (): JSX.Element => {
       sendMessage={sendMessage}
       title={title}
       username={username}
+      role={role}
     />
   ) : (
     <StyledContainer

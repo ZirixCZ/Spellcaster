@@ -31,6 +31,7 @@ func (h *Hub) setupEventHandlers() {
 	h.handlers[EventStartLobby] = StartLobbyHandler
 	h.handlers[EventFetchUsers] = FetchUsersHandler
 	h.handlers[EventInputWord] = InputWordHandler
+	h.handlers[EventRoles] = RolesHandler
 }
 
 // routeEvent is used to make sure the correct event goes into the correct handler

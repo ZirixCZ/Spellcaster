@@ -28,6 +28,7 @@ const (
 	EventFetchUsers        = "fetch_users"
 	EventInputWord         = "input_word"
 	EventSuccess           = "success"
+	EventRoles             = "roles"
 )
 
 // SendMessageEvent is the payload sent in the
@@ -50,6 +51,17 @@ type StartLobbyEvent struct {
 
 type StartLobbyBroadcat struct {
 	StartLobbyEvent
+	Sent time.Time `json:"sent"`
+}
+
+type RolesEvent struct {
+	Username string `json:"username"`
+	Target   string `json:"target_id"`
+}
+
+type RolesBroadcast struct {
+	RolesEvent
+	Role string    `json:"role"`
 	Sent time.Time `json:"sent"`
 }
 
@@ -159,6 +171,7 @@ func StartLobbyHandler(event Event, c *Client) error {
 	}
 
 	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
+
 	var lobbyMaster = lobby.MasterUserName
 	if lobbyMaster != payload.Username {
 		return fmt.Errorf("user not lobby master")
@@ -184,6 +197,50 @@ func StartLobbyHandler(event Event, c *Client) error {
 	for client := range c.hub.clients {
 		if client.lobby == c.lobby {
 			lobby.User = append(lobby.User, types.User{UserName: client.username, Score: 0})
+			client.egress <- outgoingEvent
+		}
+	}
+
+	return nil
+}
+
+func RolesHandler(event Event, c *Client) error {
+	var payload RolesEvent
+	if err := json.Unmarshal(event.Payload, &payload); err != nil {
+		return fmt.Errorf("bad payload in request: %v", err)
+	}
+
+	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
+
+	manageRolesState := utils.ManageRoles(lobby)
+	if !manageRolesState {
+		return fmt.Errorf("Error while assigning roles")
+	}
+
+	for client := range c.hub.clients {
+		if client.lobby == c.lobby {
+			index, ok := utils.FindUserIndex(lobby, client.username)
+			if !ok {
+				return fmt.Errorf("Error while finding user index")
+			}
+
+			var broadMessage RolesBroadcast
+			broadMessage.Username = client.username
+			broadMessage.Target = client.lobby
+			broadMessage.Role = lobby.User[index].Role
+			broadMessage.Sent = time.Now()
+
+			fmt.Println("Role: ", broadMessage.Role)
+
+			data, err := json.Marshal(broadMessage)
+			if err != nil {
+				return fmt.Errorf("failed to marshal broadcast message: %v", err)
+			}
+
+			var outgoingEvent Event
+			outgoingEvent.Type = EventRoles
+			outgoingEvent.Payload = data
+
 			client.egress <- outgoingEvent
 		}
 	}
