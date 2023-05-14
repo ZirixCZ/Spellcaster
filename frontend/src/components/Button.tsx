@@ -9,6 +9,7 @@ interface ButtonProps {
   small?: boolean;
   medium?: boolean;
   large?: boolean;
+  disabled?: boolean;
 }
 
 const Button = (props: ButtonProps): JSX.Element => {
@@ -29,6 +30,7 @@ interface Props {
   small?: boolean;
   medium?: boolean;
   large?: boolean;
+  disabled?: boolean;
 }
 
 export const StyledButton = styled(motion.button)<Props>`

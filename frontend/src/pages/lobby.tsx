@@ -9,6 +9,7 @@ import callApi from "../utils/callApi";
 import Container from "../components/Container";
 import StartedLobby from "./startedLobby";
 import { arraysMatch } from "../utils/arraysMatch";
+import LobbyMasterPanel from "../views/LobbyMasterPanel";
 
 interface Game {
   data: string;
@@ -21,6 +22,7 @@ const Lobby = (): JSX.Element => {
   const [messageHistory, setMessageHistory] = React.useState<Game[]>([]);
   const [connectedUsers, setConnectedUsers] = React.useState<string[]>([]);
   const [isStarted, setIsStarted] = React.useState<boolean>(false);
+  const RoundInputRef = React.useRef<HTMLInputElement | null>(null);
   const [word, setWord] = React.useState<string | null>(null);
   const [role, setRole] = React.useState<string | null>(null);
 
@@ -126,7 +128,11 @@ const Lobby = (): JSX.Element => {
     sendMessage(
       JSON.stringify({
         type: "start_lobby",
-        payload: { target_id: title, username: username },
+        payload: {
+          target_id: title,
+          username: username,
+          rounds_count: parseInt(RoundInputRef.current?.value ?? "1"),
+        },
       })
     );
   };
@@ -151,13 +157,11 @@ const Lobby = (): JSX.Element => {
         {connectionStatus}{" "}
         {readyState === ReadyState.OPEN && username ? `as ${username}` : null}
       </p>
-
-      <button
-        onClick={() => startGame()}
-        disabled={readyState !== ReadyState.OPEN}
-      >
-        Click to start
-      </button>
+      <LobbyMasterPanel
+        startGame={startGame}
+        readyState={readyState}
+        roundInputRef={RoundInputRef}
+      />
       <UsersTitle>Connected Users</UsersTitle>
       <UnorderedList>
         {connectedUsers?.map((user, i) => (
@@ -185,7 +189,7 @@ const UnorderedList = styled.ul`
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  width: 20rem;
+  width: 23rem;
   flex-wrap: wrap;
   padding-left: 0;
   margin-left: 0;

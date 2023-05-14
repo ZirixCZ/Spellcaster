@@ -45,8 +45,9 @@ type JoinLobbyBroadcast struct {
 }
 
 type StartLobbyEvent struct {
-	Username string `json:"username"`
-	Target   string `json:"target_id"`
+	Username    string `json:"username"`
+	Target      string `json:"target_id"`
+	RoundsCount int    `json:"rounds_count"`
 }
 
 type StartLobbyBroadcat struct {
@@ -177,12 +178,16 @@ func StartLobbyHandler(event Event, c *Client) error {
 		return fmt.Errorf("user not lobby master")
 	}
 
+	lobby.Round.RoundsCount = payload.RoundsCount
+	lobby.Round.RoundsPlayed = 0
+
 	state := true
 	utils.LobbyState(lobby, &state)
 
 	var broadMessage StartLobbyBroadcat
 	broadMessage.Username = payload.Username
 	broadMessage.Target = payload.Target
+	broadMessage.RoundsCount = payload.RoundsCount
 	broadMessage.Sent = time.Now()
 
 	data, err := json.Marshal(broadMessage)
@@ -211,6 +216,8 @@ func RolesHandler(event Event, c *Client) error {
 	}
 
 	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
+
+	fmt.Print("lobby.Round.RoundsCount: ", lobby.Round.RoundsCount)
 
 	manageRolesState := utils.ManageRoles(lobby)
 	if !manageRolesState {
