@@ -139,7 +139,9 @@ func JoinLobbyHandler(event Event, c *Client) error {
 	broadMessage.Sent = time.Now()
 	usernames := []string{}
 	for client := range c.hub.clients {
-		usernames = append(usernames, client.username)
+		if client.lobby == c.lobby {
+			usernames = append(usernames, client.username)
+		}
 	}
 	broadMessage.Usernames = usernames
 
