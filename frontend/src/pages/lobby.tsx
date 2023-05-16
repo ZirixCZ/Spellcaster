@@ -25,6 +25,7 @@ const Lobby = (): JSX.Element => {
   const RoundInputRef = React.useRef<HTMLInputElement | null>(null);
   const [word, setWord] = React.useState<string | null>(null);
   const [role, setRole] = React.useState<string | null>(null);
+  const [isMaster, setIsMaster] = React.useState<boolean>(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -59,6 +60,7 @@ const Lobby = (): JSX.Element => {
       if (arraysMatch(message.payload.usernames, connectedUsers)) return;
       setConnectedUsers(message.payload.usernames);
     } else if (message.type === "join_lobby") {
+      setIsMaster(message.payload.master_username === username);
       setConnectedUsers(message.payload.usernames);
       setInterval(FetchConnectedUsers, 4000);
     } else if (message.type === "start_lobby") {
@@ -157,11 +159,13 @@ const Lobby = (): JSX.Element => {
         {connectionStatus}{" "}
         {readyState === ReadyState.OPEN && username ? `as ${username}` : null}
       </p>
-      <LobbyMasterPanel
-        startGame={startGame}
-        readyState={readyState}
-        roundInputRef={RoundInputRef}
-      />
+      {isMaster && (
+        <LobbyMasterPanel
+          startGame={startGame}
+          readyState={readyState}
+          roundInputRef={RoundInputRef}
+        />
+      )}
       <UsersTitle>Connected Users</UsersTitle>
       <UnorderedList>
         {connectedUsers?.map((user, i) => (

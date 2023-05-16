@@ -40,8 +40,9 @@ type JoinLobbyEvent struct {
 
 type JoinLobbyBroadcast struct {
 	JoinLobbyEvent
-	Usernames []string  `json:"usernames"`
-	Sent      time.Time `json:"sent"`
+	Usernames      []string  `json:"usernames"`
+	MasterUserName string    `json:"master_username"`
+	Sent           time.Time `json:"sent"`
 }
 
 type StartLobbyEvent struct {
@@ -136,6 +137,7 @@ func JoinLobbyHandler(event Event, c *Client) error {
 	var broadMessage JoinLobbyBroadcast
 	broadMessage.Username = payload.Username
 	broadMessage.Target = payload.Target
+	broadMessage.MasterUserName = lobby.MasterUserName
 	broadMessage.Sent = time.Now()
 	usernames := []string{}
 	for client := range c.hub.clients {
