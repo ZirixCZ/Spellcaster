@@ -4,12 +4,13 @@ import Swal from "sweetalert2";
 
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import getLobbyFromURL from "../utils/getLobbyFromURL";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import callApi from "../utils/callApi";
 import Container from "../components/Container";
 import StartedLobby from "./startedLobby";
 import { arraysMatch } from "../utils/arraysMatch";
 import LobbyMasterPanel from "../views/LobbyMasterPanel";
+import { LobbyInterface } from "../types/Lobby";
 
 interface Game {
   data: string;
@@ -22,6 +23,8 @@ const Lobby = (): JSX.Element => {
   const [messageHistory, setMessageHistory] = React.useState<Game[]>([]);
   const [connectedUsers, setConnectedUsers] = React.useState<string[]>([]);
   const [isStarted, setIsStarted] = React.useState<boolean>(false);
+  const [roundCount, setRoundCount] = React.useState<number>(1);
+  const [roundsPlayed, setRoundsPlayed] = React.useState<number>(1);
   const RoundInputRef = React.useRef<HTMLInputElement | null>(null);
   const [word, setWord] = React.useState<string | null>(null);
   const [role, setRole] = React.useState<string | null>(null);
@@ -29,6 +32,8 @@ const Lobby = (): JSX.Element => {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { name } = useParams();
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
@@ -65,8 +70,10 @@ const Lobby = (): JSX.Element => {
       setInterval(FetchConnectedUsers, 4000);
     } else if (message.type === "start_lobby") {
       setIsStarted(true);
+      setRoundCount(message.payload.rounds_count);
     } else if (message.type === "roles") {
       console.log(message.payload);
+      setRoundsPlayed(message.payload.rounds_played);
       setRole(message.payload.role);
     } else if (message.type === "input_word") {
       setWord(message.payload.word);
@@ -77,6 +84,8 @@ const Lobby = (): JSX.Element => {
         icon: "success",
         confirmButtonText: "Ok",
       });
+    } else if (message.type === "end_game") {
+      navigate(`/lobbies/${name}/summary`);
     }
   }, [lastMessage, setMessageHistory]);
 
@@ -141,6 +150,8 @@ const Lobby = (): JSX.Element => {
 
   return isStarted ? (
     <StartedLobby
+      roundCount={roundCount}
+      roundsPlayed={roundsPlayed}
       wordUpdate={word}
       sendMessage={sendMessage}
       title={title}

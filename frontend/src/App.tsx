@@ -16,6 +16,7 @@ import Welcome from "./pages/unprotected/welcome/Welcome";
 import { tablet } from "./Global";
 import { useThemeStore } from "./store/themeStore";
 import Symbol from "./components/Symbol";
+import LobbySummary from "./pages/lobbySummary";
 
 const App = (): JSX.Element => {
   const theme = useThemeStore((state) => state.theme);
@@ -34,6 +35,7 @@ const App = (): JSX.Element => {
             <Route path="leaderboard" element={<Leaderboard />} />
             <Route path="lobbies" element={<Lobbies />} />
             <Route path="lobbies/:name" element={<Lobby />} />
+            <Route path="lobbies/:name/summary" element={<LobbySummary />} />
             <Route path="theme" element={<ThemeSwitcher />} />
             <Route path="admin/*" element={<Admin />} />
           </Route>

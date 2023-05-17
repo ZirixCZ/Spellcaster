@@ -1,6 +1,11 @@
 import { css } from "styled-components/macro";
 import "./style/Global.css";
 
+export enum Role {
+  WORDSPELLER = "WordSpeller",
+  WORDMASTER = "WordMaster",
+}
+
 const size = {
   mobile: "768px",
   tablet: "1366px",

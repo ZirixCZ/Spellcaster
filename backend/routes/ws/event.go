@@ -29,6 +29,7 @@ const (
 	EventInputWord         = "input_word"
 	EventSuccess           = "success"
 	EventRoles             = "roles"
+	EventEndGame           = "end_game"
 )
 
 // SendMessageEvent is the payload sent in the
@@ -63,8 +64,9 @@ type RolesEvent struct {
 
 type RolesBroadcast struct {
 	RolesEvent
-	Role string    `json:"role"`
-	Sent time.Time `json:"sent"`
+	Role         string    `json:"role"`
+	RoundsPlayed int       `json:"rounds_played"`
+	Sent         time.Time `json:"sent"`
 }
 
 type ErrorEvent struct {
@@ -99,6 +101,12 @@ type Success struct {
 type SuccessBroadcast struct {
 	Success
 	Sent time.Time `json:"sent"`
+}
+
+type EndGameEvent struct {
+	Target string    `json:"target_id"`
+	Winner string    `json:"winner"`
+	Sent   time.Time `json:"sent"`
 }
 
 func JoinLobbyHandler(event Event, c *Client) error {
@@ -221,7 +229,11 @@ func RolesHandler(event Event, c *Client) error {
 
 	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
 
-	fmt.Print("lobby.Round.RoundsCount: ", lobby.Round.RoundsCount)
+	isEndGame := utils.ManageGameEnd(lobby)
+	if isEndGame {
+		EndGameHandler(event, c, lobby)
+		return nil
+	}
 
 	manageRolesState := utils.ManageRoles(lobby)
 	if !manageRolesState {
@@ -229,15 +241,18 @@ func RolesHandler(event Event, c *Client) error {
 	}
 
 	for client := range c.hub.clients {
+		fmt.Println("client.lobby: ", client.lobby)
 		if client.lobby == c.lobby {
 			index, ok := utils.FindUserIndex(lobby, client.username)
 			if !ok {
 				return fmt.Errorf("Error while finding user index")
 			}
+			fmt.Println(client.username)
 
 			var broadMessage RolesBroadcast
 			broadMessage.Username = client.username
 			broadMessage.Target = client.lobby
+			broadMessage.RoundsPlayed = lobby.Round.RoundsPlayed
 			broadMessage.Role = lobby.User[index].Role
 			broadMessage.Sent = time.Now()
 
@@ -302,34 +317,21 @@ func InputWordHandler(event Event, c *Client) error {
 
 	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
 
-	if len(lobby.Round.CurrentWordMaster) == 0 {
-		lobby.Round.CurrentWordMaster = c.username
+	// WordMaster invalid word
+	if !utils.IsValidWord(payload.Word) || utils.StringInArray(lobby.Round.Words, payload.Word) && utils.IsWordMaster(lobby, c.username) {
+		log.Println("WordMaster: Word is invalid. Word: ", payload.Word)
 
-		userIndex, ok := utils.FindUserIndex(lobby, c.username)
-		if ok {
-			return fmt.Errorf("user not found")
+		message := ""
+		if utils.StringInArray(lobby.Round.Words, payload.Word) {
+			message = payload.Word + " has already been used"
+		} else {
+			message = payload.Word + " is not a valid word"
 		}
-		lobby.User[userIndex].Score += 1
-	}
-	log.Println(lobby.User)
 
-	if !utils.IsValidWord(payload.Word) && utils.IsWordMaster(lobby, c.username) {
-		log.Println(lobby.Word)
-		log.Println("Invalid word")
-
-		var broadMessage ErrorEvent
-
-		broadMessage.Message = payload.Word
-
-		var outgoingEvent Event
-
-		data, err := json.Marshal(broadMessage)
+		outgoingEvent, err := broadcastError(event, c, message, lobby)
 		if err != nil {
-			return fmt.Errorf("failed to marshal broadcast message: %v", err)
+			return fmt.Errorf("failed to broadcast error: %v", err)
 		}
-
-		outgoingEvent.Type = EventInvalidWordError
-		outgoingEvent.Payload = data
 
 		for client := range c.hub.clients {
 			if client.lobby == c.lobby && utils.IsWordMaster(lobby, client.username) {
@@ -339,15 +341,22 @@ func InputWordHandler(event Event, c *Client) error {
 		return fmt.Errorf("invalid word")
 	}
 
+	userIndex, ok := utils.FindUserIndex(lobby, c.username)
+	if !ok {
+		return fmt.Errorf("user not found")
+	}
+
 	if utils.IsWordMaster(lobby, c.username) {
+		fmt.Print("isLobbyMaster", lobby.Word)
 		lobby.Word = payload.Word
 		lobby.Round.Words = append(lobby.Round.Words, payload.Word)
-		lobby.Round.PastWordMasters = append(lobby.Round.PastWordMasters, c.username)
 		lobby.Round.RoundsPlayed += 1
 		log.Println("Words: ", lobby.Round.Words)
+		lobby.User[userIndex].Score += 1
 	} else {
+		lobby.Round.CurrentRoundSpellers = append(lobby.Round.CurrentRoundSpellers, c.username)
 		if lobby.Word == payload.Word {
-			// TODO: add point to the user
+			lobby.User[userIndex].Score += 1
 
 			var broadMessage SuccessBroadcast
 			broadMessage.Message = "Correct!"
@@ -366,6 +375,13 @@ func InputWordHandler(event Event, c *Client) error {
 				if client.lobby == c.lobby && client.username == c.username {
 					client.egress <- outgoingEvent
 				}
+			}
+
+			if len(lobby.Round.CurrentRoundSpellers) == len(lobby.User)-1 {
+				fmt.Println("Round over")
+				lobby.Round.CurrentRoundSpellers = []string{}
+				lobby.Round.RoundsPlayed += 1
+				RolesHandler(event, c)
 			}
 			return nil
 		}
@@ -393,6 +409,45 @@ func InputWordHandler(event Event, c *Client) error {
 		}
 	}
 	return nil
+}
+
+func EndGameHandler(event Event, c *Client, lobby *types.Lobby) error {
+	var broadMessage EndGameEvent
+	broadMessage.Sent = time.Now()
+
+	broadMessage.Target = lobby.Name
+	broadMessage.Winner = "test"
+
+	data, err := json.Marshal(broadMessage)
+	if err != nil {
+		return fmt.Errorf("failed to marshal broadcast message: %v", err)
+	}
+
+	var outgoingEvent Event
+	outgoingEvent.Type = EventEndGame
+	outgoingEvent.Payload = data
+
+	for client := range c.hub.clients {
+		if client.lobby == c.lobby {
+			client.egress <- outgoingEvent
+		}
+	}
+	return nil
+}
+
+func broadcastError(event Event, c *Client, message string, lobby *types.Lobby) (Event, error) {
+	var broadMessage ErrorEvent
+	broadMessage.Message = message
+	data, err := json.Marshal(broadMessage)
+	if err != nil {
+		return Event{}, fmt.Errorf("failed to marshal broadcast message: %v", err)
+	}
+
+	var outgoingEvent Event
+	outgoingEvent.Type = EventInvalidLobbyError
+	outgoingEvent.Payload = data
+
+	return outgoingEvent, nil
 }
 
 func handleTarget(event Event, c *Client) error {

@@ -1,11 +1,14 @@
 package utils
 
-import "backend/spellit/types"
+import (
+	"backend/spellit/types"
+	"strings"
+)
 
 func FindUserIndex(lobby *types.Lobby, username string) (int, bool) {
 	users := lobby.User
 	for i, user := range users {
-		if user.UserName == username {
+		if strings.Compare(user.UserName, username) == 0 {
 			return i, true
 		}
 	}
