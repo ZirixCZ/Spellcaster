@@ -52,6 +52,7 @@ const Register = (): JSX.Element => {
           type="text"
           pattern="^[a-z0-9_.]+$"
           errorMessage="username invalid"
+          autoComplete="username"
         />
         <FormInput
           refer={emailRef}

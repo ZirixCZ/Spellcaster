@@ -7,6 +7,7 @@ interface InputProps {
   type?: string;
   pattern?: string;
   errorMessage?: string;
+  autoComplete?: string;
 }
 
 const Input = (props: InputProps): JSX.Element => {
@@ -16,6 +17,7 @@ const Input = (props: InputProps): JSX.Element => {
       type={props.type}
       placeholder={props.placeholder}
       pattern={props.pattern}
+      autoComplete={props.autoComplete}
     />
   );
 };

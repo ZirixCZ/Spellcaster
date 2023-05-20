@@ -10,6 +10,7 @@ type AppProps = {
   errorMessage: string;
   isLast?: boolean;
   hasNoPadding?: boolean;
+  autoComplete?: string;
 };
 
 const FormInput = (props: AppProps): JSX.Element => {
@@ -20,6 +21,7 @@ const FormInput = (props: AppProps): JSX.Element => {
         type={props.type}
         placeholder={props.placeholder}
         pattern={props.pattern}
+        autoComplete={props.autoComplete}
       />
       <Span>{props.errorMessage}</Span>
     </InputValidator>

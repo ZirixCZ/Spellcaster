@@ -58,6 +58,7 @@ const Login = (): JSX.Element => {
           type="text"
           pattern="^[a-z0-9_.]+$"
           errorMessage="email invalid"
+          autoComplete="username"
         />
         <FormInput
           refer={passwordRef}
