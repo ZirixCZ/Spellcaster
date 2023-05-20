@@ -18,7 +18,7 @@ const Auth = () => {
       }
       setTimeout(() => {
         navigate("/welcome");
-      }, 2000);
+      }, 1000);
     });
   }, []);
 

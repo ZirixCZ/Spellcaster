@@ -21,6 +21,12 @@ const Register = (): JSX.Element => {
     if (typeof submitSuccess !== "undefined")
       submitSuccess.then((result) => {
         if (!result) {
+          Swal.fire({
+            title: "Error!",
+            text: "Something went wrong. Make sure you already don't have an account.",
+            icon: "error",
+            confirmButtonText: "Try again",
+          });
           return;
         }
 

@@ -4,3 +4,5 @@
 backend/.env
 
 .DS_Store
+
+frontend/.env

@@ -52,9 +52,25 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	storage.DB.Create(&newUser)
 
-	w.WriteHeader(http.StatusCreated)
 	fmt.Printf("New user: %s\n", userInput.Email)
-	fmt.Fprintf(w, "User %+v created", userInput.Email)
+
+	jwt, err := GenerateJWT(newUser.UserName, newUser.Roles)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	resp := make(map[string]string)
+	resp["jwt"] = jwt
+	resp["roles"] = newUser.Roles
+	jsonResp, err := json.Marshal(resp)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write(jsonResp)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {

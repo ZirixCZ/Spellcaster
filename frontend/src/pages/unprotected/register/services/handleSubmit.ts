@@ -59,10 +59,17 @@ const handleSubmit = async (
       password: password,
     })
   ).then((res) => {
-    if (res.ok) {
-      return true;
+    if (!res.ok) {
+      return false;
     }
-    return false;
+    return res.json().then((json) => {
+      const token = json.jwt;
+      if (!token) {
+        return false;
+      }
+      localStorage.setItem("jwt", json.jwt);
+      return true;
+    });
   });
 
   return success.valueOf();
