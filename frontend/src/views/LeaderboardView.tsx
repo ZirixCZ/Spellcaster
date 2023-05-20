@@ -65,7 +65,7 @@ const LeaderboardView = (props: Props): JSX.Element => {
 };
 
 export const StyledLeaderboard = styled.table`
-  width: 100%;
+  width: 14rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,8 +85,7 @@ export const LeaderboardButtonWrapper = styled.div`
 export const ButtonWrapper = styled.div`
   display: flex;
   padding-top: 3rem;
-  min-width: 50%;
-  width: fit-content;
+  width: 14rem;
 `;
 
 export default LeaderboardView;

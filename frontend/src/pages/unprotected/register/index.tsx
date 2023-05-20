@@ -56,7 +56,7 @@ const Register = (): JSX.Element => {
         <FormInput
           refer={emailRef}
           placeholder="example@example.com"
-          type="text"
+          type="email"
           pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
           errorMessage="email invalid"
         />

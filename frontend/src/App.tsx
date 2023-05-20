@@ -17,6 +17,7 @@ import { tablet } from "./Global";
 import { useThemeStore } from "./store/themeStore";
 import Symbol from "./components/Symbol";
 import LobbySummary from "./pages/lobbySummary";
+import { mobile } from "../src/Global";
 
 const App = (): JSX.Element => {
   const theme = useThemeStore((state) => state.theme);
@@ -70,6 +71,11 @@ export const ThemeButton = styled.button`
   color: ${({ theme }) => theme.text};
   cursor: pointer;
   z-index: 99;
+  ${mobile(css`
+    top: initial;
+    bottom: 0;
+    margin-bottom: 1.5rem;
+  `)}
 `;
 
 export default App;

@@ -1,4 +1,5 @@
 import * as React from "react";
+import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,6 +12,8 @@ import Container from "../components/Container";
 import Theme from "../components/Theme";
 import { mobile } from "../Global";
 import { useThemeStore } from "../store/themeStore";
+import localStorage from "../utils/localStorageRemove";
+import localStorageRemove from "../utils/localStorageRemove";
 
 const Dashboard = (): JSX.Element => {
   const navigate = useNavigate();
@@ -38,15 +41,7 @@ const Dashboard = (): JSX.Element => {
             heightKeyword="fit-content"
             justifyContent="flex-end"
             alignItems="flex-end"
-          >
-            {/*<StyledThemeSwitcher*/}
-            {/*  onClick={() => {*/}
-            {/*    navigate("/theme");*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  <Button primary>settings</Button>*/}
-            {/*</StyledThemeSwitcher>*/}
-          </Container>
+          ></Container>
           <Container
             justifyContent="space-evenly"
             height={100}
@@ -67,6 +62,21 @@ const Dashboard = (): JSX.Element => {
               </ButtonWrapper>
             </Container>
           </Container>
+          <LogOutContainer
+            onClick={() => {
+              if (localStorageRemove("jwt")) {
+                navigate("/welcome");
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                });
+              }
+            }}
+          >
+            <LogOutButton>Log Out</LogOutButton>
+          </LogOutContainer>
         </>
       ) : (
         <Container justifyContent="center" alignItems="center" height={100}>
@@ -84,6 +94,38 @@ export const StyledThemeSwitcher = styled.div`
 
 const StyledContainer = styled(Container)``;
 
+const LogOutContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: fit-content;
+  ${mobile(css`
+    justify-content: center;
+  `)}
+`;
+
+const LogOutButton = styled.button`
+  background-color: ${({ theme }) => theme.red};
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 1rem;
+  margin-right: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  width: 7rem;
+  height: 3.5rem;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  z-index: 1;
+  ${mobile(css`
+    margin-right: 0;
+  `)}
+`;
+
 export const StyledHeader = styled.div`
   font-size: 2rem;
   padding-top: 0;
@@ -97,7 +139,7 @@ export const ButtonWrapper = styled.div`
   display: flex;
   margin-bottom: 1rem;
   margin-top: 1rem;
-  width: 100%;
+  width: 14rem;
 `;
 
 export const CodeInput = styled(StyledInput)`
