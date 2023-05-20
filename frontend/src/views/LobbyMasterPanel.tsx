@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components/macro";
 import Button from "../components/Button";
 import { ReadyState } from "react-use-websocket";
-import { ButtonWrapper } from "./LeaderboardView";
 
 interface Props {
   startGame: () => void;
@@ -37,6 +36,14 @@ interface StyledNumberInputProps {
   primary?: boolean;
   secondary?: boolean;
 }
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  padding-top: 3rem;
+  width: 100%;
+  margin-right: 1rem;
+`;
+
 const StyledRoundInput = styled.input<StyledNumberInputProps>`
   width: 3rem;
   z-index: 0;
