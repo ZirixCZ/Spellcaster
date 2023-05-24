@@ -11,7 +11,7 @@ const Loader = () => {
   return (
     <Container>
       <StyledLoader>
-        <StyledSymbol src={symbol} alt="Image of a letter symbol" />
+        <StyledSymbol src={symbol} role="none" />
       </StyledLoader>
     </Container>
   );
