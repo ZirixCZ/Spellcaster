@@ -8,5 +8,7 @@ export interface LobbyInterface {
 
 export interface User {
   name: string;
-  lobbymaster: boolean;
+  score?: string;
+  placement?: string;
+  lobbymaster?: boolean;
 }

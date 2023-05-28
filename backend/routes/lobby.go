@@ -21,6 +21,21 @@ func LobbyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func LobbySummary(w http.ResponseWriter, r *http.Request) {
+	name := r.URL.Query().Get("name")
+
+	var lobby = utils.LobbyReference(&LobbyList, name)
+
+	jsonBytes, err := json.Marshal(lobby.User)
+	if err != nil {
+		fmt.Println("Error marshaling JSON:", err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonBytes)
+}
+
 func createLobby(w http.ResponseWriter, r *http.Request) {
 	var input LobbyInput
 

@@ -72,7 +72,6 @@ const Lobby = (): JSX.Element => {
       setIsStarted(true);
       setRoundCount(message.payload.rounds_count);
     } else if (message.type === "roles") {
-      console.log(message.payload);
       setRoundsPlayed(message.payload.rounds_played);
       setRole(message.payload.role);
     } else if (message.type === "input_word") {
@@ -85,7 +84,12 @@ const Lobby = (): JSX.Element => {
         confirmButtonText: "Ok",
       });
     } else if (message.type === "end_game") {
-      navigate(`/lobbies/${name}/summary`);
+      navigate(
+        { pathname: `/lobbies/${name}/summary`, search: `?name=${name}` },
+        {
+          state: { username: username },
+        }
+      );
     }
   }, [lastMessage, setMessageHistory]);
 
