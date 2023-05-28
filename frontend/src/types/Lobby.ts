@@ -9,6 +9,6 @@ export interface LobbyInterface {
 export interface User {
   name: string;
   score?: string;
-  placement?: string;
+  placement?: number;
   lobbymaster?: boolean;
 }

@@ -14,6 +14,7 @@ const LobbySummary = () => {
   const [scrollAmount, setScrollAmount] = React.useState(0);
   const [username, setUsername] = React.useState<string | null>(null);
 
+  const navigate = useNavigate();
   const location = useLocation();
 
   const { name } = useParams();
@@ -69,7 +70,7 @@ const LobbySummary = () => {
 
           <SummaryMenu data={rankings} />
 
-          <ButtonWrapper>
+          <ButtonWrapper onClick={() => navigate("/")}>
             <Button>Continue</Button>
           </ButtonWrapper>
         </Summary>
@@ -243,8 +244,6 @@ const Wrapper = styled.div<WrapperInterface>`
   display: flex;
   flex-direction: row;
   gap: 2rem;
-  background-color: ${({ theme, count }) =>
-    count % 2 === 0 ? "rgba(30, 30, 40, 1)" : null};
 
   p {
     margin-top: 1rem;
@@ -258,7 +257,6 @@ const Container = styled.div`
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
-  background-color: rgb(30, 30, 40);
   scroll-snap-type: y mandatory;
 `;
 

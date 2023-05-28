@@ -13,8 +13,8 @@ const SummaryMenu = ({ data }: Props) => {
   React.useEffect(() => {
     if (!data) return;
 
-    setRankings(data);
-  }, []);
+    setRankings(data.slice(0, 3));
+  }, [data]);
 
   React.useEffect(() => {
     if (!rankings) return;
@@ -32,9 +32,13 @@ const SummaryMenu = ({ data }: Props) => {
     setCurrentUser(newRankings[0]);
   };
 
+  console.log(currentUser?.placement);
+
   return (
     <StyledSummaryMenu>
-      <SummaryRank>{`${currentUser?.placement}. place`}</SummaryRank>
+      <SummaryRank
+        placement={currentUser?.placement}
+      >{`${currentUser?.placement}. place`}</SummaryRank>
       <SummaryUsername>{currentUser?.name}</SummaryUsername>
       <SummaryNext onClick={handleNext}>Next</SummaryNext>
     </StyledSummaryMenu>
@@ -42,7 +46,9 @@ const SummaryMenu = ({ data }: Props) => {
 };
 
 const StyledSummaryMenu = styled.div`
-  background: ${({ theme }) => theme.primary};
+  background: ${({ theme }) => theme.white};
+  z-index: 1;
+  border: 0.2rem solid ${({ theme }) => theme.black};
   width: 100%;
   max-width: 30rem;
   height: 20rem;
@@ -53,13 +59,20 @@ const StyledSummaryMenu = styled.div`
   flex-direction: column;
 `;
 
-const SummaryRank = styled.p`
+interface SummaryRankInterface {
+  placement: number | undefined;
+}
+
+const SummaryRank = styled.p<SummaryRankInterface>`
   font-size: 2rem;
   font-weight: 700;
   font-style: italic;
   margin: 0;
   padding: 0;
   padding-top: 2rem;
+
+  color: ${({ theme, placement }) =>
+    placement === 1 ? theme.blue : placement === 2 ? theme.red : theme.yellow};
 `;
 
 const SummaryUsername = styled.p`
@@ -74,6 +87,10 @@ const SummaryNext = styled.a`
   font-weight: 400;
   padding-bottom: 2rem;
   cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 `;
 
 export default SummaryMenu;

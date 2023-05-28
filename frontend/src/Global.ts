@@ -23,6 +23,10 @@ export const lightTheme = {
   white: "#FFFFF0",
   whiteTransparent: "rgba(255, 255, 240, 0.3)",
   text: "#333333",
+  yellow: "#FEE826",
+  blue: "#26B0FE",
+  silver: "#C0C0C0",
+  bronze: "#CD7F32",
 };
 
 export const darkTheme = {
@@ -35,6 +39,10 @@ export const darkTheme = {
   white: "rgb(30, 30, 40)",
   whiteTransparent: "rgba(30, 30, 40, 0.5)",
   text: "#FFFFFF",
+  yellow: "#FEE826",
+  blue: "#7CD0FF",
+  silver: "#C0C0C0",
+  bronze: "#CD7F32",
 };
 
 export const mobile = (inner: any) => css`

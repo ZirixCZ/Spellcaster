@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
 )
 
 var LobbyList []types.Lobby
@@ -25,6 +26,14 @@ func LobbySummary(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
 
 	var lobby = utils.LobbyReference(&LobbyList, name)
+
+	sort.SliceStable(lobby.User, func(i, j int) bool {
+		return lobby.User[i].UserName > lobby.User[j].UserName
+	})
+
+	for i := range lobby.User {
+		lobby.User[i].Placement = i + 1
+	}
 
 	jsonBytes, err := json.Marshal(lobby.User)
 	if err != nil {
