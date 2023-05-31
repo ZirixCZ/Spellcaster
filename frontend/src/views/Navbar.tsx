@@ -81,7 +81,7 @@ const StyledNavbar = styled.div<StyledNavbarInterface>`
   height: 4rem;
   width: 100%;
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   box-sizing: border-box;
   backdrop-filter: blur(13px);
 

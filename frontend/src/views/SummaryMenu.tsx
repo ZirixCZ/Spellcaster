@@ -1,6 +1,7 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { User } from "../types/Lobby";
+import { mobile, tablet } from "../Global";
 
 interface Props {
   data: User[] | null;
@@ -49,7 +50,7 @@ const StyledSummaryMenu = styled.div`
   background: ${({ theme }) => theme.white};
   z-index: 1;
   border: 0.2rem solid ${({ theme }) => theme.black};
-  width: 100%;
+  width: 90%;
   max-width: 30rem;
   height: 20rem;
   border-radius: 1rem;
@@ -57,6 +58,14 @@ const StyledSummaryMenu = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
+
+  ${tablet(css`
+    margin-top: 7rem;
+  `)}
+
+  ${mobile(css`
+    margin-top: 17rem;
+  `)}
 `;
 
 interface SummaryRankInterface {

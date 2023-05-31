@@ -18,10 +18,19 @@ import { useThemeStore } from "./store/themeStore";
 import Symbol from "./components/Symbol";
 import LobbySummary from "./pages/lobbySummary";
 import { mobile } from "../src/Global";
+import useThemeDetector from "./utils/useThemeDetector";
 
 const App = (): JSX.Element => {
   const theme = useThemeStore((state) => state.theme);
+  const themeDetector = useThemeDetector();
   const changeTheme = useThemeStore((state) => state.changeTheme);
+
+  React.useEffect(() => {
+    console.log("theme prefrence changed", themeDetector);
+    if (localStorage.getItem("theme")) return;
+
+    changeTheme(themeDetector);
+  }, []);
 
   return (
     <Theme>
@@ -52,10 +61,12 @@ const App = (): JSX.Element => {
 
 export const Container = styled.div`
   height: 100vh;
+  max-height: fit-content;
   width: 100%;
   line-height: 1.5;
   background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.text};
+  overflow-x: hidden;
 `;
 
 export const ThemeButton = styled.button`

@@ -12,5 +12,5 @@ const writeToLocalStorage = (theme: boolean) => {
 
 export const useThemeStore = create<ThemeState>()((set) => ({
   theme: localStorage.getItem("theme") === "light" ? true : false,
-  changeTheme: (by) => set((state) => ({ theme: writeToLocalStorage(by) })),
+  changeTheme: (by) => set(() => ({ theme: writeToLocalStorage(by) })),
 }));
