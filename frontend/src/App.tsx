@@ -26,7 +26,6 @@ const App = (): JSX.Element => {
   const changeTheme = useThemeStore((state) => state.changeTheme);
 
   React.useEffect(() => {
-    console.log("theme prefrence changed", themeDetector);
     if (localStorage.getItem("theme")) return;
 
     changeTheme(themeDetector);
