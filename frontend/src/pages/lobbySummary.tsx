@@ -20,6 +20,8 @@ const LobbySummary = () => {
   const { name } = useParams();
 
   React.useEffect(() => {
+    if (!location.state) window.location.replace("/");
+
     setUsername(location.state.username);
   }, []);
 
