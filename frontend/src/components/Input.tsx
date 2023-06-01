@@ -31,7 +31,7 @@ export const StyledInput = styled.input`
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
   padding-left: 1rem;
-  border-radius: 3px;
+  border-radius: 15px;
   outline: none;
   border: 1px black solid;
   border-color: ${({ theme }) => theme.text};
