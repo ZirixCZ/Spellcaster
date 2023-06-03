@@ -28,7 +28,7 @@ func LobbySummary(w http.ResponseWriter, r *http.Request) {
 	var lobby = utils.LobbyReference(&LobbyList, name)
 
 	sort.SliceStable(lobby.User, func(i, j int) bool {
-		return lobby.User[i].UserName > lobby.User[j].UserName
+		return lobby.User[i].Score > lobby.User[j].Score
 	})
 
 	for i := range lobby.User {
