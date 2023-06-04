@@ -223,7 +223,8 @@ const StyledSummary = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   background-color: ${({ theme }) => theme.white};
   ${tablet(css``)}
 `;

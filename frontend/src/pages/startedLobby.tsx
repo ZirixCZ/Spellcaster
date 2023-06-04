@@ -1,11 +1,12 @@
 import * as React from "react";
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import Swal from "sweetalert2";
+import { Role } from "../Global";
 
 import Container from "../components/Container";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { Role } from "../Global";
 
 interface Props {
   sendMessage: (
@@ -18,6 +19,10 @@ interface Props {
   wordUpdate: string | null;
   roundCount: number | null;
   roundsPlayed: number | null;
+  hideControls: boolean;
+  setHideControls: Dispatch<SetStateAction<boolean>>;
+  countdown: number;
+  word: string | null;
 }
 
 const StartedLobby = ({
@@ -27,12 +32,22 @@ const StartedLobby = ({
   role,
   roundCount,
   roundsPlayed,
+  hideControls,
+  setHideControls,
+  countdown,
+  word,
   ...props
 }: Props) => {
   const wordRef = React.useRef<HTMLInputElement | null>(null);
 
   React.useEffect(() => {
-    if (props.wordUpdate === null) return;
+    if (countdown === 0) {
+      setHideControls(true);
+    }
+  }, [countdown]);
+
+  React.useEffect(() => {
+    if (props.wordUpdate === null || role === Role.WORDMASTER) return;
 
     if ("speechSynthesis" in window) {
       const msg = new SpeechSynthesisUtterance(props.wordUpdate);
@@ -54,8 +69,19 @@ const StartedLobby = ({
     });
   }, [props.wordUpdate]);
 
-  const inputSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  React.useEffect(() => {
+    if (word !== null) {
+      setHideControls(false);
+    }
+  }, [roundsPlayed]);
+
+  function inputSubmit(
+    timedout: boolean,
+    e?: React.FormEvent<HTMLFormElement>
+  ) {
+    if (e) {
+      e.preventDefault();
+    }
 
     sendMessage(
       JSON.stringify({
@@ -63,11 +89,14 @@ const StartedLobby = ({
         payload: {
           target_id: title,
           username: username,
-          word: wordRef.current?.value,
+          word: wordRef.current?.value ?? "",
+          timedout: timedout,
         },
       })
     );
-  };
+
+    setHideControls(true);
+  }
 
   return (
     <Container
@@ -78,17 +107,20 @@ const StartedLobby = ({
     >
       <InnerContainer>
         <Title>{role}</Title>
-        <StyledForm onSubmit={(e) => inputSubmit(e)}>
-          <Description>
-            {role === Role.WORDMASTER
-              ? `Provide a word for others to spell. This word will be pronounced to individuals assigned the WordSpeller role.`
-              : `Listen carefully to the word uttered by the WordMaster. Then try to spell it out in the input box below.`}
-          </Description>
-          <StyledInput refer={wordRef}></StyledInput>
-          <SubmitButton>
-            {role === Role.WORDMASTER ? "Cast" : "Spell"}
-          </SubmitButton>
-        </StyledForm>
+        {hideControls === false && (
+          <StyledForm onSubmit={(e) => inputSubmit(false, e)}>
+            <Description>
+              {role === Role.WORDMASTER
+                ? `Provide a word for others to spell. This word will be pronounced to individuals assigned the WordSpeller role.`
+                : `Listen carefully to the word uttered by the WordMaster. Then try to spell it out in the input box below.`}
+            </Description>
+            <StyledInput refer={wordRef}></StyledInput>
+            <SubmitButton>
+              {role === Role.WORDMASTER ? "Cast" : "Spell"}
+            </SubmitButton>
+            <h3>{countdown}</h3>
+          </StyledForm>
+        )}
       </InnerContainer>
       <h2>
         {roundCount !== null && roundsPlayed !== null

@@ -139,7 +139,11 @@ export const ButtonWrapper = styled.div`
   display: flex;
   margin-bottom: 1rem;
   margin-top: 1rem;
-  width: 14rem;
+  width: 22rem;
+
+  ${mobile(css`
+    width: 14rem;
+  `)}
 `;
 
 export const CodeInput = styled(StyledInput)`

@@ -87,6 +87,7 @@ type InputWordEvent struct {
 	Username string `json:"username"`
 	Target   string `json:"target_id"`
 	Word     string `json:"word"`
+	Timedout bool   `json:"timedout"`
 }
 
 type InputWordBroadcast struct {
@@ -249,11 +250,16 @@ func RolesHandler(event Event, c *Client) error {
 			}
 			fmt.Println(client.username)
 
+			if lobby.User[index].CurrentRoleBroadcasted {
+				return nil
+			}
+
 			var broadMessage RolesBroadcast
 			broadMessage.Username = client.username
 			broadMessage.Target = client.lobby
 			broadMessage.RoundsPlayed = lobby.Round.RoundsPlayed
 			broadMessage.Role = lobby.User[index].Role
+			lobby.User[index].CurrentRoleBroadcasted = true
 			broadMessage.Sent = time.Now()
 
 			fmt.Println("Role: ", broadMessage.Role)
@@ -317,44 +323,110 @@ func InputWordHandler(event Event, c *Client) error {
 
 	var lobby = utils.LobbyReference(routes.ReturnLobbyList(), payload.Target)
 
-	// WordMaster invalid word
-	if !utils.IsValidWord(payload.Word) || utils.StringInArray(lobby.Round.Words, payload.Word) && utils.IsWordMaster(lobby, c.username) {
-		log.Println("WordMaster: Word is invalid. Word: ", payload.Word)
-
-		message := ""
-		if utils.StringInArray(lobby.Round.Words, payload.Word) {
-			message = payload.Word + " has already been used"
-		} else {
-			message = payload.Word + " is not a valid word"
-		}
-
-		outgoingEvent, err := broadcastError(event, c, message, lobby)
-		if err != nil {
-			return fmt.Errorf("failed to broadcast error: %v", err)
-		}
-
-		for client := range c.hub.clients {
-			if client.lobby == c.lobby && utils.IsWordMaster(lobby, client.username) {
-				client.egress <- outgoingEvent
-			}
-		}
-		return fmt.Errorf("invalid word")
-	}
-
 	userIndex, ok := utils.FindUserIndex(lobby, c.username)
 	if !ok {
 		return fmt.Errorf("user not found")
 	}
 
+	// WordMaster
 	if utils.IsWordMaster(lobby, c.username) {
+		// Wordmaster times out
+		if payload.Timedout {
+			utils.InvalidateRoleBroadcast(lobby)
+			RolesHandler(event, c)
+			lobby.Round.RoundsPlayed += 1
+			return nil
+		}
+
+		if !utils.IsValidWord(payload.Word) || utils.StringInArray(lobby.Round.Words, payload.Word) {
+			log.Println("WordMaster: Word is invalid. Word: ", payload.Word)
+
+			message := ""
+			if utils.StringInArray(lobby.Round.Words, payload.Word) {
+				message = payload.Word + " has already been used"
+			} else {
+				message = payload.Word + " is not a valid word"
+			}
+
+			outgoingEvent, err := broadcastError(EventInvalidWordError, event, c, message, lobby)
+			if err != nil {
+				return fmt.Errorf("failed to broadcast error: %v", err)
+			}
+
+			for client := range c.hub.clients {
+				if client.lobby == c.lobby && utils.IsWordMaster(lobby, client.username) {
+					client.egress <- outgoingEvent
+				}
+			}
+			return fmt.Errorf("invalid word")
+		}
+
 		fmt.Print("isLobbyMaster", lobby.Word)
 		lobby.Word = payload.Word
 		lobby.Round.Words = append(lobby.Round.Words, payload.Word)
-		lobby.Round.RoundsPlayed += 1
 		log.Println("Words: ", lobby.Round.Words)
 		lobby.User[userIndex].Score += 1
+
+		var broadMessage InputWordBroadcast
+		broadMessage.Sent = time.Now()
+
+		broadMessage.Username = payload.Username
+		broadMessage.Target = payload.Target
+		broadMessage.Word = payload.Word
+
+		data, err := json.Marshal(broadMessage)
+		if err != nil {
+			return fmt.Errorf("failed to marshal broadcast message: %v", err)
+		}
+
+		var outgoingEvent Event
+		outgoingEvent.Type = EventInputWord
+		outgoingEvent.Payload = data
+
+		for client := range c.hub.clients {
+			if client.lobby == c.lobby && !utils.IsWordMaster(lobby, client.username) {
+				client.egress <- outgoingEvent
+			}
+		}
+
+		for client := range c.hub.clients {
+			if client.lobby == c.lobby && client.username == c.username {
+				client.egress <- outgoingEvent
+			}
+		}
+		return nil
 	} else {
 		lobby.Round.CurrentRoundSpellers = append(lobby.Round.CurrentRoundSpellers, c.username)
+
+		if !utils.IsValidWord(payload.Word) || !utils.StringInArray(lobby.Round.Words, payload.Word) {
+			log.Println("WordSpeller: Word is invalid. Word: ", payload.Word)
+
+			var message string
+			// WordSpeller times out
+			if payload.Timedout {
+				message = "oh maw gawd, you timed out"
+			}
+
+			message = fmt.Sprintf("The provided word %s is not the correct word.", payload.Word)
+
+			outgoingEvent, err := broadcastError(EventInvalidWordError, event, c, message, lobby)
+			if err != nil {
+				return fmt.Errorf("failed to broadcast error: %v", err)
+			}
+
+			for client := range c.hub.clients {
+				if client.lobby == c.lobby && client.username == c.username {
+					client.egress <- outgoingEvent
+				}
+			}
+
+			if utils.CheckRoundEnd(lobby) {
+				utils.InvalidateRoleBroadcast(lobby)
+				RolesHandler(event, c)
+			}
+			return fmt.Errorf("invalid word")
+		}
+
 		if lobby.Word == payload.Word {
 			lobby.User[userIndex].Score += 1
 
@@ -377,37 +449,13 @@ func InputWordHandler(event Event, c *Client) error {
 				}
 			}
 
-			if len(lobby.Round.CurrentRoundSpellers) == len(lobby.User)-1 {
-				fmt.Println("Round over")
-				lobby.Round.CurrentRoundSpellers = []string{}
-				lobby.Round.RoundsPlayed += 1
-				RolesHandler(event, c)
-			}
-			return nil
+		}
+		if utils.CheckRoundEnd(lobby) {
+			utils.InvalidateRoleBroadcast(lobby)
+			RolesHandler(event, c)
 		}
 	}
 
-	var broadMessage InputWordBroadcast
-	broadMessage.Sent = time.Now()
-
-	broadMessage.Username = payload.Username
-	broadMessage.Target = payload.Target
-	broadMessage.Word = payload.Word
-
-	data, err := json.Marshal(broadMessage)
-	if err != nil {
-		return fmt.Errorf("failed to marshal broadcast message: %v", err)
-	}
-
-	var outgoingEvent Event
-	outgoingEvent.Type = EventInputWord
-	outgoingEvent.Payload = data
-
-	for client := range c.hub.clients {
-		if client.lobby == c.lobby && !utils.IsWordMaster(lobby, client.username) {
-			client.egress <- outgoingEvent
-		}
-	}
 	return nil
 }
 
@@ -416,6 +464,7 @@ func EndGameHandler(event Event, c *Client, lobby *types.Lobby) error {
 	broadMessage.Sent = time.Now()
 
 	broadMessage.Target = lobby.Name
+	// TODO: sort by score
 	broadMessage.Winner = "test"
 
 	data, err := json.Marshal(broadMessage)
@@ -435,7 +484,7 @@ func EndGameHandler(event Event, c *Client, lobby *types.Lobby) error {
 	return nil
 }
 
-func broadcastError(event Event, c *Client, message string, lobby *types.Lobby) (Event, error) {
+func broadcastError(outgoingEventType string, event Event, c *Client, message string, lobby *types.Lobby) (Event, error) {
 	var broadMessage ErrorEvent
 	broadMessage.Message = message
 	data, err := json.Marshal(broadMessage)
@@ -444,7 +493,7 @@ func broadcastError(event Event, c *Client, message string, lobby *types.Lobby) 
 	}
 
 	var outgoingEvent Event
-	outgoingEvent.Type = EventInvalidLobbyError
+	outgoingEvent.Type = outgoingEventType
 	outgoingEvent.Payload = data
 
 	return outgoingEvent, nil

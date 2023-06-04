@@ -11,6 +11,8 @@ import StartedLobby from "./startedLobby";
 import { arraysMatch } from "../utils/arraysMatch";
 import LobbyMasterPanel from "../views/LobbyMasterPanel";
 import { LobbyInterface } from "../types/Lobby";
+import useCountdown from "../utils/useCountdown";
+import { Role } from "../Global";
 
 interface Game {
   data: string;
@@ -24,11 +26,29 @@ const Lobby = (): JSX.Element => {
   const [connectedUsers, setConnectedUsers] = React.useState<string[]>([]);
   const [isStarted, setIsStarted] = React.useState<boolean>(false);
   const [roundCount, setRoundCount] = React.useState<number>(1);
-  const [roundsPlayed, setRoundsPlayed] = React.useState<number>(1);
+  const [roundsPlayed, setRoundsPlayed] = React.useState<number | null>(null);
   const RoundInputRef = React.useRef<HTMLInputElement | null>(null);
   const [word, setWord] = React.useState<string | null>(null);
-  const [role, setRole] = React.useState<string | null>(null);
+  const [role, setRole] = React.useState<Role | null>(null);
   const [isMaster, setIsMaster] = React.useState<boolean>(false);
+  const [hideControls, setHideControls] = React.useState<boolean>(false);
+
+  const countdown = useCountdown(30, roundsPlayed, word, role);
+
+  React.useEffect(() => {
+    setWord(null);
+  }, [roundsPlayed]);
+
+  React.useEffect(() => {
+    if (role === Role.WORDSPELLER && !word) {
+      setHideControls(true);
+      return;
+    }
+
+    if (role === Role.WORDSPELLER && word) {
+      setHideControls(false);
+    }
+  }, [word, role]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -57,10 +77,13 @@ const Lobby = (): JSX.Element => {
     } else if (message.type === "word_error") {
       Swal.fire({
         title: "Error",
-        text: `The word ${message.payload.message} is not valid.`,
+        text: `${message.payload.message}`,
         icon: "error",
         confirmButtonText: "Ok",
       });
+      if (role === Role.WORDSPELLER) {
+        setHideControls(true);
+      }
     } else if (message.type === "fetch_users") {
       if (arraysMatch(message.payload.usernames, connectedUsers)) return;
       setConnectedUsers(message.payload.usernames);
@@ -76,6 +99,10 @@ const Lobby = (): JSX.Element => {
       setRole(message.payload.role);
     } else if (message.type === "input_word") {
       setWord(message.payload.word);
+      console.log(role);
+      if (role === Role.WORDMASTER) {
+        setHideControls(true);
+      }
     } else if (message.type === "success") {
       Swal.fire({
         title: "Success",
@@ -118,7 +145,8 @@ const Lobby = (): JSX.Element => {
   }, [title, username]);
 
   React.useEffect(() => {
-    if (!isStarted) return;
+    if (!isStarted || !isMaster) return;
+    console.log("get roles");
 
     const getRoles = {
       type: "roles",
@@ -153,15 +181,21 @@ const Lobby = (): JSX.Element => {
   };
 
   return isStarted ? (
-    <StartedLobby
-      roundCount={roundCount}
-      roundsPlayed={roundsPlayed}
-      wordUpdate={word}
-      sendMessage={sendMessage}
-      title={title}
-      username={username}
-      role={role}
-    />
+    <>
+      <StartedLobby
+        roundCount={roundCount}
+        roundsPlayed={roundsPlayed}
+        wordUpdate={word}
+        sendMessage={sendMessage}
+        title={title}
+        username={username}
+        role={role}
+        hideControls={hideControls}
+        setHideControls={setHideControls}
+        countdown={countdown}
+        word={word}
+      />
+    </>
   ) : (
     <StyledContainer
       width={100}

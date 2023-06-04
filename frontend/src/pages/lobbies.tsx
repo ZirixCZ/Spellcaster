@@ -208,12 +208,12 @@ const StyledLobbies = styled(motion.div)`
   justify-content: center;
   width: 50%;
   margin-bottom: 2.5em;
-  overflow: scroll;
+  overflow-y: scroll;
   max-height: 50vh;
-  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   -ms-overflow-style: none;
   scrollbar-width: none;
+
   ${tablet(css`
     width: 100%;
   `)}
@@ -243,7 +243,6 @@ const Lobby = styled(motion.div)<LobbyButtonInterface>`
   width: 50%;
   height: 7em;
   border-radius: 15px;
-  scroll-snap-align: start;
 
   ${(props) => {
     if (props.isStarted) {

@@ -65,6 +65,7 @@ export const Container = styled.div`
   line-height: 1.5;
   background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.text};
+  scrollbar-color: dark;
   overflow-x: hidden;
 `;
 
