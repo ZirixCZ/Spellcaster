@@ -33,8 +33,6 @@ const SummaryMenu = ({ data }: Props) => {
     setCurrentUser(newRankings[0]);
   };
 
-  console.log(currentUser?.placement);
-
   return (
     <StyledSummaryMenu>
       <SummaryRank

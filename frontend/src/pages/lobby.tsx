@@ -99,7 +99,6 @@ const Lobby = (): JSX.Element => {
       setRole(message.payload.role);
     } else if (message.type === "input_word") {
       setWord(message.payload.word);
-      console.log(role);
       if (role === Role.WORDMASTER) {
         setHideControls(true);
       }
@@ -146,7 +145,6 @@ const Lobby = (): JSX.Element => {
 
   React.useEffect(() => {
     if (!isStarted || !isMaster) return;
-    console.log("get roles");
 
     const getRoles = {
       type: "roles",

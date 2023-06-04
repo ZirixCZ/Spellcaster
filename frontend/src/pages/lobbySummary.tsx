@@ -50,7 +50,6 @@ const LobbySummary = () => {
         return;
       }
       res.json().then((json) => {
-        console.log(json);
         setRankings(json);
       });
     });
