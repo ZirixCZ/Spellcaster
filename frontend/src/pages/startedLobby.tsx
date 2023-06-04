@@ -94,8 +94,6 @@ const StartedLobby = ({
         },
       })
     );
-
-    setHideControls(true);
   }
 
   return (
