@@ -21,6 +21,7 @@ interface Props {
   roundsPlayed: number | null;
   hideControls: boolean;
   setHideControls: Dispatch<SetStateAction<boolean>>;
+  hideControlsHandler: () => void;
   countdown: number;
   word: string | null;
 }
@@ -34,6 +35,7 @@ const StartedLobby = ({
   roundsPlayed,
   hideControls,
   setHideControls,
+  hideControlsHandler,
   countdown,
   word,
   ...props
@@ -42,7 +44,8 @@ const StartedLobby = ({
 
   React.useEffect(() => {
     if (countdown === 0) {
-      setHideControls(true);
+      hideControlsHandler();
+      inputSubmit(true);
     }
   }, [countdown]);
 

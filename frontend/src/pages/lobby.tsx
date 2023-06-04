@@ -35,18 +35,33 @@ const Lobby = (): JSX.Element => {
 
   const countdown = useCountdown(30, roundsPlayed, word, role);
 
+  const hideControlsHandler = () => {
+    setHideControls(true);
+    setWord(null);
+  };
+
   React.useEffect(() => {
     setWord(null);
   }, [roundsPlayed]);
 
   React.useEffect(() => {
-    if (role === Role.WORDSPELLER && !word) {
-      setHideControls(true);
+    console.log(role === Role.WORDSPELLER, !word);
+    if (role === Role.WORDSPELLER && word === null) {
+      hideControlsHandler();
       return;
     }
 
-    if (role === Role.WORDSPELLER && word) {
+    console.log(role, word);
+    if (role === Role.WORDMASTER && word === null) {
+      console.log("setHideControls(false)");
       setHideControls(false);
+      return;
+    }
+
+    if (role === Role.WORDSPELLER && word !== null) {
+      console.log("setHideControls(true)");
+      setHideControls(false);
+      return;
     }
   }, [word, role]);
 
@@ -82,7 +97,7 @@ const Lobby = (): JSX.Element => {
         confirmButtonText: "Ok",
       });
       if (role === Role.WORDSPELLER) {
-        setHideControls(true);
+        hideControlsHandler();
       }
     } else if (message.type === "fetch_users") {
       if (arraysMatch(message.payload.usernames, connectedUsers)) return;
@@ -100,7 +115,7 @@ const Lobby = (): JSX.Element => {
     } else if (message.type === "input_word") {
       setWord(message.payload.word);
       if (role === Role.WORDMASTER) {
-        setHideControls(true);
+        hideControlsHandler();
       }
     } else if (message.type === "success") {
       Swal.fire({
@@ -190,6 +205,7 @@ const Lobby = (): JSX.Element => {
         role={role}
         hideControls={hideControls}
         setHideControls={setHideControls}
+        hideControlsHandler={hideControlsHandler}
         countdown={countdown}
         word={word}
       />

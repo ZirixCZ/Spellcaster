@@ -333,8 +333,8 @@ func InputWordHandler(event Event, c *Client) error {
 		// Wordmaster times out
 		if payload.Timedout {
 			utils.InvalidateRoleBroadcast(lobby)
-			RolesHandler(event, c)
 			lobby.Round.RoundsPlayed += 1
+			RolesHandler(event, c)
 			return nil
 		}
 
@@ -384,16 +384,11 @@ func InputWordHandler(event Event, c *Client) error {
 		outgoingEvent.Payload = data
 
 		for client := range c.hub.clients {
-			if client.lobby == c.lobby && !utils.IsWordMaster(lobby, client.username) {
+			if client.lobby == c.lobby {
 				client.egress <- outgoingEvent
 			}
 		}
 
-		for client := range c.hub.clients {
-			if client.lobby == c.lobby && client.username == c.username {
-				client.egress <- outgoingEvent
-			}
-		}
 		return nil
 	} else {
 		lobby.Round.CurrentRoundSpellers = append(lobby.Round.CurrentRoundSpellers, c.username)
@@ -405,9 +400,9 @@ func InputWordHandler(event Event, c *Client) error {
 			// WordSpeller times out
 			if payload.Timedout {
 				message = "oh maw gawd, you timed out"
+			} else {
+				message = fmt.Sprintf("The provided word %s is not the correct word.", payload.Word)
 			}
-
-			message = fmt.Sprintf("The provided word %s is not the correct word.", payload.Word)
 
 			outgoingEvent, err := broadcastError(EventInvalidWordError, event, c, message, lobby)
 			if err != nil {
