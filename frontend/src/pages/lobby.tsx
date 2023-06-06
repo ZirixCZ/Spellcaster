@@ -1,3 +1,5 @@
+// TODO: user selects number of rounds -> * by number of connected users. show the value the user selected
+// // (user selected * connected users) / rounds played * connected users
 import * as React from "react";
 import styled from "styled-components/macro";
 import Swal from "sweetalert2";
@@ -13,6 +15,7 @@ import LobbyMasterPanel from "../views/LobbyMasterPanel";
 import { LobbyInterface } from "../types/Lobby";
 import useCountdown from "../utils/useCountdown";
 import { Role } from "../Global";
+import calculateRoundCount from "../utils/calculateRoundCount";
 
 interface Game {
   data: string;
@@ -45,21 +48,17 @@ const Lobby = (): JSX.Element => {
   }, [roundsPlayed]);
 
   React.useEffect(() => {
-    console.log(role === Role.WORDSPELLER, !word);
     if (role === Role.WORDSPELLER && word === null) {
       hideControlsHandler();
       return;
     }
 
-    console.log(role, word);
     if (role === Role.WORDMASTER && word === null) {
-      console.log("setHideControls(false)");
       setHideControls(false);
       return;
     }
 
     if (role === Role.WORDSPELLER && word !== null) {
-      console.log("setHideControls(true)");
       setHideControls(false);
       return;
     }
@@ -181,13 +180,18 @@ const Lobby = (): JSX.Element => {
   }, [readyState]);
 
   const startGame = () => {
+    const roundsCount = calculateRoundCount(
+      RoundInputRef.current ? parseInt(RoundInputRef.current.value) : 1,
+      connectedUsers.length
+    );
+
     sendMessage(
       JSON.stringify({
         type: "start_lobby",
         payload: {
           target_id: title,
           username: username,
-          rounds_count: parseInt(RoundInputRef.current?.value ?? "1"),
+          rounds_count: roundsCount,
         },
       })
     );
@@ -208,6 +212,7 @@ const Lobby = (): JSX.Element => {
         hideControlsHandler={hideControlsHandler}
         countdown={countdown}
         word={word}
+        userCount={connectedUsers.length}
       />
     </>
   ) : (

@@ -7,6 +7,7 @@ import { Role } from "../Global";
 import Container from "../components/Container";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import calculateRoundCount from "../utils/calculateRoundCount";
 
 interface Props {
   sendMessage: (
@@ -24,6 +25,7 @@ interface Props {
   hideControlsHandler: () => void;
   countdown: number;
   word: string | null;
+  userCount: number;
 }
 
 const StartedLobby = ({
@@ -38,6 +40,7 @@ const StartedLobby = ({
   hideControlsHandler,
   countdown,
   word,
+  userCount,
   ...props
 }: Props) => {
   const wordRef = React.useRef<HTMLInputElement | null>(null);
@@ -125,7 +128,7 @@ const StartedLobby = ({
       </InnerContainer>
       <h2>
         {roundCount !== null && roundsPlayed !== null
-          ? roundCount - roundsPlayed
+          ? Math.ceil((roundCount - roundsPlayed) / userCount)
           : "a few"}{" "}
         remaining rounds
       </h2>

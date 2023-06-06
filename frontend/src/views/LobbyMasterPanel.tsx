@@ -23,8 +23,8 @@ const LobbyMasterPanel = ({
       </ButtonWrapper>
       <StyledRoundInput
         type="number"
-        min={1}
-        defaultValue={1}
+        min={"1"}
+        defaultValue={"1"}
         step={1}
         ref={roundInputRef}
       />
