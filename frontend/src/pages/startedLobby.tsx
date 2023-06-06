@@ -46,6 +46,7 @@ const StartedLobby = ({
 }: Props) => {
   const wordRef = React.useRef<HTMLInputElement | null>(null);
   const [replay, setReplay] = React.useState<boolean>(false);
+  const [isFinished, setIsFinished] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     if (countdown === 0) {
@@ -56,14 +57,34 @@ const StartedLobby = ({
     }
   }, [countdown]);
 
+  function speakAndWait(msg: SpeechSynthesisUtterance, speechSynthesis: any) {
+    return new Promise((resolve, reject) => {
+      msg.onend = resolve;
+      msg.onerror = reject;
+      speechSynthesis.speak(msg);
+    });
+  }
+
+  const callSynthesis = async (word: string) => {
+    const msg = new SpeechSynthesisUtterance(word);
+    const speechSynthesis = window.speechSynthesis;
+
+    try {
+      await speakAndWait(msg, speechSynthesis);
+      setIsFinished(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   React.useEffect(() => {
     if (props.wordUpdate === null || role === Role.WORDMASTER) return;
+    if (!isFinished) return;
 
-    console.log("out loud");
+    setIsFinished(false);
 
     if ("speechSynthesis" in window) {
-      const msg = new SpeechSynthesisUtterance(props.wordUpdate);
-      window.speechSynthesis.speak(msg);
+      callSynthesis(props.wordUpdate);
     } else {
       Swal.fire({
         title: "Error",
