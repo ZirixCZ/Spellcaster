@@ -8,6 +8,7 @@ import Container from "../components/Container";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import calculateRoundCount from "../utils/calculateRoundCount";
+import { ButtonWrapper } from "./dashboard";
 
 interface Props {
   sendMessage: (
@@ -44,9 +45,12 @@ const StartedLobby = ({
   ...props
 }: Props) => {
   const wordRef = React.useRef<HTMLInputElement | null>(null);
+  const [replay, setReplay] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (countdown === 0) {
+      if (role === Role.WORDMASTER && word) return;
+
       hideControlsHandler();
       inputSubmit(true);
     }
@@ -54,6 +58,8 @@ const StartedLobby = ({
 
   React.useEffect(() => {
     if (props.wordUpdate === null || role === Role.WORDMASTER) return;
+
+    console.log("out loud");
 
     if ("speechSynthesis" in window) {
       const msg = new SpeechSynthesisUtterance(props.wordUpdate);
@@ -66,14 +72,7 @@ const StartedLobby = ({
         confirmButtonText: "Ok",
       });
     }
-
-    Swal.fire({
-      title: "Incoming Word!",
-      text: `The word is: ${props.wordUpdate}`,
-      icon: "success",
-      confirmButtonText: "Ok",
-    });
-  }, [props.wordUpdate]);
+  }, [props.wordUpdate, replay]);
 
   React.useEffect(() => {
     if (word !== null) {
@@ -112,18 +111,28 @@ const StartedLobby = ({
       <InnerContainer>
         <Title>{role}</Title>
         {hideControls === false && (
-          <StyledForm onSubmit={(e) => inputSubmit(false, e)}>
-            <Description>
-              {role === Role.WORDMASTER
-                ? `Provide a word for others to spell. This word will be pronounced to individuals assigned the WordSpeller role.`
-                : `Listen carefully to the word uttered by the WordMaster. Then try to spell it out in the input box below.`}
-            </Description>
-            <StyledInput refer={wordRef}></StyledInput>
-            <SubmitButton>
-              {role === Role.WORDMASTER ? "Cast" : "Spell"}
-            </SubmitButton>
-            <h3>{countdown}</h3>
-          </StyledForm>
+          <>
+            <StyledForm onSubmit={(e) => inputSubmit(false, e)}>
+              <Description>
+                {role === Role.WORDMASTER
+                  ? `Provide a word for others to spell. This word will be pronounced to individuals assigned the WordSpeller role.`
+                  : `Listen carefully to the word uttered by the WordMaster. Then try to spell it out in the input box below.`}
+              </Description>
+              <StyledInput refer={wordRef}></StyledInput>
+              <SubmitButton>
+                {role === Role.WORDMASTER ? "Cast" : "Spell"}
+              </SubmitButton>
+
+              <h3>{countdown}</h3>
+            </StyledForm>
+            {role === Role.WORDSPELLER ? (
+              <ReplayButtonWrapper onClick={() => setReplay(!replay)}>
+                <Button>replay word</Button>
+              </ReplayButtonWrapper>
+            ) : (
+              <></>
+            )}
+          </>
         )}
       </InnerContainer>
       <h2>
@@ -135,6 +144,10 @@ const StartedLobby = ({
     </Container>
   );
 };
+
+const ReplayButtonWrapper = styled(ButtonWrapper)`
+  width: 10rem;
+`;
 
 const Title = styled.h1`
   font-size: 3rem;
