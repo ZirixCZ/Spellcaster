@@ -158,7 +158,7 @@ func GenerateJWT(username string, roles string) (string, error) {
 	claims["authorized"] = true
 	claims["username"] = username
 	claims["roles"] = roles
-	claims["exp"] = time.Now().UTC().Add(30 * time.Minute).Unix()
+	claims["exp"] = time.Now().UTC().Add(1440 * time.Minute).Unix()
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_KEY")))
 	if err != nil {
