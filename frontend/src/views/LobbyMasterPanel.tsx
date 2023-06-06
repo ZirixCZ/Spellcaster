@@ -6,35 +6,53 @@ import { ReadyState } from "react-use-websocket";
 interface Props {
   startGame: () => void;
   roundInputRef: React.RefObject<HTMLInputElement>;
+  timerInputRef: React.RefObject<HTMLInputElement>;
   readyState: number;
 }
 const LobbyMasterPanel = ({
   startGame,
   readyState,
   roundInputRef,
+  timerInputRef,
   ...props
 }: Props) => {
   return (
-    <Container>
-      <ButtonWrapper onClick={() => startGame()}>
-        <Button secondary disabled={readyState !== ReadyState.OPEN}>
-          Start
-        </Button>
-      </ButtonWrapper>
-      <StyledRoundInput
-        type="number"
-        min={"1"}
-        defaultValue={"1"}
-        step={1}
-        ref={roundInputRef}
-      />
-    </Container>
+    <Wrapper>
+      <Container>
+        <ButtonWrapper onClick={() => startGame()}>
+          <Button secondary disabled={readyState !== ReadyState.OPEN}>
+            Start
+          </Button>
+        </ButtonWrapper>
+        <StyledRoundInput
+          type="number"
+          min={"1"}
+          max={"99"}
+          defaultValue={"1"}
+          step={1}
+          ref={roundInputRef}
+        />
+      </Container>
+      <TimerContainer>
+        <h4>Set timer</h4>
+        <StyledRoundInput
+          isTimer={true}
+          type="number"
+          min={"5"}
+          max={"999"}
+          defaultValue={"30"}
+          step={5}
+          ref={timerInputRef}
+        />
+      </TimerContainer>
+    </Wrapper>
   );
 };
 
 interface StyledNumberInputProps {
   primary?: boolean;
   secondary?: boolean;
+  isTimer?: boolean;
 }
 
 const ButtonWrapper = styled.div`
@@ -45,7 +63,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const StyledRoundInput = styled.input<StyledNumberInputProps>`
-  width: 3rem;
+  width: ${({ isTimer }) => (isTimer ? "5rem" : "4rem")};
   z-index: 0;
   height: 3.5rem;
   border-radius: 15px;
@@ -67,6 +85,14 @@ const Container = styled.div`
   width: 20rem;
   justify-content: space-evenly;
   align-items: end;
+`;
+
+const TimerContainer = styled(Container)`
+  align-items: center;
+`;
+
+const Wrapper = styled(Container)`
+  flex-direction: column;
 `;
 
 export default LobbyMasterPanel;

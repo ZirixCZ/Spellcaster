@@ -50,6 +50,7 @@ type StartLobbyEvent struct {
 	Username    string `json:"username"`
 	Target      string `json:"target_id"`
 	RoundsCount int    `json:"rounds_count"`
+	Timer       int    `json:"timer"`
 }
 
 type StartLobbyBroadcat struct {
@@ -201,6 +202,7 @@ func StartLobbyHandler(event Event, c *Client) error {
 	broadMessage.Username = payload.Username
 	broadMessage.Target = payload.Target
 	broadMessage.RoundsCount = payload.RoundsCount
+	broadMessage.Timer = payload.Timer
 	broadMessage.Sent = time.Now()
 
 	data, err := json.Marshal(broadMessage)

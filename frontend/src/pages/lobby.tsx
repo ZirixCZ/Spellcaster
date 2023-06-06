@@ -30,13 +30,15 @@ const Lobby = (): JSX.Element => {
   const [isStarted, setIsStarted] = React.useState<boolean>(false);
   const [roundCount, setRoundCount] = React.useState<number>(1);
   const [roundsPlayed, setRoundsPlayed] = React.useState<number | null>(null);
-  const RoundInputRef = React.useRef<HTMLInputElement | null>(null);
+  const roundInputRef = React.useRef<HTMLInputElement | null>(null);
+  const timerInputRef = React.useRef<HTMLInputElement | null>(null);
+  const [timer, setTimer] = React.useState<number | null>(null);
   const [word, setWord] = React.useState<string | null>(null);
   const [role, setRole] = React.useState<Role | null>(null);
   const [isMaster, setIsMaster] = React.useState<boolean>(false);
   const [hideControls, setHideControls] = React.useState<boolean>(false);
 
-  const countdown = useCountdown(30, roundsPlayed, word, role);
+  const countdown = useCountdown(timer ? timer : 15, roundsPlayed, word, role);
 
   const hideControlsHandler = () => {
     setHideControls(true);
@@ -107,6 +109,7 @@ const Lobby = (): JSX.Element => {
       setInterval(FetchConnectedUsers, 4000);
     } else if (message.type === "start_lobby") {
       setIsStarted(true);
+      setTimer(message.payload.timer);
       setRoundCount(message.payload.rounds_count);
     } else if (message.type === "roles") {
       setRoundsPlayed(message.payload.rounds_played);
@@ -181,7 +184,7 @@ const Lobby = (): JSX.Element => {
 
   const startGame = () => {
     const roundsCount = calculateRoundCount(
-      RoundInputRef.current ? parseInt(RoundInputRef.current.value) : 1,
+      roundInputRef.current ? parseInt(roundInputRef.current.value) : 1,
       connectedUsers.length
     );
 
@@ -192,6 +195,9 @@ const Lobby = (): JSX.Element => {
           target_id: title,
           username: username,
           rounds_count: roundsCount,
+          timer: timerInputRef.current
+            ? parseInt(timerInputRef.current.value)
+            : "15",
         },
       })
     );
@@ -231,7 +237,8 @@ const Lobby = (): JSX.Element => {
         <LobbyMasterPanel
           startGame={startGame}
           readyState={readyState}
-          roundInputRef={RoundInputRef}
+          roundInputRef={roundInputRef}
+          timerInputRef={timerInputRef}
         />
       )}
       <UsersTitle>Connected Users</UsersTitle>
