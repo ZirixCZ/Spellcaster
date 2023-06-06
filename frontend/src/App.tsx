@@ -77,7 +77,7 @@ export const ThemeButton = styled.button`
   margin-right: 1rem;
   border: none;
   font-size: 2rem;
-  border-radius: 3px;
+  border-radius: 100%;
   background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.text};
   cursor: pointer;
