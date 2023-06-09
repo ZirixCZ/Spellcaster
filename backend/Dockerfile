@@ -1,5 +1,18 @@
-FROM golang:1.19.5
+FROM golang:1.19.5 as build
 
 WORKDIR /app
 
-CMD ["sh","-c","./bin/air"]
+COPY . .
+
+RUN go build -o api
+
+FROM ubuntu:20.04
+
+COPY --from=build /app/api /app/api
+COPY .env /app/.env
+
+RUN chmod +x /app/api
+
+WORKDIR /app
+
+ENTRYPOINT /app/api
