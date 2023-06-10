@@ -1,13 +1,15 @@
 package routes
 
 import (
+	"backend/spellit/types"
 	"backend/spellit/utils"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
 )
 
-var LobbyList []Lobbies
+var LobbyList []types.Lobby
 
 func LobbyHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -18,6 +20,29 @@ func LobbyHandler(w http.ResponseWriter, r *http.Request) {
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
+}
+
+func LobbySummary(w http.ResponseWriter, r *http.Request) {
+	name := r.URL.Query().Get("name")
+
+	var lobby = utils.LobbyReference(&LobbyList, name)
+
+	sort.SliceStable(lobby.User, func(i, j int) bool {
+		return lobby.User[i].Score > lobby.User[j].Score
+	})
+
+	for i := range lobby.User {
+		lobby.User[i].Placement = i + 1
+	}
+
+	jsonBytes, err := json.Marshal(lobby.User)
+	if err != nil {
+		fmt.Println("Error marshaling JSON:", err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonBytes)
 }
 
 func createLobby(w http.ResponseWriter, r *http.Request) {
@@ -62,12 +87,21 @@ func getLobbies(w http.ResponseWriter, r *http.Request) {
 }
 
 func addLobby(name string, lobbyMaster string) {
-	lobby := Lobbies{Name: name, MasterUserName: lobbyMaster}
+	lobby := types.Lobby{Name: name, MasterUserName: lobbyMaster}
 	LobbyList = append(LobbyList, lobby)
 }
 
-func ReturnLobbyList() *[]Lobbies {
+func ReturnLobbyList() *[]types.Lobby {
 	return &LobbyList
+}
+
+func FindLobbyIndex(lobbyList []Lobbies, name string) int {
+	for i, lobby := range lobbyList {
+		if lobby.Name == name {
+			return i
+		}
+	}
+	return -1
 }
 
 type LobbyInput struct {
@@ -81,7 +115,7 @@ type User struct {
 
 type Lobbies struct {
 	Name           string `json:"name" validate:"required,max=256"`
-	PlayerCount    int    `json:"playerCount"`
 	User           []User `json:"user"`
 	MasterUserName string `json:"masterUsername"`
+	IsStarted      bool   `json:"isStarted"`
 }

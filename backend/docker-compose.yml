@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   db:
     image: postgres
@@ -10,15 +10,13 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/usr/local/var/postgresql@14
-  web:
+  api:
     build: .
     environment:
       DB_CONNECTION_STRING: "host=db user=postgres password=password dbname=postgres sslmode=disable"
     ports:
-      - "8000:8080"
+      - "8000:8000"
     depends_on:
       - db
-    volumes:
-      - ./:/app/
 volumes:
   pgdata:

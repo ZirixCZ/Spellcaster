@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import callApi from "../../utils/callApi";
 import Navbar from "../../views/Navbar";
+import Loader from "../../components/Loader";
 
-export default () => {
+const Auth = () => {
   const navigate = useNavigate();
   const [auth, setAuth] = React.useState(false);
 
@@ -17,11 +18,22 @@ export default () => {
       }
       setTimeout(() => {
         navigate("/welcome");
-      }, 2000);
+      }, 1000);
     });
   }, []);
 
-  return <Container>{auth ? <><Navbar /><Outlet /></> : <Loader />}</Container>;
+  return (
+    <Container>
+      {auth ? (
+        <>
+          <Navbar />
+          <Outlet />
+        </>
+      ) : (
+        <Loader />
+      )}
+    </Container>
+  );
 };
 
 const Container = styled.div`
@@ -30,22 +42,6 @@ const Container = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-`
-
-const Loader = styled.div`
-  border: 16px solid #333333;
-  border-top: 16px solid #3498db; 
-  border-radius: 50%;
-  width: 3em;
-  height: 3em;
-  animation: spin 1s linear infinite;
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
+
+export default Auth;

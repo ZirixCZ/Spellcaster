@@ -9,16 +9,19 @@ type AppProps = {
   pattern: string;
   errorMessage: string;
   isLast?: boolean;
+  hasNoPadding?: boolean;
+  autoComplete?: string;
 };
 
 const FormInput = (props: AppProps): JSX.Element => {
   return (
-    <InputValidator isLast={props.isLast}>
+    <InputValidator isLast={props.isLast} hasNoPadding={props.hasNoPadding}>
       <Input
         refer={props.refer}
         type={props.type}
         placeholder={props.placeholder}
         pattern={props.pattern}
+        autoComplete={props.autoComplete}
       />
       <Span>{props.errorMessage}</Span>
     </InputValidator>
@@ -35,11 +38,13 @@ export const Span = styled.span`
 
 interface InputValidatorInterface {
   isLast?: boolean;
+  hasNoPadding?: boolean;
 }
 
 export const InputValidator = styled.div<InputValidatorInterface>`
   width: 100%;
-  padding-bottom: ${({ isLast }) => isLast ? 0 : 1.75}rem;
+  padding-bottom: ${({ isLast }) => (isLast ? 0 : 1.75)}rem;
+  ${({ hasNoPadding }) => hasNoPadding && "padding: 0;"}
 
   &:invalid ${Span} {
     visibility: visible;

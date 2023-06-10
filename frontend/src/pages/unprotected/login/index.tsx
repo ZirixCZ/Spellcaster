@@ -1,8 +1,9 @@
 import * as React from "react";
+import styled, { css } from "styled-components/macro";
+import Swal from "sweetalert2";
 import { FormEvent, useRef, useState } from "react";
 import Button from "../../../components/Button";
 import { Link, useNavigate } from "react-router-dom";
-import styled, { css } from "styled-components/macro";
 import FormInput from "../../../components/FormInput";
 import Container from "../../../components/Container";
 import Paragraph from "../../../components/Paragraph";
@@ -20,7 +21,15 @@ const Login = (): JSX.Element => {
   React.useEffect(() => {
     if (typeof submitSuccess !== "undefined")
       submitSuccess.then((result) => {
-        if (!result) return;
+        if (!result) {
+          Swal.fire({
+            title: "Error!",
+            text: "The information you provided were incorrect.",
+            icon: "error",
+            confirmButtonText: "Try again",
+          });
+          return;
+        }
 
         if (result === true || result === false) navigate("/");
       });
@@ -45,14 +54,15 @@ const Login = (): JSX.Element => {
         <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
         <FormInput
           refer={userNameRef}
-          placeholder="Username"
+          placeholder="username"
           type="text"
           pattern="^[a-z0-9_.]+$"
           errorMessage="email invalid"
+          autoComplete="username"
         />
         <FormInput
           refer={passwordRef}
-          placeholder="Password"
+          placeholder="password"
           type="password"
           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
           errorMessage="password invalid"
