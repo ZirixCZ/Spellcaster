@@ -2,21 +2,16 @@ package storage
 
 import (
 	"backend/spellit/models"
-	"github.com/joho/godotenv"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"log"
 	"os"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
 func connectToDB() *gorm.DB {
-	err := godotenv.Load()
-	if err != nil {
-		panic("Error loading .env file")
-	}
-
 	dsn := os.Getenv("DB_CONNECTION_STRING")
 	db, dbError := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if dbError != nil {

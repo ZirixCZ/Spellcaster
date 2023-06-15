@@ -6,12 +6,9 @@ import (
 	"backend/spellit/routes/ws"
 	"backend/spellit/storage"
 	"net/http"
-
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	godotenv.Load()
 	storage.InitializeDB()
 
 	hub := ws.NewHub()
