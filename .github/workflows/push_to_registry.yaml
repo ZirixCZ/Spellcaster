@@ -24,5 +24,5 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: registry.digitalocean.com/spellcaster:latest
+          tags: registry.digitalocean.com/spellcaster/spellcaster:latest
           file: ./backend/Dockerfile
