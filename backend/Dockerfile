@@ -14,4 +14,6 @@ RUN chmod +x /app/api
 
 WORKDIR /app
 
+EXPOSE 8000
+
 ENTRYPOINT /app/api
