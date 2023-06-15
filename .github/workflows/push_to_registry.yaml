@@ -16,8 +16,8 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Login to registry
-          run: |
-            doctl registry login
+        run: |
+          doctl registry login
 
       - name: Push to registry
         uses: docker/build-push-action@v3
