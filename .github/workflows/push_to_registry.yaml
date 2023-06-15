@@ -1,7 +1,9 @@
 name: Push to registry
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   push_to_registry:
