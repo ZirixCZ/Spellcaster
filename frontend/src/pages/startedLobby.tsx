@@ -47,15 +47,20 @@ const StartedLobby = ({
   const wordRef = React.useRef<HTMLInputElement | null>(null);
   const [replay, setReplay] = React.useState<boolean>(false);
   const [isFinished, setIsFinished] = React.useState<boolean>(true);
+  const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    if (countdown === 0) {
+    if (countdown === 0 && !isSubmitted) {
       if (role === Role.WORDMASTER && word) return;
 
       hideControlsHandler();
       inputSubmit(true);
     }
   }, [countdown]);
+
+  React.useEffect(() => {
+    setIsSubmitted(false);
+  }, [word]);
 
   function speakAndWait(msg: SpeechSynthesisUtterance, speechSynthesis: any) {
     return new Promise((resolve, reject) => {
@@ -120,6 +125,8 @@ const StartedLobby = ({
         },
       })
     );
+
+    setIsSubmitted(true);
   }
 
   return (
