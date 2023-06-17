@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+func isRunningInDocker() bool {
+	_, err := os.Stat("/.dockerenv")
+	return err == nil
+}
+
 func IsValidWord(word string) bool {
 	wd, err := os.Getwd()
 	if err != nil {
@@ -14,7 +19,14 @@ func IsValidWord(word string) bool {
 		return false
 	}
 
-	wordListPath := filepath.Join(wd, "storage", "wordlist.txt")
+	wordListPath := ""
+	if isRunningInDocker() {
+		wordListPath = "/app/storage/wordlist.txt"
+
+	} else {
+		wordListPath = filepath.Join(wd, "storage", "wordlist.txt")
+	}
+
 	wordListBytes, err := os.ReadFile(wordListPath)
 	if err != nil {
 		fmt.Println("Error loading wordlist file:", err)

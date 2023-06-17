@@ -9,6 +9,7 @@ RUN go build -o api
 FROM ubuntu:22.04
 
 COPY --from=build /app/api /app/api
+COPY ./storage/wordlist.txt /app/storage/wordlist.txt
 
 RUN chmod +x /app/api
 
