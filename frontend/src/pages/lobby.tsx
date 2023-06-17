@@ -24,7 +24,9 @@ interface Game {
 const Lobby = (): JSX.Element => {
   const [title, setTitle] = React.useState<string | null>(null);
   const [username, setUsername] = React.useState<string | null>(null);
-  const [socketUrl] = React.useState("ws://localhost:8000/ws/lobby/state");
+  const [socketUrl] = React.useState(
+    `wss://${process.env.REACT_APP_API_URL ?? "localhost:8000"}/ws/lobby/state`
+  );
   const [messageHistory, setMessageHistory] = React.useState<Game[]>([]);
   const [connectedUsers, setConnectedUsers] = React.useState<string[]>([]);
   const [isStarted, setIsStarted] = React.useState<boolean>(false);

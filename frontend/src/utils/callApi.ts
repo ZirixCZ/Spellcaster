@@ -11,7 +11,7 @@ const callApi = async (
   };
 
   let uri =
-    (process.env.REACT_APP_API_URL ?? "http://localhost:8000") + endpoint;
+    "https://" + (process.env.REACT_APP_API_URL ?? "localhost:8000") + endpoint;
 
   return fetch(uri, { headers: headers, method: method, body: body });
 };
