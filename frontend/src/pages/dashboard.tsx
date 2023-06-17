@@ -4,19 +4,21 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { StyledInput } from "../components/Input";
+import FormInput from "../components/FormInput";
 import styled, { css } from "styled-components/macro";
 import callApi from "../utils/callApi";
 import LeaderboardView from "../views/LeaderboardView";
 import Button from "../components/Button";
 import Container from "../components/Container";
 import Theme from "../components/Theme";
-import { mobile } from "../Global";
+import { mobile, tablet } from "../Global";
 import { useThemeStore } from "../store/themeStore";
 import localStorage from "../utils/localStorageRemove";
 import localStorageRemove from "../utils/localStorageRemove";
 
 const Dashboard = (): JSX.Element => {
   const navigate = useNavigate();
+  const lobbyCodeRef = React.useRef<HTMLInputElement | null>(null);
 
   const [auth, setAuth] = useState(false);
 
@@ -43,24 +45,46 @@ const Dashboard = (): JSX.Element => {
             alignItems="flex-end"
           ></Container>
           <Container
-            justifyContent="space-evenly"
+            justifyContent="center"
             height={100}
             width={25}
             widthMobile={75}
           >
             <StyledHeader>
-              <h1>Spellcaster</h1>
+              <Title>Spellcaster</Title>
             </StyledHeader>
-            <StyledContainer width={100}>
-              <LeaderboardView withButton={true} />
-            </StyledContainer>
             <Container width={100}>
               <ButtonWrapper onClick={() => navigate("/lobbies")}>
                 <Button secondary medium>
-                  Search For Game
+                  Show active lobbies
                 </Button>
               </ButtonWrapper>
             </Container>
+            <Form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!lobbyCodeRef.current?.value) return;
+
+                navigate(`/lobbies/${lobbyCodeRef.current?.value}`);
+              }}
+            >
+              <div>
+                <TitleLeft>JOIN EXISTING</TitleLeft>
+                <FormInput
+                  refer={lobbyCodeRef}
+                  placeholder="Enter Lobby Code"
+                  type="text"
+                  pattern="*"
+                  errorMessage="email invalid"
+                  autoComplete="username"
+                />
+              </div>
+              <FormButtonWrapper>
+                <Button secondary medium>
+                  Search
+                </Button>
+              </FormButtonWrapper>
+            </Form>
           </Container>
           <LogOutContainer
             onClick={() => {
@@ -86,6 +110,36 @@ const Dashboard = (): JSX.Element => {
     </Container>
   );
 };
+
+export const Form = styled.form`
+  width: 22rem;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1.5rem;
+
+  ${mobile(css`
+    width: 14rem;
+    flex-direction: column;
+    & > div > div {
+      padding: 0;
+    }
+  `)}
+`;
+
+const Title = styled.h1`
+  padding-bottom: 2rem;
+`;
+
+export const TitleLeft = styled.p`
+  width: 100%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: left;
+`;
 
 export const StyledThemeSwitcher = styled.div`
   width: fit-content;
@@ -132,6 +186,21 @@ export const StyledHeader = styled.div`
   ${mobile(css`
     padding-top: 2rem;
     font-size: 1.5rem;
+  `)}
+`;
+
+const FormButtonWrapper = styled.div`
+  height: 100%;
+  width: 35%;
+  display: flex;
+  align-items: center;
+  & > button {
+    margin-top: 0.75rem;
+    padding: 0;
+  }
+
+  ${mobile(css`
+    width: 100%;
   `)}
 `;
 

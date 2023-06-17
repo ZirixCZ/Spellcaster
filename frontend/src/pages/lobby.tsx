@@ -1,7 +1,7 @@
 // TODO: user selects number of rounds -> * by number of connected users. show the value the user selected
 // // (user selected * connected users) / rounds played * connected users
 import * as React from "react";
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 import Swal from "sweetalert2";
 
 import useWebSocket, { ReadyState } from "react-use-websocket";
@@ -14,7 +14,7 @@ import { arraysMatch } from "../utils/arraysMatch";
 import LobbyMasterPanel from "../views/LobbyMasterPanel";
 import { LobbyInterface } from "../types/Lobby";
 import useCountdown from "../utils/useCountdown";
-import { Role } from "../Global";
+import { Role, tablet } from "../Global";
 import calculateRoundCount from "../utils/calculateRoundCount";
 
 interface Game {
@@ -230,14 +230,17 @@ const Lobby = (): JSX.Element => {
     <StyledContainer
       width={100}
       height={100}
-      justifyContent="center"
+      justifyContent={isMaster ? "space-evenly" : "center"}
       alignItems="center"
+      isLobbyMaster={isMaster}
     >
-      <h1>{title}</h1>
-      <p>
-        {connectionStatus}{" "}
-        {readyState === ReadyState.OPEN && username ? `as ${username}` : null}
-      </p>
+      <UserStatusWrapper>
+        <h1>{title}</h1>
+        <p>
+          {connectionStatus}{" "}
+          {readyState === ReadyState.OPEN && username ? `as ${username}` : null}
+        </p>
+      </UserStatusWrapper>
       {isMaster && (
         <LobbyMasterPanel
           startGame={startGame}
@@ -246,18 +249,43 @@ const Lobby = (): JSX.Element => {
           timerInputRef={timerInputRef}
         />
       )}
-      <UsersTitle>Connected Users</UsersTitle>
-      <UnorderedList>
-        {connectedUsers?.map((user, i) => (
-          <span key={i}>{user}</span>
-        ))}
-      </UnorderedList>
+      <ConnectedUsersWrapper>
+        <UsersTitle>Connected Users</UsersTitle>
+        <UnorderedList>
+          {connectedUsers?.map((user, i) => (
+            <span key={i}>{user}</span>
+          ))}
+        </UnorderedList>
+      </ConnectedUsersWrapper>
     </StyledContainer>
   );
 };
 
+interface StyledContainerInterface {
+  isLobbyMaster: boolean;
+}
+
 const StyledContainer = styled(Container)`
   font-size: 1.5rem;
+  flex-direction: ${({ isLobbyMaster }: StyledContainerInterface) =>
+    isLobbyMaster ? "row" : "column"};
+
+  ${tablet(css`
+    flex-direction: column;
+    justify-content: center;
+  `)}
+`;
+
+const UserStatusWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ConnectedUsersWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const UsersTitle = styled.h3`

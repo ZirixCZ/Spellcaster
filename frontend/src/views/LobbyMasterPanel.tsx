@@ -24,27 +24,33 @@ const LobbyMasterPanel = ({
             Start
           </Button>
         </ButtonWrapper>
-        <StyledRoundInput
-          type="number"
-          min={"1"}
-          max={"99"}
-          defaultValue={"1"}
-          step={1}
-          ref={roundInputRef}
-        />
       </Container>
-      <TimerContainer>
-        <h4>Set timer</h4>
-        <StyledRoundInput
-          isTimer={true}
-          type="number"
-          min={"5"}
-          max={"999"}
-          defaultValue={"30"}
-          step={5}
-          ref={timerInputRef}
-        />
-      </TimerContainer>
+      <ControlsWrapper>
+        <ControlContainer>
+          <h4>Set rounds</h4>
+          <StyledRoundInput
+            isTimer={true}
+            type="number"
+            min={"1"}
+            max={"99"}
+            defaultValue={"1"}
+            step={1}
+            ref={roundInputRef}
+          />
+        </ControlContainer>
+        <ControlContainer>
+          <h4>Set timer</h4>
+          <StyledRoundInput
+            isTimer={true}
+            type="number"
+            min={"5"}
+            max={"999"}
+            defaultValue={"30"}
+            step={5}
+            ref={timerInputRef}
+          />
+        </ControlContainer>
+      </ControlsWrapper>
     </Wrapper>
   );
 };
@@ -58,6 +64,7 @@ interface StyledNumberInputProps {
 const ButtonWrapper = styled.div`
   display: flex;
   padding-top: 3rem;
+  padding-bottom: 1rem;
   width: 100%;
   margin-right: 1rem;
 `;
@@ -79,6 +86,8 @@ const StyledRoundInput = styled.input<StyledNumberInputProps>`
   }
 `;
 
+const ControlsWrapper = styled.div``;
+
 const Container = styled.div`
   display: flex;
   flex-direction: row;
@@ -87,7 +96,7 @@ const Container = styled.div`
   align-items: end;
 `;
 
-const TimerContainer = styled(Container)`
+const ControlContainer = styled(Container)`
   align-items: center;
 `;
 

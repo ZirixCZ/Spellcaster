@@ -82,11 +82,6 @@ export const ThemeButton = styled.button`
   color: ${({ theme }) => theme.text};
   cursor: pointer;
   z-index: 99;
-  ${mobile(css`
-    top: initial;
-    bottom: 0;
-    margin-bottom: 1.5rem;
-  `)}
 `;
 
 export default App;

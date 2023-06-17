@@ -30,7 +30,6 @@ const Navbar = (props: Props) => {
     <StyledNavbar symbol={symbolState}>
       <StyledContainer>
         <Item onClick={() => navigate("/")}>Dashboard</Item>
-        <Item onClick={() => navigate("/leaderboard")}>Leaderboard</Item>
         <Item onClick={() => navigate("/lobbies")}>Lobbies</Item>
       </StyledContainer>
     </StyledNavbar>
@@ -65,11 +64,11 @@ const StyledContainer = styled.div`
   }
 
   ${tablet(css`
-    gap: 2em;
+    gap: 2.5em;
   `)}
 
   ${mobile(css`
-    gap: 0.75em;
+    gap: 1em;
   `)}
 `;
 
