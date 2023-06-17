@@ -64,7 +64,7 @@ const Login = (): JSX.Element => {
           refer={passwordRef}
           placeholder="password"
           type="password"
-          pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+          pattern=".{8,}"
           errorMessage="password invalid"
           isLast={true}
         />

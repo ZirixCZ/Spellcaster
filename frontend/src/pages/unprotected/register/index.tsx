@@ -21,12 +21,6 @@ const Register = (): JSX.Element => {
     if (typeof submitSuccess !== "undefined")
       submitSuccess.then((result) => {
         if (!result) {
-          Swal.fire({
-            title: "Error!",
-            text: "Something went wrong. Make sure you already don't have an account.",
-            icon: "error",
-            confirmButtonText: "Try again",
-          });
           return;
         }
 
@@ -71,7 +65,7 @@ const Register = (): JSX.Element => {
           refer={passwordRef}
           placeholder="letter, number, min 8 characters"
           type="password"
-          pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+          pattern=".{8,}"
           errorMessage="password invalid"
           isLast={true}
         />

@@ -16,7 +16,7 @@ const checkValidityRegex = (
     validate = [
       /^[a-z0-9_.]+$/.test(userName),
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password),
+      /^.{8,}$/.test(password),
     ];
   }
 
@@ -60,14 +60,29 @@ const handleSubmit = async (
     })
   ).then((res) => {
     if (!res.ok) {
+      Swal.fire({
+        title: "Error!",
+        text: "Something went wrong. Make sure you already don't have an account.",
+        icon: "error",
+        confirmButtonText: "Try again",
+      });
+
       return false;
     }
     return res.json().then((json) => {
       const token = json.jwt;
       if (!token) {
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong. Make sure you already don't have an account.",
+          icon: "error",
+          confirmButtonText: "Try again",
+        });
+
         return false;
       }
       localStorage.setItem("jwt", json.jwt);
+      console.log("it shouldb e ok : ( why is it not)");
       return true;
     });
   });
