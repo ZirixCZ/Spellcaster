@@ -135,26 +135,6 @@ const Lobbies = (): JSX.Element => {
                 </Lobby>
               );
             })}
-        {startedLobbiesRef.current.length <= 0
-          ? null
-          : startedLobbiesRef.current.map((item, i) => {
-              return (
-                <Lobby
-                  isStarted={item.isStarted}
-                  whileHover={{
-                    scale: 1.025,
-                    transition: { duration: 0.25 },
-                  }}
-                  whileTap={{ scale: 0.9 }}
-                  key={i}
-                >
-                  <Title weight={800}>{item.name ? item.name : "noname"}</Title>
-                  <Text>
-                    {item.masterUsername ? item.masterUsername : "error"}
-                  </Text>
-                </Lobby>
-              );
-            })}
       </StyledLobbies>
       <Arrow
         src="/img/arrow.svg"
