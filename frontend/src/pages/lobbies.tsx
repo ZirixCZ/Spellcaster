@@ -110,40 +110,41 @@ const Lobbies = (): JSX.Element => {
         animate="visible"
         ref={lobbyContainerRef}
       >
-        {!lobbies
-          ? null
-          : lobbies.map((item, i) => {
-              if (checkIfStarted(item)) {
-                return null;
-              }
+        {!lobbies ? (
+          <LobbiesNotFoundTitle>No lobbies found</LobbiesNotFoundTitle>
+        ) : (
+          lobbies.map((item, i) => {
+            if (checkIfStarted(item)) {
+              return null;
+            }
 
-              return (
-                <Lobby
-                  isStarted={item.isStarted}
-                  whileHover={{
-                    scale: 1.025,
-                    transition: { duration: 0.25 },
-                  }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => navigate(`/lobbies/${item.name ?? null}`)}
-                  key={i}
-                >
-                  <Title weight={800}>{item.name ? item.name : "noname"}</Title>
-                  <Text>
-                    {item.masterUsername ? item.masterUsername : "error"}
-                  </Text>
-                </Lobby>
-              );
-            })}
+            return (
+              <Lobby
+                isStarted={item.isStarted}
+                whileHover={{
+                  scale: 1.025,
+                  transition: { duration: 0.25 },
+                }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => navigate(`/lobbies/${item.name ?? null}`)}
+                key={i}
+              >
+                <Title weight={800}>{item.name ? item.name : "noname"}</Title>
+                <Text>
+                  {item.masterUsername ? item.masterUsername : "error"}
+                </Text>
+              </Lobby>
+            );
+          })
+        )}
       </StyledLobbies>
       <Arrow
         src="/img/arrow.svg"
         alt="arrow"
         isVisible={
           lobbyContainerRef?.current
-            ? scrollAmount <
-              lobbyContainerRef.current.scrollHeight - scrollAmount + 500
-            : true
+            ? scrollAmount < lobbyContainerRef.current.scrollHeight - 500
+            : false
         }
         onClick={() => {
           const lobbyContainer = lobbyContainerRef.current;
@@ -153,12 +154,6 @@ const Lobbies = (): JSX.Element => {
           }
         }}
       />
-      <Form onSubmit={(e) => onFormSubmit(e)}>
-        <GTitleLeft>CREATE A NEW LOBBY</GTitleLeft>
-        <Button secondary medium>
-          Create
-        </Button>
-      </Form>
     </Container>
   );
 };
@@ -178,6 +173,11 @@ const Arrow = styled.img<ArrowInterface>`
 
 const ArrowUp = styled(Arrow)`
   transform: rotate(180deg);
+  margin-bottom: 2rem;
+`;
+
+const LobbiesNotFoundTitle = styled.h2`
+  font-size: 3rem;
 `;
 
 const StyledLobbies = styled(motion.div)`

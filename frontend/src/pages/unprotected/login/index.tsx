@@ -71,7 +71,7 @@ const Login = (): JSX.Element => {
         <Paragraph size={1} weight={500}>
           <Link to="/register">I don't have an account</Link>
         </Paragraph>
-        <Button primary medium>
+        <Button secondary medium>
           Login
         </Button>
       </Form>

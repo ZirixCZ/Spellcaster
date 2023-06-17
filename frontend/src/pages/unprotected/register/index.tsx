@@ -72,7 +72,7 @@ const Register = (): JSX.Element => {
         <Paragraph size={1} weight={500}>
           <Link to="/login">I have an account</Link>
         </Paragraph>
-        <Button primary medium>
+        <Button secondary medium>
           Create an account
         </Button>
       </Form>

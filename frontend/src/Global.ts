@@ -21,7 +21,7 @@ export const lightTheme = {
   gray: "#333333",
   buttonHover: "#1F191B",
   white: "#FFFFF0",
-  whiteTransparent: "rgba(255, 255, 240, 0.3)",
+  whiteTransparent: "rgba(255, 255, 255, 0.3)",
   text: "#333333",
   yellow: "#FEE826",
   blue: "#26B0FE",

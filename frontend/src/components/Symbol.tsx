@@ -53,7 +53,7 @@ const StyledSymbol = styled.img`
   filter: brightness(2);
   filter: saturate(80%);
   filter: contrast(80%);
-  opacity: 1.5;
+  opacity: 1;
 `;
 
 export default Symbol;

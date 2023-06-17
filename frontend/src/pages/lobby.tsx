@@ -188,6 +188,17 @@ const Lobby = (): JSX.Element => {
   }, [readyState]);
 
   const startGame = () => {
+    if (connectedUsers.length < 2) {
+      Swal.fire({
+        title: "Error",
+        text: "You need at least 2 players to start the game",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
+
+      return;
+    }
+
     const roundsCount = calculateRoundCount(
       roundInputRef.current ? parseInt(roundInputRef.current.value) : 1,
       connectedUsers.length

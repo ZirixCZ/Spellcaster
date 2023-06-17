@@ -15,10 +15,13 @@ import { mobile, tablet } from "../Global";
 import { useThemeStore } from "../store/themeStore";
 import localStorage from "../utils/localStorageRemove";
 import localStorageRemove from "../utils/localStorageRemove";
+import { generateLobbyCode } from "../utils/generateLobbyCode";
+import { LobbyInterface } from "../types/Lobby";
 
 const Dashboard = (): JSX.Element => {
   const navigate = useNavigate();
   const lobbyCodeRef = React.useRef<HTMLInputElement | null>(null);
+  const [lobbies, setLobbies] = React.useState<LobbyInterface[] | null>(null);
 
   const [auth, setAuth] = useState(false);
 
@@ -33,6 +36,34 @@ const Dashboard = (): JSX.Element => {
       }, 2000);
     });
   }, []);
+
+  // fetch lobbies
+  React.useEffect(() => {
+    callApi("GET", "/api/lobby", null).then((res) => {
+      res.json().then((json) => {
+        setLobbies(json);
+      });
+    });
+  }, []);
+
+  // create a new lobby
+  const onFormSubmit = (e: React.FormEvent) => {
+    let name = generateLobbyCode();
+    while (lobbies && lobbies.find((item) => item.name === name)) {
+      name = generateLobbyCode();
+    }
+
+    e.preventDefault();
+    callApi(
+      "POST",
+      "/api/lobby",
+      JSON.stringify({
+        name: name,
+      })
+    ).then(() => {
+      navigate(`/lobbies/${name}`);
+    });
+  };
 
   return (
     <Container height={100} width={100}>
@@ -56,10 +87,16 @@ const Dashboard = (): JSX.Element => {
             <Container width={100}>
               <ButtonWrapper onClick={() => navigate("/lobbies")}>
                 <Button secondary medium>
-                  Show active lobbies
+                  Browse lobbies
                 </Button>
               </ButtonWrapper>
             </Container>
+            <Form onSubmit={(e) => onFormSubmit(e)}>
+              <Button secondary medium>
+                Create lobby
+              </Button>
+            </Form>
+
             <Form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -81,7 +118,7 @@ const Dashboard = (): JSX.Element => {
               </div>
               <FormButtonWrapper>
                 <Button secondary medium>
-                  Search
+                  Join
                 </Button>
               </FormButtonWrapper>
             </Form>

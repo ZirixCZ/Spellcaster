@@ -27,7 +27,7 @@ const LobbyMasterPanel = ({
       </Container>
       <ControlsWrapper>
         <ControlContainer>
-          <h4>Set rounds</h4>
+          <h4>Rounds</h4>
           <StyledRoundInput
             isTimer={true}
             type="number"
@@ -39,7 +39,7 @@ const LobbyMasterPanel = ({
           />
         </ControlContainer>
         <ControlContainer>
-          <h4>Set timer</h4>
+          <h4>Timer</h4>
           <StyledRoundInput
             isTimer={true}
             type="number"
