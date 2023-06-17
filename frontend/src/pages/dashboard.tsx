@@ -117,7 +117,7 @@ const Dashboard = (): JSX.Element => {
                 />
               </div>
               <FormButtonWrapper>
-                <Button secondary medium>
+                <Button primary medium>
                   Join
                 </Button>
               </FormButtonWrapper>
