@@ -45,10 +45,6 @@ const Lobby = (): JSX.Element => {
 
   const countdown = useCountdown(timer ? timer : 15, roundsPlayed, word, role);
 
-  React.useEffect(() => {
-    console.log(countdown);
-  }, [countdown]);
-
   const hideControlsHandler = () => {
     setHideControls(true);
     setWord(null);
