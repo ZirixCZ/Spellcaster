@@ -72,7 +72,7 @@ const LobbySummary = () => {
           <SummaryMenu data={rankings} />
 
           <ButtonWrapper onClick={() => navigate("/")}>
-            <Button>Continue</Button>
+            <Button secondary>Continue</Button>
           </ButtonWrapper>
         </Summary>
         <Leaderboard>

@@ -1,4 +1,5 @@
 import getToken from "./getToken";
+import generateUri from "./generateUri";
 
 const callApi = async (
   method: string,
@@ -10,11 +11,7 @@ const callApi = async (
     Authorization: "" + getToken(),
   };
 
-  let uri =
-    (process.env.REACT_APP_API_URL &&
-    !process.env.REACT_APP_API_URL.includes("localhost")
-      ? `https://${process.env.REACT_APP_API_URL}`
-      : "http://localhost:8000") + endpoint;
+  let uri = generateUri() + endpoint;
 
   return fetch(uri, { headers: headers, method: method, body: body });
 };

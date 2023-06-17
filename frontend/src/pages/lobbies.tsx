@@ -16,6 +16,7 @@ import { generateLobbyCode } from "../utils/generateLobbyCode";
 const Lobbies = (): JSX.Element => {
   const newLobby = React.useRef<HTMLInputElement | null>(null);
   const [lobbies, setLobbies] = React.useState<LobbyInterface[] | null>(null);
+  const [lobbiesLoading, setLobbiesLoading] = React.useState(true);
   const startedLobbiesRef = React.useRef<LobbyInterface[]>([]);
   const [scrollAmount, setScrollAmount] = React.useState(0);
 
@@ -28,6 +29,7 @@ const Lobbies = (): JSX.Element => {
     callApi("GET", "/api/lobby", null).then((res) => {
       res.json().then((json) => {
         setLobbies(json);
+        setLobbiesLoading(false);
       });
     });
   }, []);
@@ -110,9 +112,10 @@ const Lobbies = (): JSX.Element => {
         animate="visible"
         ref={lobbyContainerRef}
       >
-        {!lobbies || lobbies.length < 1 ? (
+        {(!lobbies || lobbies.length < 0) && !lobbiesLoading ? (
           <LobbiesNotFoundTitle>No lobbies found</LobbiesNotFoundTitle>
         ) : (
+          lobbies &&
           lobbies.map((item, i) => {
             if (checkIfStarted(item)) {
               return null;

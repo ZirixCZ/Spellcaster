@@ -3,6 +3,7 @@
 import * as React from "react";
 import styled, { css } from "styled-components/macro";
 import Swal from "sweetalert2";
+import QRCode from "react-qr-code";
 
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import getLobbyFromURL from "../utils/getLobbyFromURL";
@@ -14,8 +15,9 @@ import { arraysMatch } from "../utils/arraysMatch";
 import LobbyMasterPanel from "../views/LobbyMasterPanel";
 import { LobbyInterface } from "../types/Lobby";
 import useCountdown from "../utils/useCountdown";
-import { Role, tablet } from "../Global";
+import { Role, tablet, mobile } from "../Global";
 import calculateRoundCount from "../utils/calculateRoundCount";
+import generateUri from "../utils/generateUri";
 
 interface Game {
   data: string;
@@ -41,6 +43,9 @@ const Lobby = (): JSX.Element => {
   const [word, setWord] = React.useState<string | null>(null);
   const [role, setRole] = React.useState<Role | null>(null);
   const [isMaster, setIsMaster] = React.useState<boolean>(false);
+  const [masterUsername, setMasterUsername] = React.useState<string | null>(
+    null
+  );
   const [hideControls, setHideControls] = React.useState<boolean>(false);
 
   const countdown = useCountdown(timer ? timer : 15, roundsPlayed, word, role);
@@ -110,6 +115,7 @@ const Lobby = (): JSX.Element => {
       setConnectedUsers(message.payload.usernames);
     } else if (message.type === "join_lobby") {
       setIsMaster(message.payload.master_username === username);
+      setMasterUsername(message.payload.master_username);
       setConnectedUsers(message.payload.usernames);
       setInterval(FetchConnectedUsers, 4000);
     } else if (message.type === "start_lobby") {
@@ -240,37 +246,63 @@ const Lobby = (): JSX.Element => {
   ) : (
     <StyledContainer
       width={100}
-      height={100}
-      justifyContent={isMaster ? "space-evenly" : "center"}
+      heightKeyword="fit-content"
+      justifyContent={"space-evenly"}
       alignItems="center"
       isLobbyMaster={isMaster}
     >
-      <UserStatusWrapper>
-        <h1>{title}</h1>
-        <p>
-          {connectionStatus}{" "}
-          {readyState === ReadyState.OPEN && username ? `as ${username}` : null}
-        </p>
-      </UserStatusWrapper>
-      {isMaster && (
-        <LobbyMasterPanel
-          startGame={startGame}
-          readyState={readyState}
-          roundInputRef={roundInputRef}
-          timerInputRef={timerInputRef}
-        />
-      )}
-      <ConnectedUsersWrapper>
-        <UsersTitle>Connected Users</UsersTitle>
-        <UnorderedList>
-          {connectedUsers?.map((user, i) => (
-            <span key={i}>{user}</span>
-          ))}
-        </UnorderedList>
-      </ConnectedUsersWrapper>
+      <>
+        <QRCode value={generateUri() + "/lobbies/" + title} />
+      </>
+      <TopSection>
+        <UserStatusWrapper>
+          <h1>{title}</h1>
+          <WaitingStatusParagraph>
+            {readyState === ReadyState.OPEN && masterUsername
+              ? `Waiting for ${masterUsername} to start the game.`
+              : connectionStatus}
+          </WaitingStatusParagraph>
+        </UserStatusWrapper>
+        {isMaster && (
+          <LobbyMasterPanel
+            startGame={startGame}
+            readyState={readyState}
+            roundInputRef={roundInputRef}
+            timerInputRef={timerInputRef}
+          />
+        )}
+      </TopSection>
+
+      <BottomSection>
+        <ConnectedUsersWrapper>
+          <UsersTitle>Connected Users</UsersTitle>
+          <UnorderedList>
+            {connectedUsers?.map((user, i) => (
+              <span key={i}>{user}</span>
+            ))}
+          </UnorderedList>
+        </ConnectedUsersWrapper>
+      </BottomSection>
     </StyledContainer>
   );
 };
+
+const WaitingStatusParagraph = styled.p`
+  width: 75%;
+`;
+
+const TopSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const BottomSection = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+`;
 
 interface StyledContainerInterface {
   isLobbyMaster: boolean;
@@ -279,11 +311,18 @@ interface StyledContainerInterface {
 const StyledContainer = styled(Container)`
   font-size: 1.5rem;
   flex-direction: ${({ isLobbyMaster }: StyledContainerInterface) =>
-    isLobbyMaster ? "row" : "column"};
+    isLobbyMaster ? "row" : "row"};
 
   ${tablet(css`
     flex-direction: column;
     justify-content: center;
+    padding-top: ${({ isLobbyMaster }: StyledContainerInterface) =>
+      isLobbyMaster ? "20rem" : null};
+  `)}
+
+  ${mobile(css`
+    padding-top: ${({ isLobbyMaster }: StyledContainerInterface) =>
+      isLobbyMaster ? "32rem" : "15rem"};
   `)}
 `;
 

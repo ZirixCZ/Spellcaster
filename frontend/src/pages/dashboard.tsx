@@ -24,11 +24,13 @@ const Dashboard = (): JSX.Element => {
   const [lobbies, setLobbies] = React.useState<LobbyInterface[] | null>(null);
 
   const [auth, setAuth] = useState(false);
+  const [authProgress, setAuthProgress] = useState(true);
 
   useEffect(() => {
     callApi("GET", "/api/home", null).then((res) => {
       if (res.ok) {
         setAuth(true);
+        setAuthProgress(false);
         return;
       }
       setTimeout(() => {
@@ -140,9 +142,11 @@ const Dashboard = (): JSX.Element => {
           </LogOutContainer>
         </>
       ) : (
-        <Container justifyContent="center" alignItems="center" height={100}>
-          <p>You weren't authorized</p>
-        </Container>
+        !authProgress && (
+          <Container justifyContent="center" alignItems="center" height={100}>
+            <p>You weren't authorized</p>
+          </Container>
+        )
       )}
     </Container>
   );

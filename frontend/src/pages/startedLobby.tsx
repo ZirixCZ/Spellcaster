@@ -147,11 +147,11 @@ const StartedLobby = ({
                   : `Listen carefully to the word uttered by the WordMaster. Then try to spell it out in the input box below.`}
               </Description>
               <StyledInput refer={wordRef}></StyledInput>
-              <SubmitButton primary>
+              <SubmitButton secondary>
                 {role === Role.WORDMASTER ? "Cast" : "Spell"}
               </SubmitButton>
 
-              <h3>{countdown}</h3>
+              <h3>{countdown} seconds remaining</h3>
             </StyledForm>
             {role === Role.WORDSPELLER ? (
               <ReplayButtonWrapper onClick={() => setReplay(!replay)}>
