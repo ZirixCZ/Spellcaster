@@ -18,13 +18,6 @@ const LobbyMasterPanel = ({
 }: Props) => {
   return (
     <Wrapper>
-      <Container>
-        <ButtonWrapper onClick={() => startGame()}>
-          <Button secondary disabled={readyState !== ReadyState.OPEN}>
-            Start
-          </Button>
-        </ButtonWrapper>
-      </Container>
       <ControlsWrapper>
         <ControlContainer>
           <h4>Rounds</h4>
@@ -49,8 +42,16 @@ const LobbyMasterPanel = ({
             step={5}
             ref={timerInputRef}
           />
+          <h4>s</h4>
         </ControlContainer>
       </ControlsWrapper>
+      <Container>
+        <ButtonWrapper onClick={() => startGame()}>
+          <Button secondary disabled={readyState !== ReadyState.OPEN}>
+            Start
+          </Button>
+        </ButtonWrapper>
+      </Container>
     </Wrapper>
   );
 };

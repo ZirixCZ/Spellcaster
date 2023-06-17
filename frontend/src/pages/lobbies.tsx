@@ -110,7 +110,7 @@ const Lobbies = (): JSX.Element => {
         animate="visible"
         ref={lobbyContainerRef}
       >
-        {!lobbies ? (
+        {!lobbies || lobbies.length < 1 ? (
           <LobbiesNotFoundTitle>No lobbies found</LobbiesNotFoundTitle>
         ) : (
           lobbies.map((item, i) => {
@@ -178,6 +178,10 @@ const ArrowUp = styled(Arrow)`
 
 const LobbiesNotFoundTitle = styled.h2`
   font-size: 3rem;
+
+  ${tablet(css`
+    font-size: 1rem;
+  `)}
 `;
 
 const StyledLobbies = styled(motion.div)`
@@ -227,19 +231,19 @@ const Lobby = styled(motion.div)<LobbyButtonInterface>`
   ${(props) => {
     if (props.isStarted) {
       return css`
-        background: rgba(232, 56, 73, 0.8);
+        background: rgba(232, 56, 73);
 
         &:hover {
-          background: rgba(232, 56, 73, 0.9);
+          background: rgba(232, 56, 73);
         }
       `;
     } else {
       return css`
         cursor: pointer;
-        background-color: rgba(37, 37, 37, 0.8);
+        background-color: rgba(37, 37, 37);
 
         &:hover {
-          background: rgba(37, 37, 37, 0.9);
+          background: rgba(37, 37, 37);
         }
       `;
     }

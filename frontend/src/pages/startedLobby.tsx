@@ -147,7 +147,7 @@ const StartedLobby = ({
                   : `Listen carefully to the word uttered by the WordMaster. Then try to spell it out in the input box below.`}
               </Description>
               <StyledInput refer={wordRef}></StyledInput>
-              <SubmitButton>
+              <SubmitButton primary>
                 {role === Role.WORDMASTER ? "Cast" : "Spell"}
               </SubmitButton>
 
