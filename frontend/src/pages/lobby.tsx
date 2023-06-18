@@ -259,7 +259,13 @@ const Lobby = (): JSX.Element => {
           <h1>{title}</h1>
           <WaitingStatusParagraph>
             {readyState === ReadyState.OPEN && masterUsername
-              ? `Waiting for ${masterUsername} to start the game.`
+              ? connectedUsers.length < 2
+                ? isMaster
+                  ? "Waiting for players"
+                  : `Waiting for ${masterUsername} to connect`
+                : !isMaster
+                ? `Waiting for ${masterUsername} to start the game`
+                : "Waiting for you to start the game"
               : connectionStatus}
           </WaitingStatusParagraph>
         </UserStatusWrapper>
@@ -288,7 +294,7 @@ const Lobby = (): JSX.Element => {
 };
 
 const WaitingStatusParagraph = styled.p`
-  width: 75%;
+  width: 100%;
 `;
 
 const TopSection = styled.div`
