@@ -73,6 +73,7 @@ const LogoutButton = styled.div`
   margin-right: 5rem;
   border: none;
   font-size: 2rem;
+  max-width: 2.5rem;
   border-radius: 100%;
   background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.text};
