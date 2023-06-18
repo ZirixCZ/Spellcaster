@@ -125,21 +125,6 @@ const Dashboard = (): JSX.Element => {
               </FormButtonWrapper>
             </Form>
           </Container>
-          <LogOutContainer
-            onClick={() => {
-              if (localStorageRemove("jwt")) {
-                navigate("/welcome");
-              } else {
-                Swal.fire({
-                  icon: "error",
-                  title: "Oops...",
-                  text: "Something went wrong!",
-                });
-              }
-            }}
-          >
-            <LogOutButton>Log Out</LogOutButton>
-          </LogOutContainer>
         </>
       ) : (
         !authProgress && (

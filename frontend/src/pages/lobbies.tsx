@@ -19,6 +19,7 @@ const Lobbies = (): JSX.Element => {
   const [lobbiesLoading, setLobbiesLoading] = React.useState(true);
   const startedLobbiesRef = React.useRef<LobbyInterface[]>([]);
   const [scrollAmount, setScrollAmount] = React.useState(0);
+  const [displayBottomArrow, setDisplayBottomArrow] = React.useState(false);
 
   const lobbyContainerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -90,8 +91,27 @@ const Lobbies = (): JSX.Element => {
     return false;
   };
 
+  const bottomArrowVisibility = () => {
+    if (!lobbyContainerRef.current) {
+      console.log("hree");
+      if (lobbies && lobbies.length > 3) return true;
+      console.log("a");
+      return false;
+    }
+
+    return scrollAmount < lobbyContainerRef.current.scrollHeight - 500;
+  };
+
+  React.useEffect(() => {
+    console.log(bottomArrowVisibility());
+    setDisplayBottomArrow(bottomArrowVisibility());
+  }, [lobbiesLoading, scrollAmount]);
+
   return (
     <Container heightKeyword="fit-content" width={100}>
+      <ButtonWrapper onClick={() => navigate("/")}>
+        <Button>Go back</Button>
+      </ButtonWrapper>{" "}
       <ArrowUp
         src="/img/arrow.svg"
         alt="arrow"
@@ -144,11 +164,7 @@ const Lobbies = (): JSX.Element => {
       <Arrow
         src="/img/arrow.svg"
         alt="arrow"
-        isVisible={
-          lobbyContainerRef?.current
-            ? scrollAmount < lobbyContainerRef.current.scrollHeight - 500
-            : false
-        }
+        isVisible={displayBottomArrow}
         onClick={() => {
           const lobbyContainer = lobbyContainerRef.current;
           if (lobbyContainer) {
@@ -176,6 +192,7 @@ const Arrow = styled.img<ArrowInterface>`
 
 const ArrowUp = styled(Arrow)`
   transform: rotate(180deg);
+  margin-top: 0;
   margin-bottom: 2rem;
 `;
 
@@ -183,7 +200,7 @@ const LobbiesNotFoundTitle = styled.h2`
   font-size: 3rem;
 
   ${tablet(css`
-    font-size: 1rem;
+    font-size: 2rem;
   `)}
 `;
 
@@ -211,7 +228,7 @@ const StyledLobbies = styled(motion.div)`
 `;
 
 const ButtonWrapper = styled.div`
-  width: 25%;
+  width: 15%;
   ${tablet(css`
     width: 50%;
   `)}

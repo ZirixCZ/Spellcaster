@@ -1,7 +1,10 @@
 import * as React from "react";
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import callApi from "../utils/callApi";
 import styled, { css } from "styled-components/macro";
 import { tablet, mobile } from "../Global";
+import localStorageRemove from "../utils/localStorageRemove";
 import { StyledThemeSwitcher } from "../pages/dashboard";
 import { useSymbolStore } from "../store/symbolStore";
 
@@ -16,6 +19,7 @@ const Navbar = (props: Props) => {
   const navigate = useNavigate();
 
   const [symbolState, setSymbolState] = React.useState<string>("");
+  const [username, setUsername] = React.useState<string | null>(null);
 
   const parseSymbol = (symbol: string) => {
     let parse = symbol.split(".")[0];
@@ -26,15 +30,64 @@ const Navbar = (props: Props) => {
     setSymbolState(parseSymbol(symbol));
   }, [symbol]);
 
+  React.useEffect(() => {
+    callApi("GET", "/api/user/verifyusername", null).then((res) => {
+      res.json().then((data) => {
+        setUsername(data.userName);
+      });
+    });
+  }, []);
+
   return (
     <StyledNavbar symbol={symbolState}>
       <StyledContainer>
-        <Item onClick={() => navigate("/")}>Dashboard</Item>
-        <Item onClick={() => navigate("/lobbies")}>Lobbies</Item>
+        <Item onClick={() => navigate("/")}>
+          <Logo src="/img/logo.png" />
+        </Item>
+        <Item>{username}</Item>
       </StyledContainer>
+      <LogoutButton
+        onClick={() => {
+          if (localStorageRemove("jwt")) {
+            navigate("/welcome");
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
+          }
+        }}
+      >
+        <img src="/img/logout.svg" alt="logout button" />
+      </LogoutButton>
     </StyledNavbar>
   );
 };
+
+const LogoutButton = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0.75rem;
+  margin-right: 5rem;
+  border: none;
+  font-size: 2rem;
+  border-radius: 100%;
+  background-color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.text};
+  cursor: pointer;
+  z-index: 99;
+
+  & > img {
+    width: 2rem;
+    filter: ${({ theme }) => !theme.isLight && "invert(1)"};
+  }
+`;
+
+const Logo = styled.img`
+  width: 2rem;
+`;
 
 const Item = styled.a`
   font-size: 1.25rem;
@@ -46,13 +99,13 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 5rem;
+  gap: 2.5rem;
   width: fit-content;
   height: 100%;
   box-sizing: border-box;
 
   &:first-child {
-    padding-left: 5rem;
+    padding-left: 2rem;
 
     ${tablet(css`
       padding-left: 4em;
