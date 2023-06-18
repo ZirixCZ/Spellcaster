@@ -5,6 +5,7 @@ import styled, { css } from "styled-components/macro";
 import Swal from "sweetalert2";
 import QRCode from "react-qr-code";
 
+import Button from "../components/Button";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import getLobbyFromURL from "../utils/getLobbyFromURL";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -279,8 +280,12 @@ const Lobby = (): JSX.Element => {
             timerInputRef={timerInputRef}
           />
         )}
+        {!isMaster && (
+          <ButtonWrapper onClick={() => navigate("/")}>
+            <Button secondary>Leave</Button>
+          </ButtonWrapper>
+        )}
       </TopSection>
-
       <BottomSection>
         <ConnectedUsersWrapper>
           <UsersTitle>Connected Users</UsersTitle>
@@ -295,9 +300,18 @@ const Lobby = (): JSX.Element => {
   );
 };
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
+  width: 20rem;
+  margin-right: 1rem;
+`;
+
 const WaitingStatusParagraph = styled.p`
   text-align: center;
-  width: 90%;
+  padding-left: 2rem;
+  padding-right: 2rem;
 `;
 
 const TopSection = styled.div`
@@ -326,12 +340,12 @@ const StyledContainer = styled(Container)`
     flex-direction: column;
     justify-content: center;
     padding-top: ${({ isLobbyMaster }: StyledContainerInterface) =>
-      isLobbyMaster ? "20rem" : null};
+      isLobbyMaster ? "20rem" : "10rem"};
   `)}
 
   ${mobile(css`
     padding-top: ${({ isLobbyMaster }: StyledContainerInterface) =>
-      isLobbyMaster ? "32rem" : "15rem"};
+      isLobbyMaster ? "37rem" : "23rem"};
   `)}
 `;
 

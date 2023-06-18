@@ -32,7 +32,7 @@ const LobbyMasterPanel = ({
           />
         </ControlContainer>
         <ControlContainer>
-          <h4>Timer</h4>
+          <h4>Timer (seconds)</h4>
           <StyledRoundInput
             isTimer={true}
             type="number"
@@ -42,7 +42,6 @@ const LobbyMasterPanel = ({
             step={5}
             ref={timerInputRef}
           />
-          <h4>s</h4>
         </ControlContainer>
       </ControlsWrapper>
       <Container>
@@ -93,7 +92,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   width: 20rem;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: end;
 `;
 
