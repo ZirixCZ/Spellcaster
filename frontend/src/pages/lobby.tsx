@@ -262,11 +262,13 @@ const Lobby = (): JSX.Element => {
               ? connectedUsers.length < 2
                 ? isMaster
                   ? "Waiting for players"
-                  : `Waiting for ${masterUsername} to connect`
+                  : `Waiting for the lobby master to connect`
                 : !isMaster
                 ? `Waiting for ${masterUsername} to start the game`
                 : "Waiting for you to start the game"
-              : connectionStatus}
+              : masterUsername
+              ? connectionStatus
+              : "Error"}
           </WaitingStatusParagraph>
         </UserStatusWrapper>
         {isMaster && (
@@ -294,7 +296,8 @@ const Lobby = (): JSX.Element => {
 };
 
 const WaitingStatusParagraph = styled.p`
-  width: 100%;
+  text-align: center;
+  width: 90%;
 `;
 
 const TopSection = styled.div`
