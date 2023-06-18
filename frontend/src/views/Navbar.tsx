@@ -75,7 +75,7 @@ const LogoutButton = styled.div`
   font-size: 2rem;
   max-width: 2.5rem;
   border-radius: 100%;
-  background-color: ${({ theme }) => theme.white};
+  background-color: transparent;
   color: ${({ theme }) => theme.text};
   cursor: pointer;
   z-index: 99;
@@ -88,6 +88,7 @@ const LogoutButton = styled.div`
 
 const Logo = styled.img`
   width: 2rem;
+  background-color: transparent;
 `;
 
 const Item = styled.a`
