@@ -48,6 +48,7 @@ const Lobby = (): JSX.Element => {
     null
   );
   const [hideControls, setHideControls] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const countdown = useCountdown(timer ? timer : 15, roundsPlayed, word, role);
 
@@ -118,6 +119,7 @@ const Lobby = (): JSX.Element => {
       setIsMaster(message.payload.master_username === username);
       setMasterUsername(message.payload.master_username);
       setConnectedUsers(message.payload.usernames);
+      setIsLoading(false);
       setInterval(FetchConnectedUsers, 4000);
     } else if (message.type === "start_lobby") {
       setIsStarted(true);
@@ -272,7 +274,7 @@ const Lobby = (): JSX.Element => {
                 : !isMaster
                 ? `Waiting for ${masterUsername} to start the game`
                 : "Waiting for you to start the game"
-              : masterUsername
+              : masterUsername || isLoading
               ? connectionStatus
               : "Error"}
           </WaitingStatusParagraph>
@@ -328,6 +330,7 @@ const WaitingStatusParagraph = styled.p`
   text-align: center;
   padding-left: 2rem;
   padding-right: 2rem;
+  width: 30rem;
 `;
 
 const TopSection = styled.div`
