@@ -1,5 +1,5 @@
 import getToken from "./getToken";
-import generateUri from "./generateUri";
+import { generateApiUri } from "./generateUri";
 
 const callApi = async (
   method: string,
@@ -11,7 +11,7 @@ const callApi = async (
     Authorization: "" + getToken(),
   };
 
-  let uri = generateUri() + endpoint;
+  let uri = generateApiUri() + endpoint;
 
   return fetch(uri, { headers: headers, method: method, body: body });
 };

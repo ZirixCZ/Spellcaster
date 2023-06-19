@@ -18,7 +18,7 @@ import { LobbyInterface } from "../types/Lobby";
 import useCountdown from "../utils/useCountdown";
 import { Role, tablet, mobile } from "../Global";
 import calculateRoundCount from "../utils/calculateRoundCount";
-import generateUri from "../utils/generateUri";
+import { generateAppUri } from "../utils/generateUri";
 
 interface Game {
   data: string;
@@ -252,9 +252,14 @@ const Lobby = (): JSX.Element => {
       alignItems="center"
       isLobbyMaster={isMaster}
     >
-      <>
-        <QRCode value={generateUri() + "/lobbies/" + title} />
-      </>
+      <QRContainer>
+        <QRCode
+          level="L"
+          fgColor="#ececec"
+          bgColor="#373737"
+          value={generateAppUri() + "/lobbies/" + title}
+        />
+      </QRContainer>
       <TopSection>
         <UserStatusWrapper>
           <h1>{title}</h1>
@@ -299,6 +304,17 @@ const Lobby = (): JSX.Element => {
     </StyledContainer>
   );
 };
+
+const QRContainer = styled.div`
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.1);
+
+  & {
+    height: 16rem;
+    width: 16rem;
+  }
+`;
 
 const ButtonWrapper = styled.div`
   display: flex;

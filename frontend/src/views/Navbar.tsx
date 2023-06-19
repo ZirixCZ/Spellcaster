@@ -89,6 +89,7 @@ const LogoutButton = styled.div`
 const Logo = styled.img`
   width: 2rem;
   background-color: transparent;
+  margin-top: 0.25rem;
 `;
 
 const Item = styled.a`
