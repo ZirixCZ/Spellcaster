@@ -50,11 +50,18 @@ const StartedLobby = ({
   const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    if (countdown === 0 && !isSubmitted) {
+    if (countdown <= 0 && !isSubmitted) {
       if (role === Role.WORDMASTER && word) return;
 
       hideControlsHandler();
       inputSubmit(true);
+      return;
+    }
+
+    if (countdown <= 0 && isSubmitted && role === Role.WORDMASTER) {
+      hideControlsHandler();
+      inputSubmit(true);
+      return;
     }
   }, [countdown]);
 

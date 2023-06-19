@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useLocation } from "react-router-dom";
 import styled, { css } from "styled-components/macro";
-import { tablet } from "../Global";
+import { tablet, mobile } from "../Global";
 import { getSymbol } from "../utils/symbol";
 import { useSymbolStore } from "../store/symbolStore";
 import { AnimatePresence, motion } from "framer-motion";
@@ -40,7 +40,6 @@ const SymbolWrapper = styled.div`
   pointer-events: none;
   height: 100%;
   width: calc(fit-content + 100%);
-  padding-right: 10rem;
   overflow: hidden;
   ${tablet(css``)}
 
@@ -54,6 +53,10 @@ const StyledSymbol = styled.img`
   filter: saturate(80%);
   filter: contrast(80%);
   opacity: 1;
+
+  ${mobile(css`
+    width: 100vw;
+  `)}
 `;
 
 export default Symbol;

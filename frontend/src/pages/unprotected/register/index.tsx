@@ -48,9 +48,9 @@ const Register = (): JSX.Element => {
         <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
         <FormInput
           refer={userNameRef}
-          placeholder="a-z0-9_."
+          placeholder="a-z0-9 min of 3 characters and max 16"
           type="text"
-          pattern="^[a-z0-9_.]+$"
+          pattern="[a-zA-Z0-9]{3,16}"
           errorMessage="username invalid"
           autoComplete="username"
         />
