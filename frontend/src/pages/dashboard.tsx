@@ -67,6 +67,19 @@ const Dashboard = (): JSX.Element => {
     });
   };
 
+  const codeInputHandler = (e: any) => {
+    if (!lobbyCodeRef?.current?.value || !e?.target?.value) return;
+
+    lobbyCodeRef.current.value = e.target.value.toUpperCase();
+    if (lobbyCodeRef.current.value.length === 3) {
+      lobbyCodeRef.current.value += "-";
+    }
+
+    if (lobbyCodeRef.current.value.length > 6) {
+      lobbyCodeRef.current.value = lobbyCodeRef.current.value.slice(0, 7);
+    }
+  };
+
   return (
     <Container height={100} width={100}>
       {auth ? (
@@ -100,6 +113,7 @@ const Dashboard = (): JSX.Element => {
             </Form>
 
             <Form
+              onChange={(e) => codeInputHandler(e)}
               onSubmit={(e) => {
                 e.preventDefault();
                 if (!lobbyCodeRef.current?.value) return;
@@ -113,7 +127,7 @@ const Dashboard = (): JSX.Element => {
                   refer={lobbyCodeRef}
                   placeholder="Enter Lobby Code"
                   type="text"
-                  pattern="*"
+                  pattern="^[A-Z]{3}-[A-Z]{3}$"
                   errorMessage=""
                   autoComplete="off"
                 />
