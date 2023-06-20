@@ -331,6 +331,10 @@ const WaitingStatusParagraph = styled.p`
   padding-left: 2rem;
   padding-right: 2rem;
   width: 30rem;
+
+  ${mobile(css`
+    width: 20rem;
+  `)}
 `;
 
 const TopSection = styled.div`
@@ -359,7 +363,7 @@ const StyledContainer = styled(Container)`
     flex-direction: column;
     justify-content: center;
     padding-top: ${({ isLobbyMaster }: StyledContainerInterface) =>
-      isLobbyMaster ? "20rem" : "10rem"};
+      isLobbyMaster ? "23rem" : "10rem"};
   `)}
 
   ${mobile(css`
@@ -393,11 +397,17 @@ const UnorderedList = styled.ul`
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  width: 23rem;
+  width: 20rem;
+  height: 5rem;
   flex-wrap: wrap;
   padding-left: 0;
   margin-left: 0;
   justify-content: space-evenly;
+  overflow: scroll;
+
+  ${mobile(css`
+    width: 25rem;
+  `)}
 `;
 
 export default Lobby;

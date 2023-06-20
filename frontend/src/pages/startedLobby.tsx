@@ -50,6 +50,11 @@ const StartedLobby = ({
   const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false);
 
   React.useEffect(() => {
+    // if countdown reaches zero &
+    //      if is wordmaster & word is not null, do not send timedout
+    //      if is wordmaster & word is null, send timedout
+    //      if is not wordmaster, send timedout
+    //      if submitted is true & is wordmaster, send timedout
     if (countdown <= 0 && !isSubmitted) {
       if (role === Role.WORDMASTER && word) return;
 
@@ -58,11 +63,13 @@ const StartedLobby = ({
       return;
     }
 
-    if (countdown <= 0 && isSubmitted && role === Role.WORDMASTER) {
-      hideControlsHandler();
-      inputSubmit(true);
-      return;
-    }
+    // TODO: handle temedout, prevent unwanted sends of input with (true) [indicated timedout]
+
+    // if (countdown <= 0 && isSubmitted && role === Role.WORDMASTER) {
+    //   hideControlsHandler();
+    //   inputSubmit(true);
+    //   return;
+    // }
   }, [countdown]);
 
   React.useEffect(() => {
@@ -109,6 +116,7 @@ const StartedLobby = ({
 
   React.useEffect(() => {
     if (word !== null) {
+      setIsSubmitted(false);
       setHideControls(false);
     }
   }, [roundsPlayed]);

@@ -56,15 +56,48 @@ const LobbySummary = () => {
   }, []);
 
   const currentPlayerScore = () => {
-    return rankings?.find((user) => user.name === username)?.score;
+    return parseInt(
+      rankings?.find((user) => user.name === username)?.score ?? "-1"
+    );
+  };
+
+  const SummaryMessages = {
+    motivation: [
+      "You'll do better next time",
+      "No worries, you'll get it next time",
+      "You can do better than that",
+    ],
+    positive: [
+      "You did well",
+      "You're getting better",
+      "You're improving",
+      "You're getting there",
+      "You're doing great",
+      "You're doing well",
+      "You're doing good",
+      "You're doing fine",
+      "You're doing okay",
+    ],
   };
 
   return (
     <StyledSummary>
       <Content>
         <PersonalSummary>
-          <PersonalSummaryTitle>You did well!</PersonalSummaryTitle>
-          <PersonalSummaryParagraph>{`Your score: ${currentPlayerScore()}`}</PersonalSummaryParagraph>
+          <PersonalSummaryTitle>
+            {currentPlayerScore() === -1
+              ? ""
+              : currentPlayerScore() === 0
+              ? SummaryMessages.motivation[
+                  Math.floor(Math.random() * SummaryMessages.motivation.length)
+                ]
+              : SummaryMessages.positive[
+                  Math.floor(Math.random() * SummaryMessages.positive.length)
+                ]}
+          </PersonalSummaryTitle>
+          <PersonalSummaryParagraph>{`Your score: ${
+            currentPlayerScore() > -1 ? currentPlayerScore() : ""
+          }`}</PersonalSummaryParagraph>
         </PersonalSummary>
         <Summary>
           <Title>Summary</Title>
@@ -148,6 +181,8 @@ const PersonalSummary = styled.div`
 const PersonalSummaryTitle = styled.h2`
   font-size: 2rem;
   margin: 0;
+  width: 20rem;
+  text-align: center;
 `;
 
 const PersonalSummaryParagraph = styled.p`
@@ -266,7 +301,7 @@ const Wrapper = styled.div<WrapperInterface>`
 
 const Container = styled.div`
   width: 20rem;
-  max-height: 20rem;
+  max-height: 10rem;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;

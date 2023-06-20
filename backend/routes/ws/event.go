@@ -401,7 +401,7 @@ func InputWordHandler(event Event, c *Client) error {
 			var message string
 			// WordSpeller times out
 			if payload.Timedout {
-				message = "oh maw gawd, you timed out"
+				message = "You ran out of time"
 			} else {
 				message = fmt.Sprintf("The provided word %s is not the correct word.", payload.Word)
 			}

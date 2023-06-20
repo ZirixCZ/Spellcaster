@@ -35,9 +35,9 @@ const SummaryMenu = ({ data }: Props) => {
 
   return (
     <StyledSummaryMenu>
-      <SummaryRank
-        placement={currentUser?.placement}
-      >{`${currentUser?.placement}. place`}</SummaryRank>
+      <SummaryRank placement={currentUser?.placement}>{`${
+        currentUser?.placement ?? "1"
+      }. place`}</SummaryRank>
       <SummaryUsername>{currentUser?.name}</SummaryUsername>
       <SummaryNext onClick={handleNext}>Next</SummaryNext>
     </StyledSummaryMenu>
@@ -79,7 +79,13 @@ const SummaryRank = styled.p<SummaryRankInterface>`
   padding-top: 2rem;
 
   color: ${({ theme, placement }) =>
-    placement === 1 ? theme.blue : placement === 2 ? theme.red : theme.yellow};
+    !placement
+      ? theme.blue
+      : placement === 1
+      ? theme.blue
+      : placement === 2
+      ? theme.red
+      : theme.yellow};
 `;
 
 const SummaryUsername = styled.p`
