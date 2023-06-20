@@ -114,8 +114,8 @@ const Dashboard = (): JSX.Element => {
                   placeholder="Enter Lobby Code"
                   type="text"
                   pattern="*"
-                  errorMessage="email invalid"
-                  autoComplete="username"
+                  errorMessage=""
+                  autoComplete="off"
                 />
               </div>
               <FormButtonWrapper>
