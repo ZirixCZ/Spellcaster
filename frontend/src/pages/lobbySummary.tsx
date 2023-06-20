@@ -13,6 +13,7 @@ const LobbySummary = () => {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const [scrollAmount, setScrollAmount] = React.useState(0);
   const [username, setUsername] = React.useState<string | null>(null);
+  const [leftMessage, setLeftMessage] = React.useState<string>("");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -80,21 +81,25 @@ const LobbySummary = () => {
     ],
   };
 
+  React.useEffect(() => {
+    setLeftMessage(
+      currentPlayerScore() === -1
+        ? ""
+        : currentPlayerScore() === 0
+        ? SummaryMessages.motivation[
+            Math.floor(Math.random() * SummaryMessages.motivation.length)
+          ]
+        : SummaryMessages.positive[
+            Math.floor(Math.random() * SummaryMessages.positive.length)
+          ]
+    );
+  }, [rankings]);
+
   return (
     <StyledSummary>
       <Content>
         <PersonalSummary>
-          <PersonalSummaryTitle>
-            {currentPlayerScore() === -1
-              ? ""
-              : currentPlayerScore() === 0
-              ? SummaryMessages.motivation[
-                  Math.floor(Math.random() * SummaryMessages.motivation.length)
-                ]
-              : SummaryMessages.positive[
-                  Math.floor(Math.random() * SummaryMessages.positive.length)
-                ]}
-          </PersonalSummaryTitle>
+          <PersonalSummaryTitle>{leftMessage}</PersonalSummaryTitle>
           <PersonalSummaryParagraph>{`Your score: ${
             currentPlayerScore() > -1 ? currentPlayerScore() : ""
           }`}</PersonalSummaryParagraph>
