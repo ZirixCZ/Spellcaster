@@ -74,6 +74,7 @@ const StartedLobby = ({
 
   React.useEffect(() => {
     setIsSubmitted(false);
+    if (wordRef?.current) wordRef.current!.value = "";
   }, [word]);
 
   function speakAndWait(msg: SpeechSynthesisUtterance, speechSynthesis: any) {
@@ -155,7 +156,11 @@ const StartedLobby = ({
         <Title>{role}</Title>
         {hideControls === false && (
           <>
-            <StyledForm onSubmit={(e) => inputSubmit(false, e)}>
+            <StyledForm
+              onSubmit={(e) => {
+                inputSubmit(false, e);
+              }}
+            >
               <Description>
                 {role === Role.WORDMASTER
                   ? `Provide a word for others to spell. This word will be pronounced to individuals assigned the WordSpeller role.`
