@@ -132,7 +132,12 @@ const Lobbies = (): JSX.Element => {
         animate="visible"
         ref={lobbyContainerRef}
       >
-        {(!lobbies || lobbies.length < 0) && !lobbiesLoading ? (
+        {(!lobbies ||
+          lobbies.reduce(
+            (acc, obj) => (obj.isStarted === false ? acc + 1 : acc),
+            0
+          ) <= 0) &&
+        !lobbiesLoading ? (
           <LobbiesNotFoundTitle>No lobbies found</LobbiesNotFoundTitle>
         ) : (
           lobbies &&
