@@ -14,7 +14,7 @@ const checkValidityRegex = (
     typeof password === "string"
   ) {
     validate = [
-      /^[a-z0-9_.]+$/.test(userName),
+      /^[a-zA-Z0-9]{3,16}$/.test(userName),
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
       /^.{8,}$/.test(password),
     ];

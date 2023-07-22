@@ -49,25 +49,28 @@ const Register = (): JSX.Element => {
         <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
         <InputWithRequirements
           refer={userNameRef}
-          pattern="[a-ZA-Z0-9]{3,16}"
+          pattern="[a-zA-Z0-9]{3,16}"
           placeholder="username"
           requirements={[
             "Allowed characters: a - Z, 0 - 9",
             "Minimum length: 3 characters",
             "Maximum length: 16 characters",
           ]}
+          type="text"
         />
         <InputWithRequirements
           refer={emailRef}
           pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
           placeholder="email"
           requirements={["Email address must be valid"]}
+          type="email"
         />
         <InputWithRequirements
           refer={passwordRef}
           pattern=".{8,}"
           placeholder="password"
           requirements={["Minimum length: 8 characters"]}
+          type="password"
         />
         <Paragraph size={1} weight={500}>
           <Link to="/login">I have an account</Link>

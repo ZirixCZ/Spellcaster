@@ -6,6 +6,7 @@ interface InputWithRequirementsProps {
   placeholder: string;
   requirements: string[];
   pattern: string;
+  type: string;
   refer: React.RefObject<HTMLInputElement> | null;
 }
 
@@ -13,6 +14,7 @@ const InputWithRequirements = ({
   placeholder,
   requirements,
   pattern,
+  type,
   refer,
 }: InputWithRequirementsProps) => {
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
@@ -22,7 +24,7 @@ const InputWithRequirements = ({
       <FormInput
         refer={refer}
         placeholder={placeholder}
-        type="text"
+        type={type}
         pattern={pattern}
         errorMessage={`${placeholder} invalid}`}
         autoComplete={placeholder}

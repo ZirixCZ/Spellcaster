@@ -183,7 +183,7 @@ func doPasswordMatch(hashedPassword, password string) bool {
 }
 
 func getHashedPassword(userName string, user *models.User) error {
-	getHash := storage.DB.Select("password").Where("user_name = ?", strings.ToLower(userName)).Limit(1).Find(&user)
+	getHash := storage.DB.Select("password").Where("user_name = ?", userName).Limit(1).Find(&user)
 	if getHash.Error != nil {
 		return getHash.Error
 	}
@@ -192,7 +192,7 @@ func getHashedPassword(userName string, user *models.User) error {
 }
 
 func handleLogin(user *models.User, userName string) (bool, error) {
-	userUserNameExists := storage.DB.Where("user_name = ?", strings.ToLower(userName)).Limit(1).Find(&user)
+	userUserNameExists := storage.DB.Where("user_name = ?", userName).Limit(1).Find(&user)
 	if userUserNameExists.Error != nil {
 		return false, userUserNameExists.Error
 	}
@@ -207,7 +207,7 @@ func handleLogin(user *models.User, userName string) (bool, error) {
 }
 
 func getAndHandleUserExists(user *models.User, email string, userName string) (exists bool, err error) {
-	userUserNameExists := storage.DB.Where("user_name = ?", strings.ToLower(userName)).Limit(1).Find(&user)
+	userUserNameExists := storage.DB.Where("user_name = ?", userName).Limit(1).Find(&user)
 	userEmailExists := storage.DB.Where("email = ?", strings.ToLower(email)).Limit(1).Find(&user)
 	if userUserNameExists.Error != nil {
 		return false, userUserNameExists.Error
