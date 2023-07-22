@@ -56,7 +56,7 @@ const Login = (): JSX.Element => {
           refer={userNameRef}
           placeholder="username"
           type="text"
-          pattern="^[a-z0-9_.]+$"
+          pattern="^[a-Z0-9_.]+$"
           errorMessage="email invalid"
           autoComplete="username"
         />

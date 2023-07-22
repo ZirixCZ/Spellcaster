@@ -8,6 +8,7 @@ import Container from "../../../components/Container";
 import Paragraph from "../../../components/Paragraph";
 import { mobile, tablet } from "../../../Global";
 import handleSubmit from "./services/handleSubmit";
+import InputWithRequirements from "../../../components/InputWithRequirements";
 
 const Register = (): JSX.Element => {
   const navigate = useNavigate();
@@ -46,28 +47,27 @@ const Register = (): JSX.Element => {
         }
       >
         <GTitleLeft>ACCOUNT INFORMATION</GTitleLeft>
-        <FormInput
+        <InputWithRequirements
           refer={userNameRef}
-          placeholder="a-z0-9 min of 3 characters and max 16"
-          type="text"
-          pattern="[a-zA-Z0-9]{3,16}"
-          errorMessage="username invalid"
-          autoComplete="username"
+          pattern="[a-ZA-Z0-9]{3,16}"
+          placeholder="username"
+          requirements={[
+            "Allowed characters: a - Z, 0 - 9",
+            "Minimum length: 3 characters",
+            "Maximum length: 16 characters",
+          ]}
         />
-        <FormInput
+        <InputWithRequirements
           refer={emailRef}
-          placeholder="example@example.com"
-          type="email"
           pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-          errorMessage="email invalid"
+          placeholder="email"
+          requirements={["Email address must be valid"]}
         />
-        <FormInput
+        <InputWithRequirements
           refer={passwordRef}
-          placeholder="letter, number, min 8 characters"
-          type="password"
           pattern=".{8,}"
-          errorMessage="password invalid"
-          isLast={true}
+          placeholder="password"
+          requirements={["Minimum length: 8 characters"]}
         />
         <Paragraph size={1} weight={500}>
           <Link to="/login">I have an account</Link>

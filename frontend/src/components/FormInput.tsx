@@ -11,6 +11,8 @@ type AppProps = {
   isLast?: boolean;
   hasNoPadding?: boolean;
   autoComplete?: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
 };
 
 const FormInput = (props: AppProps): JSX.Element => {
@@ -22,6 +24,8 @@ const FormInput = (props: AppProps): JSX.Element => {
         placeholder={props.placeholder}
         pattern={props.pattern}
         autoComplete={props.autoComplete}
+        onFocus={props.onFocus}
+        onBlur={props.onBlur}
       />
       <Span>{props.errorMessage}</Span>
     </InputValidator>

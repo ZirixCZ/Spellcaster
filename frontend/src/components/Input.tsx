@@ -8,6 +8,8 @@ interface InputProps {
   pattern?: string;
   errorMessage?: string;
   autoComplete?: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const Input = (props: InputProps): JSX.Element => {
@@ -18,6 +20,8 @@ const Input = (props: InputProps): JSX.Element => {
       placeholder={props.placeholder}
       pattern={props.pattern}
       autoComplete={props.autoComplete}
+      onFocus={props.onFocus}
+      onBlur={props.onBlur}
     />
   );
 };
