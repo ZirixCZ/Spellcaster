@@ -362,13 +362,6 @@ const StyledContainer = styled(Container)`
   ${tablet(css`
     flex-direction: column;
     justify-content: center;
-    padding-top: ${({ isLobbyMaster }: StyledContainerInterface) =>
-      isLobbyMaster ? "23rem" : "10rem"};
-  `)}
-
-  ${mobile(css`
-    padding-top: ${({ isLobbyMaster }: StyledContainerInterface) =>
-      isLobbyMaster ? "37rem" : "23rem"};
   `)}
 `;
 

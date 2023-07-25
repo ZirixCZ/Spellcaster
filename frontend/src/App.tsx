@@ -19,6 +19,7 @@ import Symbol from "./components/Symbol";
 import LobbySummary from "./pages/lobbySummary";
 import { mobile } from "../src/Global";
 import useThemeDetector from "./utils/useThemeDetector";
+import Unauthorized from "./pages/unprotected/Unauthorized";
 
 const App = (): JSX.Element => {
   const theme = useThemeStore((state) => state.theme);
@@ -48,10 +49,12 @@ const App = (): JSX.Element => {
             <Route path="theme" element={<ThemeSwitcher />} />
             <Route path="admin/*" element={<Admin />} />
           </Route>
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/" element={<Unauthorized />}>
+            <Route path="/welcome" element={<Welcome />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Route>
         </Routes>
       </Container>
     </Theme>
@@ -59,8 +62,11 @@ const App = (): JSX.Element => {
 };
 
 export const Container = styled.div`
-  height: 100vh;
-  max-height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  height: fit-content;
+  min-height: 100vh;
   width: 100%;
   line-height: 1.5;
   background-color: ${({ theme }) => theme.white};
