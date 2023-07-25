@@ -135,10 +135,11 @@ interface StyledNavbarInterface {
 const StyledNavbar = styled.div<StyledNavbarInterface>`
   height: 4rem;
   width: 100%;
-  position: absolute;
+  position: relative;
   z-index: 2;
   box-sizing: border-box;
   backdrop-filter: blur(13px);
+  margin-bottom: 4rem;
 
   background-color: ${({ theme }) => theme.whiteTransparent};
   top: 0;

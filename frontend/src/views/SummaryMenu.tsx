@@ -56,14 +56,6 @@ const StyledSummaryMenu = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-
-  ${tablet(css`
-    margin-top: 7rem;
-  `)}
-
-  ${mobile(css`
-    margin-top: 17rem;
-  `)}
 `;
 
 interface SummaryRankInterface {

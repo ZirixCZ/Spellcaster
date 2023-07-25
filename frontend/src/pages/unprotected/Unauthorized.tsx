@@ -7,34 +7,12 @@ import Navbar from "../../views/Navbar";
 import Loader from "../../components/Loader";
 import { tablet, mobile } from "../../Global";
 
-const Auth = () => {
-  const navigate = useNavigate();
-  const [auth, setAuth] = React.useState(false);
-
-  React.useEffect(() => {
-    callApi("GET", "/api/home", null).then((res) => {
-      if (res.ok) {
-        setAuth(true);
-        return;
-      }
-      setTimeout(() => {
-        navigate("/welcome");
-      }, 1000);
-    });
-  }, []);
-
+const Unauthorized = () => {
   return (
     <Container>
-      {auth ? (
-        <>
-          <Navbar />
-          <SafeArea>
-            <Outlet />
-          </SafeArea>
-        </>
-      ) : (
-        <Loader />
-      )}
+      <SafeArea>
+        <Outlet />
+      </SafeArea>
     </Container>
   );
 };
@@ -55,4 +33,4 @@ const SafeArea = styled.div`
   overflow-x: hidden;
 `;
 
-export default Auth;
+export default Unauthorized;
