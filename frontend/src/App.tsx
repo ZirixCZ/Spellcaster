@@ -67,6 +67,7 @@ export const Container = styled.div`
   align-items: start;
   height: fit-content;
   min-height: 100vh;
+  height: 100vh;
   width: 100%;
   line-height: 1.5;
   background-color: ${({ theme }) => theme.white};

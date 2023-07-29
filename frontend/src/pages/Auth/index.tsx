@@ -46,6 +46,7 @@ const Container = styled.div`
   align-items: center;
   height: fit-content;
   width: 100%;
+  height: 100%;
 `;
 
 const SafeArea = styled.div`
@@ -53,6 +54,7 @@ const SafeArea = styled.div`
   height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
+  margin: 4rem;
 `;
 
 export default Auth;

@@ -249,6 +249,7 @@ const Lobby = (): JSX.Element => {
   ) : (
     <StyledContainer
       width={100}
+      height={100}
       heightKeyword="fit-content"
       justifyContent={"space-evenly"}
       alignItems="center"
@@ -362,6 +363,7 @@ const StyledContainer = styled(Container)`
   ${tablet(css`
     flex-direction: column;
     justify-content: center;
+    height: fit-content;
   `)}
 `;
 

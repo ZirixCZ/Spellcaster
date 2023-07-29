@@ -256,7 +256,7 @@ const Title = styled.h1`
 
 const StyledSummary = styled.div`
   width: 100%;
-  height: fit-content;
+  height: 100%;
   max-height: max-content;
   display: flex;
   flex-direction: column;
@@ -265,7 +265,9 @@ const StyledSummary = styled.div`
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: ${({ theme }) => theme.white};
-  ${tablet(css``)}
+  ${tablet(css`
+    height: fit-content;
+  `)}
 `;
 
 const Rank = styled.p`

@@ -111,7 +111,7 @@ const Lobbies = (): JSX.Element => {
     <Container heightKeyword="fit-content" width={100}>
       <ButtonWrapper onClick={() => navigate("/")}>
         <Button>Go back</Button>
-      </ButtonWrapper>{" "}
+      </ButtonWrapper>
       <ArrowUp
         src="/img/arrow.svg"
         alt="arrow"
